@@ -53,7 +53,7 @@
             padding: 0 1.5rem;
         }
         .result-details.open {
-            max-height: 1000px; /* Large enough for content */
+            max-height: 1200px; /* Increased for content */
             padding: 1.5rem;
         }
         .speak-btn {
@@ -188,7 +188,7 @@
 
 <script>
     // --- تنظیمات برنامه ---
-    const PROXY_URL = 'https://language-learner.qaderi.workers.dev/'; // <-- لینک جدید شما اینجا قرار گرفت
+    const PROXY_URL = 'https://language-learner.qaderi.workers.dev/';
 
     // --- دسترسی به عناصر صفحه ---
     const setupView = document.getElementById('setup-view');
@@ -365,10 +365,10 @@
             lines.forEach(line => {
                 const parts = line.split(':');
                 if (parts.length > 1) {
-                    const key = parts[0].trim().toLowerCase().replace(' ', '');
+                    const key = parts[0].trim().toLowerCase().replace(/ /g, '');
                     data[key] = parts.slice(1).join(':').trim();
                     currentKey = key;
-                } else if (currentKey === 'examples' && line.trim().startsWith(parseInt(line.trim()))) {
+                } else if (currentKey === 'examples' && line.trim().match(/^\d+\./)) {
                     if(!data.exampleslist) data.exampleslist = [];
                     data.exampleslist.push(line.trim());
                 }
@@ -380,13 +380,18 @@
     function renderResults(aiResponse) {
         const parsedData = parseAIResponse(aiResponse);
         const lang = currentLang;
+        const isRtl = lang === 'fa';
 
-        if (parsedData.length === 0) {
+        resultsList.dir = isRtl ? 'rtl' : 'ltr';
+
+        if (parsedData.length === 0 || parsedData.some(item => !item.word)) {
             resultsList.innerHTML = `<p class="text-center p-8 text-gray-600">${uiStrings[lang].errorNoResults}</p>`;
             return;
         }
 
         let html = '<div class="p-4 md:p-6 space-y-4">';
+        const listPaddingClass = isRtl ? 'pr-6' : 'pl-6';
+
         parsedData.forEach((item, index) => {
             const targetLangCode = getLangCode(targetLangSelect.value);
 
@@ -402,13 +407,22 @@
                             <span id="chevron-${index}" class="text-2xl transition-transform">▼</span>
                         </div>
                     </div>
-                    <div id="details-${index}" class="result-details bg-white border-t border-gray-200">
-                        <p><strong>${uiStrings[lang].definition}:</strong> ${item.definition || 'N/A'}</p>
-                        <p><strong>${uiStrings[lang].grammar}:</strong> ${item.grammar || 'N/A'}</p>
-                        <p><strong>${uiStrings[lang].collocations}:</strong> ${item.collocations || 'N/A'}</p>
-                        <div class="mt-2">
+                    <div id="details-${index}" class="result-details bg-white border-t border-gray-200 space-y-4">
+                        <div>
+                            <strong>${uiStrings[lang].definition}:</strong>
+                            <p class="mt-1 text-gray-800">${item.definition || 'N/A'}</p>
+                        </div>
+                        <div>
+                            <strong>${uiStrings[lang].grammar}:</strong>
+                            <p class="mt-1 text-gray-800">${item.grammar || 'N/A'}</p>
+                        </div>
+                        <div>
+                            <strong>${uiStrings[lang].collocations}:</strong>
+                            <p class="mt-1 text-gray-800">${item.collocations || 'N/A'}</p>
+                        </div>
+                        <div>
                             <strong>${uiStrings[lang].examples}:</strong>
-                            <ul class="list-disc pr-6 mt-1 space-y-2">
+                            <ul class="list-disc ${listPaddingClass} mt-1 space-y-2">
                                 ${ (item.exampleslist || []).map(ex => {
                                     const parts = ex.split(' - ');
                                     const original = parts[0].substring(parts[0].indexOf('.') + 1).trim();
@@ -423,8 +437,14 @@
                                 }).join('')}
                             </ul>
                         </div>
-                        <p class="mt-2"><strong>${uiStrings[lang].commonMistakes}:</strong> ${item.commonmistakes || 'N/A'}</p>
-                        <p class="mt-2"><strong>${uiStrings[lang].contextNote}:</strong> ${item.contextnote || 'N/A'}</p>
+                         <div>
+                            <strong>${uiStrings[lang].commonMistakes}:</strong>
+                            <p class="mt-1 text-gray-800">${item.commonmistakes || 'N/A'}</p>
+                        </div>
+                        <div>
+                            <strong>${uiStrings[lang].contextNote}:</strong>
+                            <p class="mt-1 text-gray-800">${item.contextnote || 'N/A'}</p>
+                        </div>
                     </div>
                 </div>`;
         });
@@ -483,7 +503,7 @@
             processBtn: "تحلیل کن",
             resultsTitle: "نتایج تحلیل",
             startOverBtn: "شروع دوباره",
-            errorLevel: "برای تحلیل متن‌های طولانی، لطفاً سطح زبان خود را انتخاب کنید.",
+            errorLevel: "برای تحلیل متن‌های طولانی، لطفاً سطح زبان خود را انتخاب کنید تا واژگان متناسب با سطح شما استخراج شود.",
             errorText: "لطفاً متنی را برای تحلیل وارد یا آپلود کنید.",
             errorAIResponse: "پاسخ معتبری از هوش مصنوعی دریافت نشد.",
             errorServer: "مشکلی در ارتباط با سرور پیش آمد. لطفاً دوباره تلاش کنید.",
@@ -491,7 +511,7 @@
             wordNotFound: "کلمه یافت نشد",
             definition: "تعریف",
             grammar: "نوع گرامر",
-            collocations: "هم‌آیی‌ها",
+            collocations: "ترکیب‌های رایج",
             examples: "مثال‌ها",
             commonMistakes: "اشتباهات رایج",
             contextNote: "نکته",
@@ -514,7 +534,7 @@
             processBtn: "Analyze",
             resultsTitle: "Analysis Results",
             startOverBtn: "Start Over",
-            errorLevel: "For long texts, please select your proficiency level.",
+            errorLevel: "For long texts, please select your proficiency level to extract suitable vocabulary.",
             errorText: "Please enter or upload some text to analyze.",
             errorAIResponse: "No valid response from AI.",
             errorServer: "A problem occurred connecting to the server. Please try again.",
@@ -545,7 +565,7 @@
             processBtn: "Analysieren",
             resultsTitle: "Analyseergebnisse",
             startOverBtn: "Neu anfangen",
-            errorLevel: "Für lange Texte wählen Sie bitte Ihr Sprachniveau aus.",
+            errorLevel: "Für lange Texte wählen Sie bitte Ihr Sprachniveau, um passendes Vokabular zu extrahieren.",
             errorText: "Bitte geben Sie Text zur Analyse ein oder laden Sie ihn hoch.",
             errorAIResponse: "Keine gültige Antwort von der KI.",
             errorServer: "Problem bei der Verbindung zum Server. Bitte versuchen Sie es erneut.",
@@ -576,7 +596,7 @@
             processBtn: "Analyser",
             resultsTitle: "Résultats de l'analyse",
             startOverBtn: "Recommencer",
-            errorLevel: "Pour les textes longs, veuillez sélectionner votre niveau de compétence.",
+            errorLevel: "Pour les textes longs, veuillez sélectionner votre niveau pour extraire le vocabulaire approprié.",
             errorText: "Veuillez saisir ou télécharger du texte à analyser.",
             errorAIResponse: "Aucune réponse valide de l'IA.",
             errorServer: "Un problème est survenu lors de la connexion au serveur. Veuillez réessayer.",
@@ -607,7 +627,7 @@
             processBtn: "Analizar",
             resultsTitle: "Resultados del análisis",
             startOverBtn: "Empezar de nuevo",
-            errorLevel: "Para textos largos, seleccione su nivel de competencia.",
+            errorLevel: "Para textos largos, seleccione su nivel para extraer el vocabulario adecuado.",
             errorText: "Por favor, ingrese o suba un texto para analizar.",
             errorAIResponse: "No hay respuesta válida de la IA.",
             errorServer: "Ocurrió un problema al conectarse al servidor. Por favor, inténtelo de nuevo.",
@@ -638,7 +658,7 @@
             processBtn: "分析",
             resultsTitle: "分析结果",
             startOverBtn: "重新开始",
-            errorLevel: "对于长文本，请选择您的熟练程度。",
+            errorLevel: "对于长文本，请选择您的水平以便提取合适的词汇。",
             errorText: "请输入或上传一些文本进行分析。",
             errorAIResponse: "AI无有效响应。",
             errorServer: "连接服务器时出现问题。请再试一次。",
@@ -669,7 +689,7 @@
             processBtn: "Analiz Et",
             resultsTitle: "Analiz Sonuçları",
             startOverBtn: "Yeniden Başla",
-            errorLevel: "Uzun metinler için lütfen seviyenizi seçin.",
+            errorLevel: "Uzun metinler için uygun kelimeleri çıkarmak üzere lütfen seviyenizi seçin.",
             errorText: "Lütfen analiz için bir metin girin veya yükleyin.",
             errorAIResponse: "Yapay zekadan geçerli bir yanıt alınamadı.",
             errorServer: "Sunucuya bağlanırken bir sorun oluştu. Lütfen tekrar deneyin.",
@@ -700,7 +720,7 @@
             processBtn: "Analizza",
             resultsTitle: "Risultati dell'analisi",
             startOverBtn: "Ricomincia",
-            errorLevel: "Per testi lunghi, seleziona il tuo livello di competenza.",
+            errorLevel: "Per testi lunghi, seleziona il tuo livello per estrarre il vocabolario appropriato.",
             errorText: "Inserisci o carica un testo da analizzare.",
             errorAIResponse: "Nessuna risposta valida dall'IA.",
             errorServer: "Si è verificato un problema durante la connessione al server. Riprova.",
@@ -731,7 +751,7 @@
             processBtn: "Анализировать",
             resultsTitle: "Результаты анализа",
             startOverBtn: "Начать сначала",
-            errorLevel: "Для длинных текстов, пожалуйста, выберите свой уровень владения.",
+            errorLevel: "Для длинных текстов, пожалуйста, выберите свой уровень для извлечения подходящей лексики.",
             errorText: "Пожалуйста, введите или загрузите текст для анализа.",
             errorAIResponse: "Нет действительного ответа от ИИ.",
             errorServer: "Возникла проблема с подключением к серверу. Пожалуйста, попробуйте еще раз.",
