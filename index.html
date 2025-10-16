@@ -185,13 +185,16 @@
 
       <div class="flex items-center gap-3">
         <div class="flex items-center gap-2">
-          <select id="ui-lang-switcher" class="px-2 py-1.5 rounded-lg border text-sm bg-[var(--surface)] border-[var(--border)]">
-            <option value="fa">فارسی</option><option value="en">English</option>
-            <option value="de">Deutsch</option><option value="fr">Français</option>
-            <option value="es">Español</option><option value="zh">中文</option>
-            <option value="tr">Türkçe</option><option value="it">Italiano</option>
-            <option value="ru">Русский</option>
-          </select>
+            <div class="relative flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-3 rtl:right-3 rtl:left-auto size-4 pointer-events-none text-[var(--muted)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                <select id="ui-lang-switcher" class="appearance-none w-full pl-10 pr-4 rtl:pr-10 rtl:pl-4 py-1.5 rounded-lg border text-sm bg-[var(--surface)] border-[var(--border)]">
+                    <option value="fa">فارسی</option><option value="en">English</option>
+                    <option value="de">Deutsch</option><option value="fr">Français</option>
+                    <option value="es">Español</option><option value="zh">中文</option>
+                    <option value="tr">Türkçe</option><option value="it">Italiano</option>
+                    <option value="ru">Русский</option>
+                </select>
+            </div>
           <button id="theme-toggle" class="toggle" aria-label="toggle theme">
             <span class="knob"></span>
           </button>
