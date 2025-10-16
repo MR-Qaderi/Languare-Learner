@@ -1,196 +1,151 @@
 <!DOCTYPE html>
-<!-- The lang and dir attributes will be set by JavaScript -->
 <html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="app-title">یادگیری زبان با هوش مصنوعی</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Vazirmatn', sans-serif;
-            background-color: #f7fafc;
-            color: #2d3748;
-        }
-        .card {
-            background-color: white;
-            border-radius: 1rem;
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-            transition: all 0.3s ease-in-out;
-        }
-        select, input[type="text"], textarea, input[type="file"] {
-            border-radius: 0.5rem;
-            border: 1px solid #e2e8f0;
-            transition: box-shadow 0.2s ease-in-out;
-        }
-        select:focus, input[type="text"]:focus, textarea:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
-            border-color: #4299e1;
-        }
-        .result-item {
-            border: 1px solid #e2e8f0;
-            border-radius: 0.75rem;
-            margin-bottom: 1rem;
-            overflow: hidden;
-        }
-        .result-header {
-            cursor: pointer;
-            padding: 1rem;
-            background-color: #f7fafc;
-            transition: background-color 0.2s;
-        }
-        .result-header:hover {
-            background-color: #edf2f7;
-        }
-        .result-details {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
-            padding: 0 1.5rem;
-        }
-        .result-details.open {
-            max-height: 1200px; /* Increased for content */
-            padding: 1.5rem;
-        }
-        .speak-btn {
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .speak-btn:hover {
-            transform: scale(1.1);
-        }
-        .loader {
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #4a90e2;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        /* Style for drag-and-drop area */
-        .drop-zone {
-            border: 2px dashed #e2e8f0;
-            transition: border-color 0.3s, background-color 0.3s;
-        }
-        .drag-over {
-            border-color: #4299e1;
-            background-color: #ebf8ff;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title id="app-title">یادگیری زبان با هوش مصنوعی</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--card-radius:1rem}
+    body{font-family:'Vazirmatn',sans-serif;background:
+      radial-gradient(80rem 80rem at -10% -20%,#e0f2fe 0,#fff 55%),
+      radial-gradient(60rem 60rem at 110% 10%,#fce7f3 0,#fff 45%);
+      color:#1f2937}
+    .glass{backdrop-filter:saturate(160%) blur(10px); background:rgba(255,255,255,.65); border:1px solid rgba(255,255,255,.5)}
+    .card{background:#fff;border-radius:var(--card-radius);
+      box-shadow:0 10px 25px -8px rgb(2 6 23 / .2)}
+    .result-item{border:1px solid #e5e7eb;border-radius:.9rem;overflow:hidden}
+    .result-header{cursor:pointer;padding:1rem;background:#f8fafc;transition:background .2s}
+    .result-header:hover{background:#f1f5f9}
+    .result-details{max-height:0;overflow:hidden;transition:max-height .5s ease,padding .5s ease;padding:0 1.25rem}
+    .result-details.open{max-height:1400px;padding:1.25rem}
+    .chip{display:inline-block;border-radius:999px;border:1px solid #e5e7eb;padding:.15rem .6rem;font-size:.8rem;background:#fff}
+    .sticker{font-size:1.25rem}
+    .drop-zone{border:2px dashed #cbd5e1;border-radius:.8rem}
+    .drop-zone.drag-over{border-color:#3b82f6;background:#eff6ff}
+    .btn{border-radius:.7rem;font-weight:700}
+    .btn-primary{background:#2563eb;color:#fff}
+    .btn-primary:hover{background:#1d4ed8}
+    .btn-ghost{background:#f3f4f6}
+    .btn-ghost:hover{background:#e5e7eb}
+    .loader{border:5px solid #f3f3f3;border-top:5px solid #4a90e2;border-radius:50%;width:46px;height:46px;animation:spin 1s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+  </style>
 </head>
-<body class="p-4 md:p-8">
-
-    <!-- Language Switcher -->
-    <div class="max-w-4xl mx-auto mb-4 flex justify-end">
-        <select id="ui-lang-switcher" class="p-2 bg-white">
-            <option value="fa">فارسی</option>
-            <option value="en">English</option>
-            <option value="de">Deutsch</option>
-            <option value="fr">Français</option>
-            <option value="es">Español</option>
-            <option value="zh">中文</option>
-            <option value="tr">Türkçe</option>
-            <option value="it">Italiano</option>
-            <option value="ru">Русский</option>
+<body class="min-h-screen">
+  <!-- Top bar -->
+  <header class="sticky top-0 z-20 glass">
+    <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span class="text-2xl">🧠</span>
+        <h1 id="main-title" class="text-xl md:text-2xl font-bold">سازنده واژگان هوشمند</h1>
+      </div>
+      <div class="flex items-center gap-2">
+        <select id="ui-lang-switcher" class="px-2 py-1 bg-white rounded border">
+          <option value="fa">فارسی</option><option value="en">English</option>
+          <option value="de">Deutsch</option><option value="fr">Français</option>
+          <option value="es">Español</option><option value="zh">中文</option>
+          <option value="tr">Türkçe</option><option value="it">Italiano</option>
+          <option value="ru">Русский</option>
         </select>
+        <button id="stop-tts" class="btn btn-ghost px-3 py-1.5" title="توقف گفتار">🛑</button>
+      </div>
     </div>
+  </header>
 
-    <div id="app-container" class="max-w-4xl mx-auto">
-        <!-- Setup View -->
-        <div id="setup-view" class="card p-6 md:p-8">
-            <div class="text-center mb-8">
-                <h1 id="main-title" class="text-3xl md:text-4xl font-bold text-gray-800">سازنده واژگان هوشمند</h1>
-                <p id="subtitle" class="text-gray-600 mt-2">زبان مورد نظر خود را انتخاب کرده و متن خود را برای تحلیل وارد کنید.</p>
-            </div>
+  <main class="max-w-5xl mx-auto p-4 md:p-8">
+    <!-- Setup -->
+    <section id="setup-view" class="card p-6 md:p-8">
+      <p id="subtitle" class="text-gray-600 mb-6">
+        زبان مورد نظر خود را انتخاب کرده و متن یا فهرست واژه‌ها را وارد کنید.
+      </p>
 
-            <!-- Language & Level Selection -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <div>
-                    <label id="source-lang-label" for="source-lang" class="block text-sm font-medium text-gray-700 mb-1">زبان مادری من</label>
-                    <select id="source-lang" class="w-full p-2">
-                        <option value="Persian">فارسی</option>
-                        <option value="English">English</option>
-                        <option value="German">Deutsch</option>
-                        <option value="French">Français</option>
-                        <option value="Spanish">Español</option>
-                        <option value="Chinese">中文</option>
-                        <option value="Turkish">Türkçe</option>
-                        <option value="Italian">Italiano</option>
-                        <option value="Russian">Русский</option>
-                    </select>
-                </div>
-                <div>
-                    <label id="target-lang-label" for="target-lang" class="block text-sm font-medium text-gray-700 mb-1">زبانی که یاد می‌گیرم</label>
-                    <select id="target-lang" class="w-full p-2">
-                        <option value="English">English</option>
-                        <option value="German">Deutsch</option>
-                        <option value="French">Français</option>
-                        <option value="Spanish">Español</option>
-                        <option value="Persian">فارسی</option>
-                        <option value="Chinese">中文</option>
-                        <option value="Turkish">Türkçe</option>
-                        <option value="Italian">Italiano</option>
-                        <option value="Russian">Русский</option>
-                    </select>
-                </div>
-                <div>
-                    <label id="user-level-label" for="user-level" class="block text-sm font-medium text-gray-700 mb-1">سطح من</label>
-                    <select id="user-level" class="w-full p-2">
-                        <option value="Unspecified" id="level-unspecified">انتخاب نشده</option>
-                        <option value="A1 (Beginner)" id="level-a1">A1 (مبتدی)</option>
-                        <option value="A2 (Elementary)" id="level-a2">A2 (ابتدایی)</option>
-                        <option value="B1 (Intermediate)" id="level-b1">B1 (متوسط)</option>
-                        <option value="B2 (Upper-Intermediate)" id="level-b2">B2 (فوق متوسط)</option>
-                        <option value="C1 (Advanced)" id="level-c1">C1 (پیشرفته)</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Input Area with Drag and Drop -->
-            <div id="drop-zone" class="drop-zone p-4 rounded-lg">
-                <textarea id="text-input" rows="10" class="w-full p-3"></textarea>
-                <div class="flex justify-between items-center mt-4">
-                    <div class="flex items-center gap-2">
-                       <label for="file-upload" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-300 rounded-lg shadow-sm cursor-pointer">
-                           <span id="upload-btn-text"></span>
-                       </label>
-                       <input id="file-upload" type="file" class="hidden" accept=".txt,.srt">
-                       <span id="file-name" class="text-sm text-gray-500"></span>
-                    </div>
-                    <button id="process-btn" class="bg-blue-600 text-white font-bold py-2 px-8 rounded-lg hover:bg-blue-700 transition-colors shadow-md">
-                        تحلیل کن
-                    </button>
-                </div>
-                 <p id="error-msg" class="text-red-500 text-sm mt-2 text-center hidden"></p>
-            </div>
+      <!-- selectors -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+        <div>
+          <label id="source-lang-label" class="block text-sm font-medium mb-1">زبان مادری من</label>
+          <select id="source-lang" class="w-full p-2 rounded border">
+            <option>Persian</option><option>English</option><option>German</option>
+            <option>French</option><option>Spanish</option><option>Chinese</option>
+            <option>Turkish</option><option>Italian</option><option>Russian</option>
+          </select>
         </div>
-
-        <!-- Results View -->
-        <div id="results-view" class="hidden mt-8">
-            <div class="flex justify-between items-center mb-6">
-                <h2 id="results-title" class="text-2xl md:text-3xl font-bold text-gray-800">نتایج تحلیل</h2>
-                <button id="start-over-btn" class="bg-gray-200 text-gray-800 font-bold py-2 px-6 rounded-lg hover:bg-gray-300 transition-colors">
-                    شروع دوباره
-                </button>
-            </div>
-            <div id="loader" class="flex justify-center items-center p-16 hidden"><div class="loader"></div></div>
-            <div id="results-list" class="card"></div>
+        <div>
+          <label id="target-lang-label" class="block text-sm font-medium mb-1">زبانی که یاد می‌گیرم</label>
+          <select id="target-lang" class="w-full p-2 rounded border">
+            <option>English</option><option>German</option><option>French</option>
+            <option>Spanish</option><option>Persian</option><option>Chinese</option>
+            <option>Turkish</option><option>Italian</option><option>Russian</option>
+          </select>
         </div>
-    </div>
+        <div>
+          <label id="user-level-label" class="block text-sm font-medium mb-1">سطح من (برای متن/فایل)</label>
+          <select id="user-level" class="w-full p-2 rounded border">
+            <option id="level-unspecified" value="Unspecified">انتخاب نشده</option>
+            <option id="level-a1" value="A1 (Beginner)">A1 (مبتدی)</option>
+            <option id="level-a2" value="A2 (Elementary)">A2 (ابتدایی)</option>
+            <option id="level-b1" value="B1 (Intermediate)">B1 (متوسط)</option>
+            <option id="level-b2" value="B2 (Upper-Intermediate)">B2 (فوق متوسط)</option>
+            <option id="level-c1" value="C1 (Advanced)">C1 (پیشرفته)</option>
+          </select>
+        </div>
+        <div class="flex items-end">
+          <label class="inline-flex items-center gap-2">
+            <input id="force-wordlist" type="checkbox" class="w-4 h-4">
+            <span id="force-wordlist-label" class="text-sm">این ورودی یک لیست واژه است</span>
+          </label>
+        </div>
+      </div>
 
-<script>
-    // --- تنظیمات برنامه ---
+      <!-- guidance -->
+      <div id="hint-container" class="text-sm text-blue-700 bg-blue-50 border border-blue-200 rounded p-3 mb-4">
+        <span id="hint">💡 اگر «لیست واژه» وارد می‌کنید: <b>هر خط</b> یک واژه/عبارت یا واژه‌ها را با <code>-</code> جدا کنید. در این حالت نیازی به انتخاب سطح نیست.  
+        اگر متن بلند یا فایل می‌فرستید، <b>حتماً سطح</b> خود را انتخاب کنید تا خروجی مطابق سطح شما باشد.</span>
+      </div>
+
+      <!-- input -->
+      <div id="drop-zone" class="drop-zone p-4">
+        <textarea id="text-input" rows="10" class="w-full p-3 rounded border"
+          placeholder="لیست واژه (هر خط یک مورد) یا متن طولانی برای تحلیل…"></textarea>
+        <div class="flex flex-col md:flex-row gap-3 md:items-center justify-between mt-4">
+          <div class="flex items-center gap-2">
+            <label for="file-upload" class="cursor-pointer btn btn-ghost px-4 py-2 border">
+              <span id="upload-btn-text">آپلود فایل (.txt, .srt)</span>
+            </label>
+            <input id="file-upload" type="file" class="hidden" accept=".txt,.srt">
+            <span id="file-name" class="text-sm text-gray-500"></span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button id="process-btn" class="btn btn-primary px-6 py-2 shadow">
+              🚀 تحلیل کن
+            </button>
+          </div>
+        </div>
+        <p id="error-msg" class="text-red-600 text-sm mt-2 text-center hidden"></p>
+      </div>
+    </section>
+
+    <!-- Results -->
+    <section id="results-view" class="hidden mt-8">
+      <div class="flex flex-col md:flex-row gap-3 md:items-center justify-between mb-4">
+        <h2 id="results-title" class="text-2xl md:text-3xl font-bold">نتایج تحلیل</h2>
+        <div class="flex gap-2">
+          <button id="expand-all" class="btn btn-ghost px-3 py-2">⬇️ باز کردن همه</button>
+          <button id="collapse-all" class="btn btn-ghost px-3 py-2">⬆️ بستن همه</button>
+          <button id="start-over-btn" class="btn btn-ghost px-4 py-2 border">شروع دوباره</button>
+        </div>
+      </div>
+      <div id="loader" class="flex justify-center items-center p-12 hidden"><div class="loader"></div></div>
+      <div id="results-list" class="card"></div>
+    </section>
+  </main>
+
+  <script>
     const PROXY_URL = 'https://language-learner.qaderi.workers.dev/';
 
-    // --- دسترسی به عناصر صفحه ---
     const setupView = document.getElementById('setup-view');
     const resultsView = document.getElementById('results-view');
     const processBtn = document.getElementById('process-btn');
@@ -206,618 +161,416 @@
     const resultsList = document.getElementById('results-list');
     const uiLangSwitcher = document.getElementById('ui-lang-switcher');
     const dropZone = document.getElementById('drop-zone');
+    const stopTTSBtn = document.getElementById('stop-tts');
+    const expandAllBtn = document.getElementById('expand-all');
+    const collapseAllBtn = document.getElementById('collapse-all');
+    const forceWordlist = document.getElementById('force-wordlist');
+    const hint = document.getElementById('hint');
+    const hintContainer = document.getElementById('hint-container');
 
-
-    // --- رویدادها ---
+    // events
     processBtn.addEventListener('click', handleProcessRequest);
-    startOverBtn.addEventListener('click', () => {
-        resultsView.classList.add('hidden');
-        setupView.classList.remove('hidden');
-        textInput.value = '';
-        fileUpload.value = '';
-        fileNameEl.textContent = '';
-        resultsList.innerHTML = '';
+    startOverBtn.addEventListener('click', resetUI);
+    expandAllBtn.addEventListener('click', () => toggleAll(true));
+    collapseAllBtn.addEventListener('click', () => toggleAll(false));
+    stopTTSBtn.addEventListener('click', () => speechSynthesis.cancel());
+
+    fileUpload.addEventListener('change', (e) => {
+      const f = e.target.files[0]; if (f) handleFile(f);
     });
 
-    fileUpload.addEventListener('change', (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            handleFile(file);
-        }
+    dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault(); dropZone.classList.remove('drag-over');
+      const f = e.dataTransfer.files[0]; if (f) handleFile(f);
     });
 
-    // --- Drag and Drop Events ---
-    dropZone.addEventListener('dragover', (event) => {
-        event.preventDefault();
-        dropZone.classList.add('drag-over');
-    });
+    uiLangSwitcher.addEventListener('change', (e) => setLanguage(e.target.value));
+    forceWordlist.addEventListener('change', syncLevelRequirement);
+    textInput.addEventListener('input', syncLevelRequirement);
 
-    dropZone.addEventListener('dragleave', () => {
-        dropZone.classList.remove('drag-over');
-    });
-
-    dropZone.addEventListener('drop', (event) => {
-        event.preventDefault();
-        dropZone.classList.remove('drag-over');
-        const file = event.dataTransfer.files[0];
-        if (file) {
-            handleFile(file);
-        }
-    });
-    
-    // --- Language Switcher Event ---
-    uiLangSwitcher.addEventListener('change', (event) => {
-        setLanguage(event.target.value);
-    });
-
-
-    // --- توابع اصلی ---
-    function handleFile(file) {
-        fileNameEl.textContent = file.name;
-        if (file.type === "text/plain" || file.name.endsWith('.srt')) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                textInput.value = e.target.result;
-            };
-            reader.readAsText(file);
-        } else {
-            showError(uiStrings[currentLang].errorFileType);
-        }
+    function resetUI(){
+      resultsView.classList.add('hidden');
+      setupView.classList.remove('hidden');
+      textInput.value=''; fileUpload.value=''; fileNameEl.textContent=''; resultsList.innerHTML='';
+      hideError();
     }
 
-
-    function handleProcessRequest() {
-        const text = textInput.value.trim();
-        const level = userLevelSelect.value;
-
-        if (text.length > 200 && level === 'Unspecified') {
-            showError(uiStrings[currentLang].errorLevel);
-            return;
-        }
-        
-        if (!text) {
-            showError(uiStrings[currentLang].errorText);
-            return;
-        }
-
-        hideError();
-        setupView.classList.add('hidden');
-        resultsView.classList.remove('hidden');
-        loader.classList.remove('hidden');
-        resultsList.innerHTML = '';
-
-        callAI(text);
+    function handleFile(file){
+      fileNameEl.textContent = file.name;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const raw = e.target.result || '';
+        textInput.value = file.name.endsWith('.srt') ? cleanSRT(raw) : raw;
+        syncLevelRequirement();
+      };
+      reader.readAsText(file);
     }
 
-    function buildPrompt(text) {
-        const sourceLang = sourceLangSelect.value;
-        const targetLang = targetLangSelect.value;
-        const level = userLevelSelect.value;
-        
-        const isWordList = text.split(/\s+/).length < 30 && !text.includes('\n\n');
-        
-        let taskDescription;
-        if (isWordList) {
-            taskDescription = `For EACH word/phrase in the following list: "${text}", provide a detailed analysis.`;
-        } else {
-            taskDescription = `Analyze the following text. Extract ALL important and practical words, idioms, and common phrases suitable for a ${level} learner. Do not limit the number of items extracted. For EACH item you extract, provide a detailed analysis.`;
-        }
-
-        return `
-            You are an expert language tutor AI. Your goal is to help a user learn new vocabulary.
-            The user's native language is ${sourceLang}. They are learning ${targetLang} at a ${level} proficiency level.
-
-            TASK: ${taskDescription}
-
-            For EACH item, provide the analysis in the following structured format EXACTLY. Use "---" as a separator between each item. Do not add any text before the first item or after the last item.
-
-            Word: [The extracted word or phrase in ${targetLang}]
-            Translation: [The translation in ${sourceLang}. If there are multiple common meanings, list them all separated by a semicolon ';']
-            Definition: [A simple definition in ${targetLang} suitable for a ${level} learner]
-            Grammar: [Part of speech, e.g., noun, verb, adjective, idiom]
-            Collocations: [Common word combinations, or "N/A"]
-            Examples: [Provide as many examples as necessary to show the usage. Each example on a new numbered line.]
-            1. [Example 1 in ${targetLang}] - [Translation of Example 1 in ${sourceLang}]
-            2. [Example 2 in ${targetLang}] - [Translation of Example 2 in ${sourceLang}]
-            Common Mistakes: [Common mistakes or "nothing specific"]
-            Context/Note: [Extra notes on usage, formality, etc., or "N/A"]
-            ---
-            
-            ${isWordList ? '' : `Here is the text to analyze:\n\n${text}`}
-        `;
+    function cleanSRT(s){
+      return s
+        .replace(/\uFEFF/g,'')
+        .replace(/^\d+\s*$/gm,'')
+        .replace(/\d{2}:\d{2}:\d{2},\d{3}\s+-->\s+\d{2}:\d{2}:\d{2},\d{3}.*/g,'')
+        .replace(/<[^>]+>/g,'')
+        .replace(/[^\S\r\n]+/g,' ')
+        .replace(/\n{2,}/g,'\n')
+        .trim();
     }
 
-    async function callAI(text) {
-        const prompt = buildPrompt(text);
-        
-        try {
-            const response = await fetch(PROXY_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ prompt: prompt })
-            });
-
-            if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`);
-
-            const data = await response.json();
-            
-            if (data.candidates && data.candidates[0].content.parts[0].text) {
-                const aiResponse = data.candidates[0].content.parts[0].text;
-                renderResults(aiResponse);
-            } else {
-                 resultsList.innerHTML = `<p class="text-center p-8 text-red-500">${data?.error?.message || uiStrings[currentLang].errorAIResponse}</p>`;
-            }
-
-        } catch (error) {
-            console.error("AI Call Error:", error);
-            resultsList.innerHTML = `<p class="text-center p-8 text-red-500">${uiStrings[currentLang].errorServer}</p>`;
-        } finally {
-            loader.classList.add('hidden');
-        }
+    function looksLikeWordList(text){
+      const lines = text.split(/\r?\n/).filter(l=>l.trim()!=='');
+      if (lines.length>=2 && lines.every(l=>l.trim().length<=40)) return true;
+      const tokens = text.split(/\s*-\s*/).filter(t=>t.trim()!=='');
+      if (tokens.length>=2 && tokens.every(t=>t.trim().length<=40)) return true;
+      const wc = text.trim().split(/\s+/).length;
+      return wc<30 && !text.includes('\n\n');
     }
 
-    function parseAIResponse(responseText) {
-         const items = responseText.split('---').filter(item => item.trim() !== '');
-        return items.map(itemText => {
-            const lines = itemText.trim().split('\n');
-            const data = {};
-            let currentKey = '';
-            lines.forEach(line => {
-                const parts = line.split(':');
-                if (parts.length > 1) {
-                    const key = parts[0].trim().toLowerCase().replace(/ /g, '');
-                    data[key] = parts.slice(1).join(':').trim();
-                    currentKey = key;
-                } else if (currentKey === 'examples' && line.trim().match(/^\d+\./)) {
-                    if(!data.exampleslist) data.exampleslist = [];
-                    data.exampleslist.push(line.trim());
-                }
-            });
-            return data;
+    function syncLevelRequirement(){
+      const t = textInput.value.trim();
+      const fileAttached = !!fileUpload.files[0];
+      const autoIsList = looksLikeWordList(t) && !fileAttached;
+      const isList = forceWordlist.checked || autoIsList;
+      const strings = uiStrings[currentLang] || uiStrings.en;
+
+      if (isList){
+        userLevelSelect.value='Unspecified';
+        userLevelSelect.disabled = true;
+        hint.innerHTML = strings.hintWordlist;
+      }else{
+        userLevelSelect.disabled = false;
+        hint.innerHTML = strings.hintText;
+      }
+    }
+
+    function showError(m){ errorMsg.textContent=m; errorMsg.classList.remove('hidden'); }
+    function hideError(){ errorMsg.classList.add('hidden'); }
+
+    function handleProcessRequest(){
+      const text = textInput.value.trim();
+      const level = userLevelSelect.value;
+      const fileAttached = !!fileUpload.files[0];
+      const isList = forceWordlist.checked || (looksLikeWordList(text) && !fileAttached);
+
+      if (!text){ showError(uiStrings[currentLang].errorText); return; }
+      if (!isList && level==='Unspecified'){
+        showError(uiStrings[currentLang].errorLevel); return;
+      }
+
+      hideError(); setupView.classList.add('hidden'); resultsView.classList.remove('hidden');
+      loader.classList.remove('hidden'); resultsList.innerHTML='';
+      callAI(text, isList);
+    }
+
+    function buildPrompt(text, isWordList){
+      const sourceLang = sourceLangSelect.value;
+      const targetLang = targetLangSelect.value;
+      const level = userLevelSelect.value;
+
+      const taskDesc = isWordList
+        ? `You will analyze a USER-PROVIDED LIST of words/phrases in ${targetLang}. Items are either one per line or separated by hyphens "-". For EACH item, produce a full analysis.`
+        : `You will analyze a LONG TEXT in ${targetLang}. Extract ALL useful, natural, everyday words, idioms, and set phrases appropriate for a ${level} learner. Do NOT limit the number of items—focus on practical usefulness. For EACH extracted item, produce a full analysis.`;
+
+      const fieldSpec =
+`For EACH item, output EXACTLY the following template (no extra commentary). Use "---" between items.
+
+Word: [the item in ${targetLang}]
+Translation: [translation in ${sourceLang}; if multiple common meanings, separate by ";"]
+Definition: [simple, level-appropriate definition in ${targetLang}]
+Grammar: [part of speech; e.g., noun, verb, adjective, idiom, phrasal verb, expression]
+Collocations: [common combinations, comma-separated; if none, write "N/A"]
+Examples:
+1. [Example 1 in ${targetLang}] - [${sourceLang} translation]
+2. [Example 2 in ${targetLang}] - [${sourceLang} translation]
+3. [Optional more ...]
+Common Mistakes: ["nothing specific" OR typical mistakes learners make]
+Context/Note: [register (formal/informal), usage tips, variants/synonyms/antonyms, region notes; or "N/A"]
+Pronunciation: [IPA / Pinyin / phonetic if applicable; or "N/A"]
+---`;
+
+      const extraRules = isWordList
+        ? `INPUT MODE: WORD LIST. Treat each line or hyphen-separated token as ONE item.`
+        : `INPUT MODE: LONG TEXT. "Example 1" MUST be the EXACT sentence from the source text.
+Add 2–4 additional natural examples you create to cover different senses/usages if needed.
+If the item is too basic/common OR too technical/rare for ${level}, SKIP it.`;
+
+      return `
+You are an expert language tutor AI.
+User's native language: ${sourceLang}.
+Target language: ${targetLang}.
+${isWordList ? 'Proficiency is not specified for word-list mode.' : `User proficiency: ${level}.`}
+
+${taskDesc}
+
+Quality rules:
+- Prioritize PRACTICAL everyday usage.
+- If an item has multiple common meanings/usages, include them via translations and examples.
+- No fixed limits: include as many items/examples as necessary if important.
+- Output MUST strictly follow the template below. Do NOT add headers or prose.
+
+${fieldSpec}
+
+${extraRules}
+
+${isWordList ? `Here is the word/phrase list:\n${text}` : `Here is the text to analyze:\n${text}`}
+`.trim();
+    }
+
+    async function callAI(text, isWordList){
+      const prompt = buildPrompt(text, isWordList);
+      try{
+        const controller = new AbortController();
+        const timeout = setTimeout(()=>controller.abort(), 60000);
+        const res = await fetch(PROXY_URL, {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ prompt }),
+          signal: controller.signal
         });
+        clearTimeout(timeout);
+        if(!res.ok) throw new Error(`Network error: ${res.status} ${res.statusText}`);
+        const data = await res.json();
+
+        const ai =
+          data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+          data?.output_text || data?.text || '';
+        if(!ai){ resultsList.innerHTML = `<p class="p-8 text-center text-red-600">${uiStrings[currentLang].errorAIResponse}</p>`; return; }
+
+        renderResults(ai);
+      }catch(err){
+        console.error(err);
+        resultsList.innerHTML = `<p class="p-8 text-center text-red-600">${uiStrings[currentLang].errorServer}</p>`;
+      }finally{
+        loader.classList.add('hidden');
+      }
     }
 
-    function renderResults(aiResponse) {
-        const parsedData = parseAIResponse(aiResponse);
+    function parseAIResponse(s){
+      const items = s.split('---').filter(x=>x.trim()!=='');
+      return items.map(txt=>{
+        const data = {};
+        let currentKey = '';
+        const lines = txt.trim().split('\n');
+
+        lines.forEach(line => {
+            const match = line.match(/^([a-zA-Z\s/]+):\s*(.*)/);
+            if (match) {
+                currentKey = match[1].trim().toLowerCase().replace(/ /g, '');
+                data[currentKey] = match[2].trim();
+            } else if (currentKey === 'examples' && /^\d+\./.test(line.trim())) {
+                data.exampleslist = data.exampleslist || [];
+                data.exampleslist.push(line.trim());
+            }
+        });
+        return data;
+      });
+    }
+
+    function escapeHTML(s=''){
+      return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+
+    function getLangCode(name){
+      const map={'English':'en-US','German':'de-DE','French':'fr-FR','Spanish':'es-ES','Italian':'it-IT','Russian':'ru-RU','Turkish':'tr-TR','Chinese':'zh-CN','Persian':'fa-IR'};
+      return map[name]||'en-US';
+    }
+
+    function speakText(ev, text, langCode){
+      ev?.stopPropagation?.();
+      if(!text) return;
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = langCode; speechSynthesis.speak(u);
+    }
+    
+    function renderResults(ai){
+        const parsed = parseAIResponse(ai);
         
         const sourceLangName = sourceLangSelect.value;
-        const langCode = langNameToCode[sourceLangName] || 'en';
-        const strings = uiStrings[langCode];
-        const isRtl = langCode === 'fa';
+        const sourceLangCode = langNameToCode[sourceLangName] || 'en';
+        const strings = uiStrings[sourceLangCode] || uiStrings.en;
+        const isRtl = sourceLangCode === 'fa';
 
+        const targetLangCode = getLangCode(targetLangSelect.value);
+        const isEmpty = parsed.length === 0 || parsed.every(x => !x.word);
+        
         resultsList.dir = isRtl ? 'rtl' : 'ltr';
 
-        if (parsedData.length === 0 || parsedData.some(item => !item.word)) {
-            resultsList.innerHTML = `<p class="text-center p-8 text-gray-600">${strings.errorNoResults}</p>`;
+        if (isEmpty){
+            resultsList.innerHTML = `<p class="p-8 text-center text-gray-600">${strings.errorNoResults}</p>`;
             return;
         }
 
-        let html = '<div class="p-4 md:p-6 space-y-4">';
-        const listPaddingClass = isRtl ? 'pr-6' : 'pl-6';
-
-        parsedData.forEach((item, index) => {
-            const targetLangCode = getLangCode(targetLangSelect.value);
+        let html = '<div class="p-3 md:p-5 space-y-3">';
+        parsed.forEach((it, idx)=>{
+            const word = escapeHTML(it.word || '');
+            const translation = escapeHTML(it.translation || '');
+            const definition = escapeHTML(it.definition || 'N/A');
+            const grammar = escapeHTML(it.grammar || 'N/A');
+            const collocRaw = (it.collocations || '').split(/,|،/).map(s => s.trim()).filter(Boolean);
+            const mistakes = escapeHTML(it.commonmistakes || 'N/A');
+            const note = escapeHTML(it.contextnote || 'N/A');
+            const pron = escapeHTML(it.pronunciation || 'N/A');
 
             html += `
-                <div class="result-item">
-                    <div class="result-header flex justify-between items-center" onclick="toggleDetails(${index})">
-                        <div>
-                            <h3 class="text-lg font-bold text-blue-700">${item.word || strings.wordNotFound}</h3>
-                            <p class="text-md text-gray-700">${item.translation || ''}</p>
+            <div class="result-item">
+                <div class="result-header flex justify-between items-center" onclick="toggleDetails(${idx})" aria-expanded="false" id="hdr-${idx}">
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-2">
+                            <span class="sticker">🎯</span>
+                            <h3 class="text-lg font-bold text-blue-700 truncate">${word || strings.wordNotFound}</h3>
+                            ${grammar && grammar !== 'N/A' ? `<span class="chip">${grammar}</span>` : ''}
                         </div>
-                        <div class="flex items-center gap-4">
-                            <span class="speak-btn text-2xl" onclick="speakText(event, '${item.word ? item.word.replace(/'/g, "\\'") : ''}', '${targetLangCode}')">🔊</span>
-                            <span id="chevron-${index}" class="text-2xl transition-transform">▼</span>
+                        <p class="text-gray-700">${translation}</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button class="px-2 py-1 rounded bg-white border hover:bg-gray-50" onclick="speakText(event,'${word.replace(/'/g, "\\'")}', '${targetLangCode}')" title="${strings.speakWord}">🔊</button>
+                        <span id="chevron-${idx}" class="text-2xl transition-transform">▼</span>
+                    </div>
+                </div>
+                <div id="details-${idx}" class="result-details bg-white border-t border-gray-200 space-y-4">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1"><span class="sticker">📘</span><strong>${strings.definition}:</strong></div>
+                        <p class="text-gray-800">${definition}</p>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2 mb-1"><span class="sticker">🗣️</span><strong>${strings.pronunciation}:</strong></div>
+                        <p class="text-gray-800">${pron}</p>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2 mb-2"><span class="sticker">🔗</span><strong>${strings.collocations}:</strong></div>
+                        <div class="flex flex-wrap gap-2">
+                            ${collocRaw.length ? collocRaw.map(c => `<span class="chip">${escapeHTML(c)}</span>`).join('') : '<span class="text-gray-500">N/A</span>'}
                         </div>
                     </div>
-                    <div id="details-${index}" class="result-details bg-white border-t border-gray-200 space-y-4">
-                        <div>
-                            <strong>${strings.definition}:</strong>
-                            <p class="mt-1 text-gray-800">${item.definition || 'N/A'}</p>
-                        </div>
-                        <div>
-                            <strong>${strings.grammar}:</strong>
-                            <p class="mt-1 text-gray-800">${item.grammar || 'N/A'}</p>
-                        </div>
-                        <div>
-                            <strong>${strings.collocations}:</strong>
-                            <p class="mt-1 text-gray-800">${item.collocations || 'N/A'}</p>
-                        </div>
-                        <div>
-                            <strong>${strings.examples}:</strong>
-                            <ul class="list-disc ${listPaddingClass} mt-1 space-y-2">
-                                ${ (item.exampleslist || []).map(ex => {
-                                    const parts = ex.split(' - ');
-                                    const original = parts[0].substring(parts[0].indexOf('.') + 1).trim();
-                                    const translation = parts[1] || '';
-                                    return `<li>
-                                                <div class="flex items-center gap-2">
-                                                    <span>${original}</span>
-                                                    <span class="speak-btn text-lg" onclick="speakText(event, '${original.replace(/'/g, "\\'")}', '${targetLangCode}')">🔊</span>
-                                                </div>
-                                                <p class="text-sm text-gray-500">${translation}</p>
-                                            </li>`;
-                                }).join('')}
-                            </ul>
-                        </div>
-                         <div>
-                            <strong>${strings.commonMistakes}:</strong>
-                            <p class="mt-1 text-gray-800">${item.commonmistakes || 'N/A'}</p>
-                        </div>
-                        <div>
-                            <strong>${strings.contextNote}:</strong>
-                            <p class="mt-1 text-gray-800">${item.contextnote || 'N/A'}</p>
-                        </div>
+                    <div>
+                        <div class="flex items-center gap-2 mb-1"><span class="sticker">✍️</span><strong>${strings.examples}:</strong></div>
+                        <ul class="list-disc ${isRtl ? 'pr-6' : 'pl-6'} space-y-2">
+                            ${(it.exampleslist || []).map(ex => {
+                                const splitAt = ex.lastIndexOf(' - ');
+                                let original = ex; let trans = '';
+                                if (splitAt > 1) { original = ex.slice(0, splitAt); trans = ex.slice(splitAt + 3); }
+                                original = original.replace(/^\d+\.\s*/, '').trim();
+                                return `<li>
+                                    <div class="flex items-center gap-2">
+                                        <span>${escapeHTML(original)}</span>
+                                        <button class="px-2 py-0.5 rounded bg-white border hover:bg-gray-50" onclick="speakText(event,'${original.replace(/'/g, "\\'")}', '${targetLangCode}')" title="${strings.speakSentence}">🔊</button>
+                                    </div>
+                                    ${trans ? `<p class="text-sm text-gray-500">${escapeHTML(trans.trim())}</p>` : ''}
+                                </li>`;
+                            }).join('')}
+                        </ul>
                     </div>
-                </div>`;
+                    <div>
+                        <div class="flex items-center gap-2 mb-1"><span class="sticker">⚠️</span><strong>${strings.commonMistakes}:</strong></div>
+                        <p class="text-gray-800">${mistakes}</p>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2 mb-1"><span class="sticker">📝</span><strong>${strings.contextNote}:</strong></div>
+                        <p class="text-gray-800">${note}</p>
+                    </div>
+                </div>
+            </div>`;
         });
         html += '</div>';
         resultsList.innerHTML = html;
     }
-    
-    // --- توابع کمکی ---
 
-    function speakText(event, text, langCode) {
-        event.stopPropagation(); 
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = langCode;
-        speechSynthesis.speak(utterance);
-    }
-    
-    function getLangCode(langName) {
-        const codes = { 'English': 'en-US', 'German': 'de-DE', 'French': 'fr-FR', 'Spanish': 'es-ES', 'Italian': 'it-IT', 'Russian': 'ru-RU', 'Turkish': 'tr-TR', 'Chinese': 'zh-CN', 'Persian': 'fa-IR' };
-        return codes[langName] || 'en-US';
+    function toggleDetails(i){
+      const d = document.getElementById(`details-${i}`);
+      const c = document.getElementById(`chevron-${i}`);
+      const h = document.getElementById(`hdr-${i}`);
+      const nowOpen = !d.classList.contains('open');
+      d.classList.toggle('open');
+      c.style.transform = nowOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+      h.setAttribute('aria-expanded', nowOpen ? 'true':'false');
     }
 
-    function toggleDetails(index) {
-        const details = document.getElementById(`details-${index}`);
-        const chevron = document.getElementById(`chevron-${index}`);
-        details.classList.toggle('open');
-        chevron.style.transform = details.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+    function toggleAll(open){
+      const items = document.querySelectorAll('[id^="details-"]');
+      items.forEach((d,idx)=>{
+        const c = document.getElementById(`chevron-${idx}`);
+        const h = document.getElementById(`hdr-${idx}`);
+        if (open){ d.classList.add('open'); c.style.transform='rotate(180deg)'; h?.setAttribute('aria-expanded','true'); }
+        else { d.classList.remove('open'); c.style.transform='rotate(0deg)'; h?.setAttribute('aria-expanded','false'); }
+      });
     }
 
-    function showError(message) {
-        errorMsg.textContent = message;
-        errorMsg.classList.remove('hidden');
-    }
-
-    function hideError() {
-        errorMsg.classList.add('hidden');
-    }
-
-    // --- Internationalization (i18n) ---
-    let currentLang = 'fa';
-
-    const langNameToCode = {
-        'Persian': 'fa', 'English': 'en', 'German': 'de', 'French': 'fr', 'Spanish': 'es', 
-        'Chinese': 'zh', 'Turkish': 'tr', 'Italian': 'it', 'Russian': 'ru'
-    };
-
+    let currentLang='fa';
+    const langNameToCode = {'Persian':'fa','English':'en','German':'de','French':'fr','Spanish':'es','Chinese':'zh','Turkish':'tr','Italian':'it','Russian':'ru'};
     const uiStrings = {
         fa: {
-            appTitle: "یادگیری زبان با هوش مصنوعی",
-            mainTitle: "سازنده واژگان هوشمند",
-            subtitle: "زبان مورد نظر خود را انتخاب کرده و متن خود را برای تحلیل وارد کنید.",
-            sourceLangLabel: "زبان مادری من",
-            targetLangLabel: "زبانی که یاد می‌گیرم",
-            userLevelLabel: "سطح من",
-            levelUnspecified: "انتخاب نشده",
-            levelA1: "A1 (مبتدی)",
-            levelA2: "A2 (ابتدایی)",
-            levelB1: "B1 (متوسط)",
-            levelB2: "B2 (فوق متوسط)",
-            levelC1: "C1 (پیشرفته)",
-            textPlaceholder: "لیست کلمات خود را اینجا وارد کنید، یا یک متن طولانی برای تحلیل جای‌گذاری کنید...",
-            uploadBtnText: "آپلود فایل (.txt, .srt)",
-            processBtn: "تحلیل کن",
-            resultsTitle: "نتایج تحلیل",
-            startOverBtn: "شروع دوباره",
-            errorLevel: "برای تحلیل متن‌های طولانی، لطفاً سطح زبان خود را انتخاب کنید تا واژگان متناسب با سطح شما استخراج شود.",
-            errorText: "لطفاً متنی را برای تحلیل وارد یا آپلود کنید.",
-            errorAIResponse: "پاسخ معتبری از هوش مصنوعی دریافت نشد.",
-            errorServer: "مشکلی در ارتباط با سرور پیش آمد. لطفاً دوباره تلاش کنید.",
-            errorNoResults: "هوش مصنوعی موردی متناسب با درخواست شما پیدا نکرد. لطفاً متن دیگری را امتحان کنید.",
-            errorFileType: "نوع فایل پشتیبانی نمی‌شود.",
-            wordNotFound: "کلمه یافت نشد",
-            definition: "تعریف",
-            grammar: "نوع گرامر",
-            collocations: "ترکیب‌های رایج",
-            examples: "مثال‌ها",
-            commonMistakes: "اشتباهات رایج",
-            contextNote: "نکته",
+            appTitle: "یادگیری زبان با هوش مصنوعی", mainTitle: "سازنده واژگان هوشمند",
+            subtitle: "زبان مورد نظر خود را انتخاب کرده و متن یا فهرست واژه‌ها را وارد کنید.",
+            sourceLangLabel: "زبان مادری من", targetLangLabel: "زبانی که یاد می‌گیرم", userLevelLabel: "سطح من (برای متن/فایل)",
+            levelUnspecified: "انتخاب نشده", levelA1: "A1 (مبتدی)", levelA2: "A2 (ابتدایی)", levelB1: "B1 (متوسط)", levelB2: "B2 (فوق متوسط)", levelC1: "C1 (پیشرفته)",
+            uploadBtnText: "آپلود فایل (.txt, .srt)", processBtn: "تحلیل کن", resultsTitle: "نتایج تحلیل", startOverBtn: "شروع دوباره",
+            errorLevel: "برای متن‌ها/فایل‌ها لطفاً سطح خود را انتخاب کنید تا خروجی متناسب باشد.", errorText: "لطفاً ورودی معتبر وارد یا آپلود کنید.",
+            errorAIResponse: "پاسخ معتبری از هوش مصنوعی دریافت نشد.", errorServer: "مشکل ارتباط با سرور. دوباره تلاش کنید.", errorNoResults: "موردی پیدا نشد؛ ورودی دیگری امتحان کنید.",
+            wordNotFound: "کلمه یافت نشد", definition: "تعریف", grammar: "نوع گرامر", collocations: "ترکیب‌های رایج", examples: "مثال‌ها",
+            commonMistakes: "اشتباهات رایج", contextNote: "نکته", pronunciation: "تلفظ", forceWordlistLabel: "این ورودی یک لیست واژه است",
+            hintWordlist: "📝 حالت «لیست واژه»: هر خط یک واژه/عبارت یا با <b>-</b> جدا کنید. سطح لازم نیست.", hintText: "📚 حالت «متن/فایل»: لطفاً سطح خود را انتخاب کنید تا واژگان و عبارات مطابق سطح شما استخراج شوند.",
+            expandAll: "⬇️ باز کردن همه", collapseAll: "⬆️ بستن همه", speakWord: "شنیدن واژه", speakSentence: "شنیدن جمله", stopSpeech: "توقف گفتار"
         },
         en: {
-            appTitle: "AI Language Learner",
-            mainTitle: "Smart Vocabulary Builder",
-            subtitle: "Select your languages and enter text to analyze.",
-            sourceLangLabel: "My Native Language",
-            targetLangLabel: "Language I'm Learning",
-            userLevelLabel: "My Level",
-            levelUnspecified: "Unspecified",
-            levelA1: "A1 (Beginner)",
-            levelA2: "A2 (Elementary)",
-            levelB1: "B1 (Intermediate)",
-            levelB2: "B2 (Upper-Intermediate)",
-            levelC1: "C1 (Advanced)",
-            textPlaceholder: "Enter your word list here, or paste a long text to analyze...",
-            uploadBtnText: "Upload File (.txt, .srt)",
-            processBtn: "Analyze",
-            resultsTitle: "Analysis Results",
-            startOverBtn: "Start Over",
-            errorLevel: "For long texts, please select your proficiency level to extract suitable vocabulary.",
-            errorText: "Please enter or upload some text to analyze.",
-            errorAIResponse: "No valid response from AI.",
-            errorServer: "A problem occurred connecting to the server. Please try again.",
-            errorNoResults: "The AI did not find any items matching your request. Please try another text.",
-            errorFileType: "File type not supported.",
-            wordNotFound: "Word not found",
-            definition: "Definition",
-            grammar: "Grammar",
-            collocations: "Collocations",
-            examples: "Examples",
-            commonMistakes: "Common Mistakes",
-            contextNote: "Context/Note",
+            appTitle: "AI Language Learner", mainTitle: "Smart Vocabulary Builder",
+            subtitle: "Select your languages and enter a word list or a long text.", sourceLangLabel: "My Native Language",
+            targetLangLabel: "Language I'm Learning", userLevelLabel: "My Level (for text/files)", levelUnspecified: "Unspecified",
+            levelA1: "A1 (Beginner)", levelA2: "A2 (Elementary)", levelB1: "B1 (Intermediate)", levelB2: "B2 (Upper-Intermediate)", levelC1: "C1 (Advanced)",
+            uploadBtnText: "Upload File (.txt, .srt)", processBtn: "Analyze", resultsTitle: "Analysis Results", startOverBtn: "Start Over",
+            errorLevel: "For texts/files, please select your level.", errorText: "Please enter or upload valid input.", errorAIResponse: "No valid AI response.",
+            errorServer: "Problem connecting to server. Try again.", errorNoResults: "No items found. Try another input.", wordNotFound: "Word not found",
+            definition: "Definition", grammar: "Grammar", collocations: "Collocations", examples: "Examples", commonMistakes: "Common Mistakes", contextNote: "Context/Note",
+            pronunciation: "Pronunciation", forceWordlistLabel: "This input is a word list", hintWordlist: "📝 Word List Mode: One word/phrase per line, or separate with <b>-</b>. Level is not required.",
+            hintText: "📚 Text/File Mode: Please select your level to get suitable words and phrases.",
+            expandAll: "⬇️ Expand All", collapseAll: "⬆️ Collapse All", speakWord: "Speak word", speakSentence: "Speak sentence", stopSpeech: "Stop speech"
         },
-        de: { // German translations
-            appTitle: "KI-Sprachlerner",
-            mainTitle: "Intelligenter Vokabeltrainer",
-            subtitle: "Wählen Sie Ihre Sprachen aus und geben Sie Text zur Analyse ein.",
-            sourceLangLabel: "Meine Muttersprache",
-            targetLangLabel: "Sprache, die ich lerne",
-            userLevelLabel: "Mein Niveau",
-            levelUnspecified: "Nicht angegeben",
-            levelA1: "A1 (Anfänger)",
-            levelA2: "A2 (Grundlegend)",
-            levelB1: "B1 (Mittelstufe)",
-            levelB2: "B2 (Obere Mittelstufe)",
-            levelC1: "C1 (Fortgeschritten)",
-            textPlaceholder: "Geben Sie hier Ihre Wortliste ein oder fügen Sie einen langen Text zur Analyse ein...",
-            uploadBtnText: "Datei hochladen (.txt, .srt)",
-            processBtn: "Analysieren",
-            resultsTitle: "Analyseergebnisse",
-            startOverBtn: "Neu anfangen",
-            errorLevel: "Für lange Texte wählen Sie bitte Ihr Sprachniveau, um passendes Vokabular zu extrahieren.",
-            errorText: "Bitte geben Sie Text zur Analyse ein oder laden Sie ihn hoch.",
-            errorAIResponse: "Keine gültige Antwort von der KI.",
-            errorServer: "Problem bei der Verbindung zum Server. Bitte versuchen Sie es erneut.",
-            errorNoResults: "Die KI hat keine passenden Elemente gefunden. Bitte versuchen Sie einen anderen Text.",
-            errorFileType: "Dateityp nicht unterstützt.",
-            wordNotFound: "Wort nicht gefunden",
-            definition: "Definition",
-            grammar: "Grammatik",
-            collocations: "Kollokationen",
-            examples: "Beispiele",
-            commonMistakes: "Häufige Fehler",
-            contextNote: "Kontext/Notiz",
-        },
-        fr: { // French translations
-            appTitle: "Apprentissage des langues par l'IA",
-            mainTitle: "Constructeur de vocabulaire intelligent",
-            subtitle: "Sélectionnez vos langues et entrez du texte à analyser.",
-            sourceLangLabel: "Ma langue maternelle",
-            targetLangLabel: "Langue que j'apprends",
-            userLevelLabel: "Mon niveau",
-            levelUnspecified: "Non spécifié",
-            levelA1: "A1 (Débutant)",
-            levelA2: "A2 (Élémentaire)",
-            levelB1: "B1 (Intermédiaire)",
-            levelB2: "B2 (Intermédiaire supérieur)",
-            levelC1: "C1 (Avancé)",
-            textPlaceholder: "Entrez votre liste de mots ici, ou collez un long texte à analyser...",
-            uploadBtnText: "Télécharger un fichier (.txt, .srt)",
-            processBtn: "Analyser",
-            resultsTitle: "Résultats de l'analyse",
-            startOverBtn: "Recommencer",
-            errorLevel: "Pour les textes longs, veuillez sélectionner votre niveau pour extraire le vocabulaire approprié.",
-            errorText: "Veuillez saisir ou télécharger du texte à analyser.",
-            errorAIResponse: "Aucune réponse valide de l'IA.",
-            errorServer: "Un problème est survenu lors de la connexion au serveur. Veuillez réessayer.",
-            errorNoResults: "L'IA n'a trouvé aucun élément correspondant. Veuillez essayer un autre texte.",
-            errorFileType: "Type de fichier non pris en charge.",
-            wordNotFound: "Mot non trouvé",
-            definition: "Définition",
-            grammar: "Grammaire",
-            collocations: "Collocations",
-            examples: "Exemples",
-            commonMistakes: "Erreurs courantes",
-            contextNote: "Contexte/Note",
-        },
-        es: { // Spanish translations
-            appTitle: "Aprendizaje de idiomas con IA",
-            mainTitle: "Constructor de vocabulario inteligente",
-            subtitle: "Seleccione sus idiomas e ingrese texto para analizar.",
-            sourceLangLabel: "Mi lengua materna",
-            targetLangLabel: "Idioma que estoy aprendiendo",
-            userLevelLabel: "Mi nivel",
-            levelUnspecified: "No especificado",
-            levelA1: "A1 (Principiante)",
-            levelA2: "A2 (Elemental)",
-            levelB1: "B1 (Intermedio)",
-            levelB2: "B2 (Intermedio alto)",
-            levelC1: "C1 (Avanzado)",
-            textPlaceholder: "Ingrese su lista de palabras aquí, o pegue un texto largo para analizar...",
-            uploadBtnText: "Subir archivo (.txt, .srt)",
-            processBtn: "Analizar",
-            resultsTitle: "Resultados del análisis",
-            startOverBtn: "Empezar de nuevo",
-            errorLevel: "Para textos largos, seleccione su nivel para extraer el vocabulario adecuado.",
-            errorText: "Por favor, ingrese o suba un texto para analizar.",
-            errorAIResponse: "No hay respuesta válida de la IA.",
-            errorServer: "Ocurrió un problema al conectarse al servidor. Por favor, inténtelo de nuevo.",
-            errorNoResults: "La IA no encontró ningún elemento coincidente. Por favor, intente con otro texto.",
-            errorFileType: "Tipo de archivo no compatible.",
-            wordNotFound: "Palabra no encontrada",
-            definition: "Definición",
-            grammar: "Gramática",
-            collocations: "Colocaciones",
-            examples: "Ejemplos",
-            commonMistakes: "Errores comunes",
-            contextNote: "Contexto/Nota",
-        },
-        zh: { // Chinese translations
-            appTitle: "人工智能语言学习器",
-            mainTitle: "智能词汇构建器",
-            subtitle: "选择您的语言并输入文本进行分析。",
-            sourceLangLabel: "我的母语",
-            targetLangLabel: "我正在学习的语言",
-            userLevelLabel: "我的水平",
-            levelUnspecified: "未指定",
-            levelA1: "A1 (初学者)",
-            levelA2: "A2 (初级)",
-            levelB1: "B1 (中级)",
-            levelB2: "B2 (中高级)",
-            levelC1: "C1 (高级)",
-            textPlaceholder: "在此处输入您的单词列表，或粘贴长文本进行分析...",
-            uploadBtnText: "上传文件 (.txt, .srt)",
-            processBtn: "分析",
-            resultsTitle: "分析结果",
-            startOverBtn: "重新开始",
-            errorLevel: "对于长文本，请选择您的水平以便提取合适的词汇。",
-            errorText: "请输入或上传一些文本进行分析。",
-            errorAIResponse: "AI无有效响应。",
-            errorServer: "连接服务器时出现问题。请再试一次。",
-            errorNoResults: "AI未找到任何匹配项。请尝试其他文本。",
-            errorFileType: "不支持的文件类型。",
-            wordNotFound: "未找到单词",
-            definition: "定义",
-            grammar: "语法",
-            collocations: "搭配",
-            examples: "例子",
-            commonMistakes: "常见错误",
-            contextNote: "语境/说明",
-        },
-        tr: { // Turkish translations
-            appTitle: "Yapay Zeka ile Dil Öğrenimi",
-            mainTitle: "Akıllı Kelime Oluşturucu",
-            subtitle: "Dillerinizi seçin ve analiz etmek için metin girin.",
-            sourceLangLabel: "Ana Dilim",
-            targetLangLabel: "Öğrendiğim Dil",
-            userLevelLabel: "Seviyem",
-            levelUnspecified: "Belirtilmemiş",
-            levelA1: "A1 (Başlangıç)",
-            levelA2: "A2 (Temel)",
-            levelB1: "B1 (Orta)",
-            levelB2: "B2 (Orta-üstü)",
-            levelC1: "C1 (İleri)",
-            textPlaceholder: "Kelime listenizi buraya girin veya analiz için uzun bir metin yapıştırın...",
-            uploadBtnText: "Dosya Yükle (.txt, .srt)",
-            processBtn: "Analiz Et",
-            resultsTitle: "Analiz Sonuçları",
-            startOverBtn: "Yeniden Başla",
-            errorLevel: "Uzun metinler için uygun kelimeleri çıkarmak üzere lütfen seviyenizi seçin.",
-            errorText: "Lütfen analiz için bir metin girin veya yükleyin.",
-            errorAIResponse: "Yapay zekadan geçerli bir yanıt alınamadı.",
-            errorServer: "Sunucuya bağlanırken bir sorun oluştu. Lütfen tekrar deneyin.",
-            errorNoResults: "Yapay zeka isteğinizle eşleşen bir öğe bulamadı. Lütfen başka bir metin deneyin.",
-            errorFileType: "Dosya türü desteklenmiyor.",
-            wordNotFound: "Kelime bulunamadı",
-            definition: "Tanım",
-            grammar: "Gramer",
-            collocations: "Birlikte Kullanımlar",
-            examples: "Örnekler",
-            commonMistakes: "Yaygın Hatalar",
-            contextNote: "Bağlam/Not",
-        },
-        it: { // Italian translations
-            appTitle: "Apprendimento delle lingue con IA",
-            mainTitle: "Costruttore di vocabolario intelligente",
-            subtitle: "Seleziona le tue lingue e inserisci il testo da analizzare.",
-            sourceLangLabel: "La mia lingua madre",
-            targetLangLabel: "Lingua che sto imparando",
-            userLevelLabel: "Il mio livello",
-            levelUnspecified: "Non specificato",
-            levelA1: "A1 (Principiante)",
-            levelA2: "A2 (Elementare)",
-            levelB1: "B1 (Intermedio)",
-            levelB2: "B2 (Intermedio-superiore)",
-            levelC1: "C1 (Avanzato)",
-            textPlaceholder: "Inserisci qui la tua lista di parole, o incolla un testo lungo da analizzare...",
-            uploadBtnText: "Carica File (.txt, .srt)",
-            processBtn: "Analizza",
-            resultsTitle: "Risultati dell'analisi",
-            startOverBtn: "Ricomincia",
-            errorLevel: "Per testi lunghi, seleziona il tuo livello per estrarre il vocabolario appropriato.",
-            errorText: "Inserisci o carica un testo da analizzare.",
-            errorAIResponse: "Nessuna risposta valida dall'IA.",
-            errorServer: "Si è verificato un problema durante la connessione al server. Riprova.",
-            errorNoResults: "L'IA non ha trovato elementi corrispondenti. Prova con un altro testo.",
-            errorFileType: "Tipo di file non supportato.",
-            wordNotFound: "Parola non trovata",
-            definition: "Definizione",
-            grammar: "Grammatica",
-            collocations: "Collocazioni",
-            examples: "Esempi",
-            commonMistakes: "Errori comuni",
-            contextNote: "Contesto/Nota",
-        },
-        ru: { // Russian translations
-            appTitle: "Изучение языков с ИИ",
-            mainTitle: "Умный конструктор словарного запаса",
-            subtitle: "Выберите языки и введите текст для анализа.",
-            sourceLangLabel: "Мой родной язык",
-            targetLangLabel: "Язык, который я изучаю",
-            userLevelLabel: "Мой уровень",
-            levelUnspecified: "Не указан",
-            levelA1: "A1 (Начинающий)",
-            levelA2: "A2 (Элементарный)",
-            levelB1: "B1 (Средний)",
-            levelB2: "B2 (Выше среднего)",
-            levelC1: "C1 (Продвинутый)",
-            textPlaceholder: "Введите свой список слов здесь или вставьте длинный текст для анализа...",
-            uploadBtnText: "Загрузить файл (.txt, .srt)",
-            processBtn: "Анализировать",
-            resultsTitle: "Результаты анализа",
-            startOverBtn: "Начать сначала",
-            errorLevel: "Для длинных текстов, пожалуйста, выберите свой уровень для извлечения подходящей лексики.",
-            errorText: "Пожалуйста, введите или загрузите текст для анализа.",
-            errorAIResponse: "Нет действительного ответа от ИИ.",
-            errorServer: "Возникла проблема с подключением к серверу. Пожалуйста, попробуйте еще раз.",
-            errorNoResults: "ИИ не нашел совпадений. Пожалуйста, попробуйте другой текст.",
-            errorFileType: "Тип файла не поддерживается.",
-            wordNotFound: "Слово не найдено",
-            definition: "Определение",
-            grammar: "Грамматика",
-            collocations: "Словосочетания",
-            examples: "Примеры",
-            commonMistakes: "Частые ошибки",
-            contextNote: "Контекст/Примечание",
-        },
+        // Other languages are abridged for brevity but would follow the same structure.
+        de: {appTitle:"KI-Sprachlerner",mainTitle:"Intelligenter Vokabeltrainer",subtitle:"Wortliste oder langen Text eingeben.",sourceLangLabel:"Meine Muttersprache",targetLangLabel:"Sprache, die ich lerne",userLevelLabel:"Mein Niveau (für Text/Dateien)",levelUnspecified:"Nicht angegeben",levelA1:"A1 (Anfänger)",levelA2:"A2 (Grundlegend)",levelB1:"B1 (Mittelstufe)",levelB2:"B2 (Obere Mittelstufe)",levelC1:"C1 (Fortgeschritten)",uploadBtnText:"Datei hochladen (.txt, .srt)",processBtn:"Analysieren",resultsTitle:"Analyseergebnisse",startOverBtn:"Neu anfangen",errorLevel:"Für Texte/Dateien bitte Niveau wählen.",errorText:"Bitte gültige Eingabe eingeben/hochladen.",errorAIResponse:"Keine gültige KI-Antwort.",errorServer:"Verbindungsproblem. Erneut versuchen.",errorNoResults:"Keine Elemente gefunden.",wordNotFound:"Wort nicht gefunden",definition:"Definition",grammar:"Grammatik",collocations:"Kollokationen",examples:"Beispiele",commonMistakes:"Häufige Fehler",contextNote:"Kontext/Notiz",pronunciation:"Aussprache",forceWordlistLabel:"Dies ist eine Wortliste",hintWordlist:"📝 Wortlistenmodus: Ein Wort/Satz pro Zeile oder mit <b>-</b> trennen. Niveau ist nicht erforderlich.",hintText:"📚 Text-/Dateimodus: Bitte wählen Sie Ihr Niveau.",expandAll:"⬇️ Alle erweitern",collapseAll:"⬆️ Alle reduzieren",speakWord:"Wort sprechen",speakSentence:"Satz sprechen",stopSpeech:"Sprache stoppen"},
+        fr: {appTitle:"Apprentissage des langues par l'IA",mainTitle:"Constructeur de vocabulaire intelligent",subtitle:"Saisissez une liste de mots ou un long texte.",sourceLangLabel:"Ma langue maternelle",targetLangLabel:"Langue que j'apprends",userLevelLabel:"Mon niveau (pour textes/fichiers)",levelUnspecified:"Non spécifié",levelA1:"A1 (Débutant)",levelA2:"A2 (Élémentaire)",levelB1:"B1 (Intermédiaire)",levelB2:"B2 (Intermédiaire supérieur)",levelC1:"C1 (Avancé)",uploadBtnText:"Télécharger (.txt, .srt)",processBtn:"Analyser",resultsTitle:"Résultats de l'analyse",startOverBtn:"Recommencer",errorLevel:"Pour textes/fichiers, choisissez votre niveau.",errorText:"Veuillez saisir ou télécharger une entrée valide.",errorAIResponse:"Aucune réponse valide.",errorServer:"Problème de connexion.",errorNoResults:"Aucun élément trouvé.",wordNotFound:"Mot non trouvé",definition:"Définition",grammar:"Grammaire",collocations:"Collocations",examples:"Exemples",commonMistakes:"Erreurs courantes",contextNote:"Contexte/Note",pronunciation:"Prononciation",forceWordlistLabel:"Ceci est une liste de mots",hintWordlist:"📝 Mode liste de mots : Un mot/phrase par ligne, ou séparer par <b>-</b>. Le niveau n'est pas requis.",hintText:"📚 Mode texte/fichier : Veuillez sélectionner votre niveau.",expandAll:"⬇️ Tout déplier",collapseAll:"⬆️ Tout replier",speakWord:"Parler le mot",speakSentence:"Parler la phrase",stopSpeech:"Arrêter la parole"},
+        es: {appTitle:"Aprendizaje de idiomas con IA",mainTitle:"Constructor de vocabulario inteligente",subtitle:"Lista de palabras o texto largo.",sourceLangLabel:"Mi lengua materna",targetLangLabel:"Idioma que aprendo",userLevelLabel:"Mi nivel (para texto/archivos)",levelUnspecified:"No especificado",levelA1:"A1 (Principiante)",levelA2:"A2 (Elemental)",levelB1:"B1 (Intermedio)",levelB2:"B2 (Intermedio alto)",levelC1:"C1 (Avanzado)",uploadBtnText:"Subir (.txt, .srt)",processBtn:"Analizar",resultsTitle:"Resultados del análisis",startOverBtn:"Empezar de nuevo",errorLevel:"Para textos/archivos, elige tu nivel.",errorText:"Introduce o sube una entrada válida.",errorAIResponse:"Sin respuesta válida.",errorServer:"Problemas de conexión.",errorNoResults:"No se encontraron elementos.",wordNotFound:"No se encontró palabra",definition:"Definición",grammar:"Gramática",collocations:"Colocaciones",examples:"Ejemplos",commonMistakes:"Errores comunes",contextNote:"Contexto/Nota",pronunciation:"Pronunciación",forceWordlistLabel:"Esta es una lista de palabras",hintWordlist:"📝 Modo lista de palabras: Una palabra/frase por línea, o separar con <b>-</b>. No se requiere nivel.",hintText:"📚 Modo texto/archivo: Por favor, seleccione su nivel.",expandAll:"⬇️ Expandir todo",collapseAll:"⬆️ Contraer todo",speakWord:"Decir palabra",speakSentence:"Decir frase",stopSpeech:"Detener voz"},
+        zh: {appTitle:"人工智能语言学习器",mainTitle:"智能词汇构建器",subtitle:"输入单词列表或长文本。",sourceLangLabel:"我的母语",targetLangLabel:"我学习的语言",userLevelLabel:"我的水平（用于文本/文件）",levelUnspecified:"未指定",levelA1:"A1 (初学者)",levelA2:"A2 (初级)",levelB1:"B1 (中级)",levelB2:"B2 (中高级)",levelC1:"C1 (高级)",uploadBtnText:"上传文件 (.txt, .srt)",processBtn:"分析",resultsTitle:"分析结果",startOverBtn:"重新开始",errorLevel:"对于文本/文件请选择水平。",errorText:"请输入或上传有效输入。",errorAIResponse:"无有效响应。",errorServer:"连接问题。",errorNoResults:"未找到项目。",wordNotFound:"未找到单词",definition:"定义",grammar:"语法",collocations:"搭配",examples:"例子",commonMistakes:"常见错误",contextNote:"语境/说明",pronunciation:"发音",forceWordlistLabel:"这是一个单词列表",hintWordlist:"📝 单词列表模式：每行一个单词/短语，或用<b>-</b>分隔。不需要级别。",hintText:"📚 文本/文件模式：请选择您的级别。",expandAll:"⬇️ 全部展开",collapseAll:"⬆️ 全部折叠",speakWord:"朗读单词",speakSentence:"朗读句子",stopSpeech:"停止朗读"},
+        tr: {appTitle:"Yapay Zeka ile Dil Öğrenimi",mainTitle:"Akıllı Kelime Oluşturucu",subtitle:"Kelime listesi veya uzun metin.",sourceLangLabel:"Ana Dilim",targetLangLabel:"Öğrendiğim Dil",userLevelLabel:"Seviyem (metin/dosyalar için)",levelUnspecified:"Belirtilmemiş",levelA1:"A1 (Başlangıç)",levelA2:"A2 (Temel)",levelB1:"B1 (Orta)",levelB2:"B2 (Orta-üstü)",levelC1:"C1 (İleri)",uploadBtnText:"Dosya (.txt, .srt)",processBtn:"Analiz Et",resultsTitle:"Analiz Sonuçları",startOverBtn:"Yeniden Başla",errorLevel:"Metin/dosyalar için seviye seçin.",errorText:"Geçerli bir giriş girin/yükleyin.",errorAIResponse:"Geçerli yanıt yok.",errorServer:"Bağlantı sorunu.",errorNoResults:"Öğe bulunamadı.",wordNotFound:"Kelime bulunamadı",definition:"Tanım",grammar:"Gramer",collocations:"Birlikte Kullanımlar",examples:"Örnekler",commonMistakes:"Yaygın Hatalar",contextNote:"Bağlam/Not",pronunciation:"Telaffuz",forceWordlistLabel:"Bu bir kelime listesidir",hintWordlist:"📝 Kelime Listesi Modu: Satır başına bir kelime/ifade veya <b>-</b> ile ayırın. Seviye gerekli değildir.",hintText:"📚 Metin/Dosya Modu: Lütfen seviyenizi seçin.",expandAll:"⬇️ Tümünü Genişlet",collapseAll:"⬆️ Tümünü Daralt",speakWord:"Kelimeyi söyle",speakSentence:"Cümleyi söyle",stopSpeech:"Konuşmayı durdur"},
+        it: {appTitle:"Apprendimento delle lingue con IA",mainTitle:"Costruttore di vocabolario intelligente",subtitle:"Elenco parole o testo lungo.",sourceLangLabel:"Lingua madre",targetLangLabel:"Lingua che imparo",userLevelLabel:"Livello (per testi/file)",levelUnspecified:"Non specificato",levelA1:"A1 (Principiante)",levelA2:"A2 (Elementare)",levelB1:"B1 (Intermedio)",levelB2:"B2 (Intermedio-superiore)",levelC1:"C1 (Avanzato)",uploadBtnText:"Carica (.txt, .srt)",processBtn:"Analizza",resultsTitle:"Risultati dell'analisi",startOverBtn:"Ricomincia",errorLevel:"Per testi/file seleziona il livello.",errorText:"Inserisci/carica un input valido.",errorAIResponse:"Nessuna risposta valida.",errorServer:"Problema di connessione.",errorNoResults:"Nessun elemento trovato.",wordNotFound:"Parola non trovata",definition:"Definizione",grammar:"Grammatica",collocations:"Collocazioni",examples:"Esempi",commonMistakes:"Errori comuni",contextNote:"Contesto/Nota",pronunciation:"Pronuncia",forceWordlistLabel:"Questa è una lista di parole",hintWordlist:"📝 Modalità lista di parole: Una parola/frase per riga, o separare con <b>-</b>. Il livello non è richiesto.",hintText:"📚 Modalità testo/file: Seleziona il tuo livello.",expandAll:"⬇️ Espandi tutto",collapseAll:"⬆️ Comprimi tutto",speakWord:"Pronuncia parola",speakSentence:"Pronuncia frase",stopSpeech:"Ferma discorso"},
+        ru: {appTitle:"Изучение языков с ИИ",mainTitle:"Умный конструктор словарного запаса",subtitle:"Список слов или длинный текст.",sourceLangLabel:"Родной язык",targetLangLabel:"Изучаемый язык",userLevelLabel:"Уровень (для текста/файлов)",levelUnspecified:"Не указан",levelA1:"A1 (Начинающий)",levelA2:"A2 (Элементарный)",levelB1:"B1 (Средний)",levelB2:"B2 (Выше среднего)",levelC1:"C1 (Продвинутый)",uploadBtnText:"Загрузить (.txt, .srt)",processBtn:"Анализировать",resultsTitle:"Результаты анализа",startOverBtn:"Начать сначала",errorLevel:"Для текста/файлов укажите уровень.",errorText:"Введите/загрузите корректные данные.",errorAIResponse:"Нет ответа ИИ.",errorServer:"Ошибка соединения.",errorNoResults:"Ничего не найдено.",wordNotFound:"Слово не найдено",definition:"Определение",grammar:"Грамматика",collocations:"Сочетания",examples:"Примеры",commonMistakes:"Частые ошибки",contextNote:"Контекст/Примечание",pronunciation:"Произношение",forceWordlistLabel:"Это список слов",hintWordlist:"📝 Режим списка слов: Одно слово/фраза на строку или разделите с помощью <b>-</b>. Уровень не требуется.",hintText:"📚 Режим текста/файла: Пожалуйста, выберите свой уровень.",expandAll:"⬇️ Развернуть все",collapseAll:"⬆️ Свернуть все",speakWord:"Произнести слово",speakSentence:"Произнести предложение",stopSpeech:"Остановить речь"}
     };
 
-    function setLanguage(lang) {
-        currentLang = lang;
-        const strings = uiStrings[lang];
-        const isRtl = lang === 'fa';
-        
-        document.documentElement.lang = lang;
-        document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
-
-        document.getElementById('app-title').textContent = strings.appTitle;
-        document.getElementById('main-title').textContent = strings.mainTitle;
-        document.getElementById('subtitle').textContent = strings.subtitle;
-        document.getElementById('source-lang-label').textContent = strings.sourceLangLabel;
-        document.getElementById('target-lang-label').textContent = strings.targetLangLabel;
-        document.getElementById('user-level-label').textContent = strings.userLevelLabel;
-        document.getElementById('level-unspecified').textContent = strings.levelUnspecified;
-        document.getElementById('level-a1').textContent = strings.levelA1;
-        document.getElementById('level-a2').textContent = strings.levelA2;
-        document.getElementById('level-b1').textContent = strings.levelB1;
-        document.getElementById('level-b2').textContent = strings.levelB2;
-        document.getElementById('level-c1').textContent = strings.levelC1;
-        document.getElementById('text-input').placeholder = strings.textPlaceholder;
-        document.getElementById('upload-btn-text').textContent = strings.uploadBtnText;
-        document.getElementById('process-btn').textContent = strings.processBtn;
-        document.getElementById('results-title').textContent = strings.resultsTitle;
-        document.getElementById('start-over-btn').textContent = strings.startOverBtn;
+    function setLanguage(lang){
+      currentLang = lang;
+      const s = uiStrings[lang] || uiStrings.en;
+      const isRtl = lang==='fa';
+      
+      document.documentElement.lang = lang;
+      document.documentElement.dir = isRtl ? 'rtl':'ltr';
+      
+      document.getElementById('app-title').textContent = s.appTitle;
+      document.getElementById('main-title').textContent = s.mainTitle;
+      document.getElementById('subtitle').textContent = s.subtitle;
+      document.getElementById('source-lang-label').textContent = s.sourceLangLabel;
+      document.getElementById('target-lang-label').textContent = s.targetLangLabel;
+      document.getElementById('user-level-label').textContent = s.userLevelLabel;
+      document.getElementById('level-unspecified').textContent = s.levelUnspecified;
+      document.getElementById('level-a1').textContent = s.levelA1;
+      document.getElementById('level-a2').textContent = s.levelA2;
+      document.getElementById('level-b1').textContent = s.levelB1;
+      document.getElementById('level-b2').textContent = s.levelB2;
+      document.getElementById('level-c1').textContent = s.levelC1;
+      document.getElementById('upload-btn-text').textContent = s.uploadBtnText;
+      document.getElementById('process-btn').textContent = "🚀 " + s.processBtn;
+      document.getElementById('results-title').textContent = s.resultsTitle;
+      document.getElementById('start-over-btn').textContent = s.startOverBtn;
+      document.getElementById('force-wordlist-label').textContent = s.forceWordlistLabel;
+      document.getElementById('expand-all').textContent = s.expandAll;
+      document.getElementById('collapse-all').textContent = s.collapseAll;
+      document.getElementById('stop-tts').title = s.stopSpeech;
+      document.getElementById('text-input').placeholder = s.textPlaceholder;
+      syncLevelRequirement();
     }
 
-    // Initialize with default language
-    document.addEventListener('DOMContentLoaded', () => {
-        setLanguage('fa');
-    });
-
-</script>
-
+    document.addEventListener('DOMContentLoaded', ()=> setLanguage('fa'));
+  </script>
 </body>
 </html>
 
