@@ -65,6 +65,7 @@
       border-radius: 1.25rem;
       box-shadow: var(--shadow);
     }
+
     .ring-card {
       position: relative;
       border-radius: 1rem;
@@ -81,7 +82,7 @@
       -webkit-mask-composite: xor; mask-composite: exclude;
       pointer-events: none;
       animation: spin 8s linear infinite;
-      opacity: .8;
+      opacity: .75;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
@@ -243,8 +244,11 @@
           </div>
         </div>
 
-        <div id="hint-container" class="text-sm bg-[var(--accent-1)]/40 border border-[var(--border)] rounded-xl p-4 mb-5">
-          <span id="hint"></span>
+        <div id="hint-container" class="mb-5 rounded-xl border border-[var(--border)] bg-[var(--surface)]">
+            <div class="px-4 py-3 flex items-start gap-3">
+              <div class="size-8 rounded-lg bg-[var(--accent-1)]/60 grid place-items-center mt-1">💡</div>
+              <div id="hint" class="text-sm muted space-y-1"></div>
+            </div>
         </div>
 
         <div id="drop-zone" class="drop-zone p-4">
@@ -275,7 +279,6 @@
           <p id="error-msg" class="text-red-500 text-sm mt-3 text-center hidden"></p>
         </div>
       </div>
-    </div>
   </section>
 
   <!-- Results -->
@@ -300,7 +303,8 @@
   </main>
 
   <footer class="text-center p-8 mt-8 text-sm muted">
-    <p id="footer-text"></p>
+      <p id="footer-text-line1"></p>
+      <p id="footer-text-line2" class="mt-1"></p>
   </footer>
 
   <button id="to-top" class="floating-top" aria-label="Back to top" title="بازگشت به بالا">⤴︎</button>
@@ -352,7 +356,10 @@
     dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('drag-over'); });
     dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
     dropZone.addEventListener('drop', (e) => { e.preventDefault(); dropZone.classList.remove('drag-over'); const f = e.dataTransfer.files[0]; if (f) handleFile(f); });
-    uiLangSwitcher.addEventListener('change', (e) => setLanguage(e.target.value));
+    uiLangSwitcher.addEventListener('change', (e) => {
+      localStorage.setItem('ll-lang', e.target.value);
+      setLanguage(e.target.value);
+    });
     forceWordlist.addEventListener('change', syncLevelRequirement);
     textInput.addEventListener('input', syncLevelRequirement);
     window.addEventListener('scroll', () => { toTopBtn.classList.toggle('show', window.scrollY > 800) });
@@ -553,8 +560,8 @@ ${isWordList ? `Here is the word/phrase list:\n${text}` : `Here is the text to a
     let currentLang='fa';
     const langNameToCode = {'Persian':'fa','English':'en','German':'de','French':'fr','Spanish':'es','Chinese':'zh','Turkish':'tr','Italian':'it','Russian':'ru'};
     const uiStrings = {
-      fa:{appTitle:"یادگیری زبان با هوش مصنوعی",mainTitle:"سازنده واژگان هوشمند",headerSubtitle:"یادگیری کاربردی با کمک هوش مصنوعی",subtitle:"زبان‌ها را انتخاب کن، متن یا فهرست واژه‌ها را بده؛ بقیه‌اش با ما ✨",sourceLangLabel:"زبان مادری من",targetLangLabel:"زبانی که یاد می‌گیرم",userLevelLabel:"سطح من",forceWordlistLabel:"این یک لیست واژه است",hintStatic:"💡 حالت <b>«لیست واژه»</b>: هر خط یک واژه/عبارت یا با <code>-</code> جدا کنید. انتخاب سطح لازم نیست.<br>در غیر این صورت، با وارد کردن متن یا فایل و <b>انتخاب سطح</b>، سیستم واژگان کاربردی را برای شما استخراج می‌کند.",uploadBtnText:"آپلود فایل (.txt, .srt)",processBtn:"تحلیل کن",resultsTitle:"نتایج تحلیل",startOverBtn:"شروع دوباره",expandAll:"باز کردن همه",collapseAll:"بستن همه",errorText:"لطفاً ورودی معتبر وارد یا آپلود کنید.",errorLevel:"برای متن‌ها/فایل‌ها لطفاً سطح خود را انتخاب کنید.",errorAIResponse:"پاسخ معتبری از هوش مصنوعی دریافت نشد.",errorServer:"مشکل ارتباط با سرور. دوباره تلاش کنید.",errorNoResults:"موردی پیدا نشد.",wordNotFound:"کلمه یافت نشد",definition:"تعریف",grammar:"گرامر",collocations:"ترکیب‌های رایج",examples:"مثال‌ها",commonMistakes:"اشتباهات رایج",contextNote:"نکته",pronunciation:"تلفظ",notApplicable:"—",tags:"برچسب‌ها",speakWord:"شنیدن واژه",speakSentence:"شنیدن جمله",stopSpeech:"توقف گفتار",footerText:"ساخته شده توسط ", textPlaceholder:"لیست کلمات خود را اینجا وارد کنید یا فایل رو کپی کنید..."},
-      en:{appTitle:"AI Language Learner",mainTitle:"Smart Vocab Builder",headerSubtitle:"Practical learning with AI assistance",subtitle:"Pick languages, paste text or a word list—AI does the rest ✨",sourceLangLabel:"My Native Language",targetLangLabel:"Language I'm Learning",userLevelLabel:"My Level",forceWordlistLabel:"This is a word list",hintStatic:"💡 <b>'Word List' mode:</b> one word/phrase per line or separated with <code>-</code>. Level selection is not needed.<br>Otherwise, by pasting text or uploading a file and <b>selecting your level</b>, the system will extract practical vocabulary for you.",uploadBtnText:"Upload File (.txt, .srt)",processBtn:"Analyze",resultsTitle:"Analysis Results",startOverBtn:"Start Over",expandAll:"Expand All",collapseAll:"Collapse All",errorText:"Please enter or upload valid input.",errorLevel:"For texts/files, please select your level.",errorAIResponse:"No valid AI response.",errorServer:"Server connection issue.",errorNoResults:"No items found.",wordNotFound:"Word not found",definition:"Definition",grammar:"Grammar",collocations:"Collocations",examples:"Examples",commonMistakes:"Common Mistakes",contextNote:"Context/Note",pronunciation:"Pronunciation",notApplicable:"—",tags:"Tags",speakWord:"Speak word",speakSentence:"Speak sentence",stopSpeech:"Stop speech",footerText:"Built by ", textPlaceholder:"Enter your word list here or copy the file..."},
+      fa:{appTitle:"یادگیری زبان با هوش مصنوعی",mainTitle:"سازنده واژگان هوشمند",headerSubtitle:"یادگیری کاربردی با کمک هوش مصنوعی",subtitle:"زبان‌ها را انتخاب کن، متن یا فهرست واژه‌ها را بده؛ بقیه‌اش با ما ✨",sourceLangLabel:"زبان مادری من",targetLangLabel:"زبانی که یاد می‌گیرم",userLevelLabel:"سطح من",forceWordlistLabel:"این یک لیست واژه است",hintStatic:"<p class='font-semibold mb-1'>راهنمای ورودی:</p><ul class='list-disc pr-4 space-y-1'><li>اگر <b>لیست کلمات</b> دارید: هر خط یک کلمه/عبارت بنویسید. در این حالت <b>نیازی به انتخاب سطح نیست</b>.</li><li>اگر <b>متن یا فایل</b> دارید: سطح‌تان را انتخاب کنید تا کلمات، اصطلاحات و جملات کاربردی <b>متناسب با سطح شما</b> استخراج شود.</li></ul>",uploadBtnText:"آپلود فایل (.txt, .srt)",processBtn:"تحلیل کن",resultsTitle:"نتایج تحلیل",startOverBtn:"شروع دوباره",expandAll:"باز کردن همه",collapseAll:"بستن همه",errorText:"لطفاً ورودی معتبر وارد یا آپلود کنید.",errorLevel:"برای متن‌ها/فایل‌ها لطفاً سطح خود را انتخاب کنید.",errorAIResponse:"پاسخ معتبری از هوش مصنوعی دریافت نشد.",errorServer:"مشکل ارتباط با سرور. دوباره تلاش کنید.",errorNoResults:"موردی پیدا نشد.",wordNotFound:"کلمه یافت نشد",definition:"تعریف",grammar:"گرامر",collocations:"ترکیب‌های رایج",examples:"مثال‌ها",commonMistakes:"اشتباهات رایج",contextNote:"نکته",pronunciation:"تلفظ",notApplicable:"—",tags:"برچسب‌ها",speakWord:"شنیدن واژه",speakSentence:"شنیدن جمله",stopSpeech:"توقف گفتار",footerText:"ساخته شده توسط ", textPlaceholder:"لیست کلمات خود را اینجا وارد کنید یا متن/فایل را Paste کنید…", dropHint:"می‌توانید کلمات را تایپ کنید یا فایل .txt/.srt را بکشید و رها کنید."},
+      en:{appTitle:"AI Language Learner",mainTitle:"Smart Vocab Builder",headerSubtitle:"Practical learning with AI assistance",subtitle:"Pick languages, paste text or a word list—AI does the rest ✨",sourceLangLabel:"My Native Language",targetLangLabel:"Language I'm Learning",userLevelLabel:"My Level",forceWordlistLabel:"This is a word list",hintStatic:"<p class='font-semibold mb-1'>Input Guide:</p><ul class='list-disc pl-4 space-y-1'><li>If you have a <b>word list</b>: write one word/phrase per line. <b>No need to select a level</b>.</li><li>If you have <b>text or a file</b>: select your level so the system can extract vocabulary <b>suited for you</b>.</li></ul>",uploadBtnText:"Upload File (.txt, .srt)",processBtn:"Analyze",resultsTitle:"Analysis Results",startOverBtn:"Start Over",expandAll:"Expand All",collapseAll:"Collapse All",errorText:"Please enter or upload valid input.",errorLevel:"For texts/files, please select your level.",errorAIResponse:"No valid AI response.",errorServer:"Server connection issue.",errorNoResults:"No items found.",wordNotFound:"Word not found",definition:"Definition",grammar:"Grammar",collocations:"Collocations",examples:"Examples",commonMistakes:"Common Mistakes",contextNote:"Context/Note",pronunciation:"Pronunciation",notApplicable:"—",tags:"Tags",speakWord:"Speak word",speakSentence:"Speak sentence",stopSpeech:"Stop speech",footerText:"Built by ", textPlaceholder:"Enter your word list here or paste a text/file…", dropHint:"Type your words or drag & drop a .txt/.srt file."},
       // Other languages can be filled similarly
     };
 
@@ -563,13 +570,30 @@ ${isWordList ? `Here is the word/phrase list:\n${text}` : `Here is the text to a
       const s = uiStrings[lang] || uiStrings.en;
       const isRtl = lang==='fa';
       document.documentElement.lang = lang; document.documentElement.dir = isRtl?'rtl':'ltr';
-      for(const key in s){
-        const el = document.getElementById(key.replace(/([A-Z])/g, "-$1").toLowerCase());
-        if(el) el.innerHTML = s[key];
+      
+      const elementsToUpdate = {
+          'app-title': s.appTitle,
+          'main-title': s.mainTitle,
+          'header-subtitle': s.headerSubtitle,
+          'subtitle': s.subtitle,
+          'source-lang-label': s.sourceLangLabel,
+          'target-lang-label': s.targetLangLabel,
+          'user-level-label': s.userLevelLabel,
+          'force-wordlist-label': s.forceWordlistLabel,
+          'hint': s.hintStatic,
+          'upload-btn-text': s.uploadBtnText,
+          'results-title': s.resultsTitle,
+          'start-over-btn': s.startOverBtn,
+          'drop-hint-text': s.dropHint
+      };
+
+      for(const id in elementsToUpdate){
+          const el = document.getElementById(id);
+          if(el) el.innerHTML = elementsToUpdate[id];
       }
-       // Specific cases not covered by ID matching
+
       document.title = s.appTitle;
-      document.getElementById('text-input').placeholder = s.textPlaceholder || "Word list (one per line) or long text for analysis…";
+      document.getElementById('text-input').placeholder = s.textPlaceholder;
       document.getElementById('level-unspecified').textContent = s.levelUnspecified || "Unspecified";
       document.getElementById('level-a1').textContent = s.levelA1 || "A1 (Beginner)";
       document.getElementById('level-a2').textContent = s.levelA2 || "A2 (Elementary)";
@@ -579,12 +603,26 @@ ${isWordList ? `Here is the word/phrase list:\n${text}` : `Here is the text to a
       document.querySelector('#process-btn > span').textContent = s.processBtn;
       document.querySelector('#expand-all').innerHTML = `<span>⬇️</span><span>${s.expandAll}</span>`;
       document.querySelector('#collapse-all').innerHTML = `<span>⬆️</span><span>${s.collapseAll}</span>`;
+      document.getElementById('stop-tts').title = s.stopSpeech;
+      
+      const footerLine1 = document.getElementById('footer-text-line1');
+      const footerLine2 = document.getElementById('footer-text-line2');
+      if(lang === 'fa') {
+          footerLine1.textContent = 'ساخته شده با همکاری هوش مصنوعی';
+          footerLine2.innerHTML = `سازنده: <a href="https://www.linkedin.com/in/mr-qaderi/" target="_blank" rel="noopener" class="text-[var(--primary-600)] hover:underline font-semibold">MohammadReza Qaderi</a>`;
+      } else {
+          footerLine1.textContent = 'Built with AI collaboration';
+          footerLine2.innerHTML = `Built by <a href="https://www.linkedin.com/in/mr-qaderi/" target="_blank" rel="noopener" class="text-[var(--primary-600)] hover:underline font-semibold">MohammadReza Qaderi</a>`;
+      }
+
+
       syncLevelRequirement();
     }
 
     document.addEventListener('DOMContentLoaded', ()=> {
-      setLanguage(localStorage.getItem('ll-lang') || 'fa');
-      uiLangSwitcher.value = localStorage.getItem('ll-lang') || 'fa';
+      const lang = localStorage.getItem('ll-lang') || 'fa';
+      setLanguage(lang);
+      uiLangSwitcher.value = lang;
     });
   </script>
 </body>
