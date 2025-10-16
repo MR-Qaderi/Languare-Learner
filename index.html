@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="fa" dir="rtl" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -10,232 +10,314 @@
   <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary-color: #3b82f6;
-      --primary-hover: #2563eb;
-      --card-bg: rgba(255, 255, 255, 0.75);
-      --border-color: rgba(0, 0, 0, 0.08);
-      --shadow-color: rgba(50, 50, 93, 0.1);
-      --text-main: #1f2937;
-      --text-light: #4b5563;
+      --bg: #f7f9fc;
+      --surface: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --border: rgba(17, 24, 39, 0.08);
+      --shadow: 0 10px 30px -12px rgba(2, 6, 23, .18);
+      --primary: #3b82f6;
+      --primary-600:#2563eb;
+      --chip:#f8fafc;
+      --chip-border:#e5e7eb;
+      --accent-1: #e0e7ff;
+      --accent-2: #fce7f3;
+      --accent-3: #ccfbf1;
+      --accent-4: #fef3c7;
     }
+    [data-theme="dark"]{
+      --bg: #0b1220;
+      --surface: #0f172a;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --border: rgba(148, 163, 184, 0.15);
+      --shadow: 0 14px 42px -12px rgba(2, 6, 23, .6);
+      --primary: #60a5fa;
+      --primary-600:#3b82f6;
+      --chip:#0b1220;
+      --chip-border:#1f2937;
+      --accent-1: #1e293b;
+      --accent-2: #1f2540;
+      --accent-3: #0f2f2b;
+      --accent-4: #2a1f0f;
+    }
+
     html { scroll-behavior: smooth; }
     body {
-      font-family: 'Vazirmatn', sans-serif;
-      background-color: #f9fafb;
+      font-family: 'Vazirmatn', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background-color: var(--bg);
       background-image:
-        radial-gradient(circle at 12% 18%, rgb(215, 227, 255) 0%, transparent 42%),
-        radial-gradient(circle at 88% 85%, rgb(253, 224, 235) 0%, transparent 45%);
-      color: var(--text-main);
+        radial-gradient(1200px 600px at 100% -10%, var(--accent-1), transparent 60%),
+        radial-gradient(900px 500px at -10% 110%, var(--accent-2), transparent 60%);
+      color: var(--text);
+      min-height: 100vh;
     }
+
     .glass {
-      backdrop-filter: saturate(180%) blur(12px);
-      background: rgba(255, 255, 255, 0.7);
-      border-bottom: 1px solid var(--border-color);
+      backdrop-filter: saturate(160%) blur(12px);
+      background: color-mix(in oklab, var(--surface) 78%, transparent);
+      border-bottom: 1px solid var(--border);
     }
+
     .card {
-      background: var(--card-bg);
-      backdrop-filter: blur(20px);
+      background: color-mix(in oklab, var(--surface) 94%, transparent);
+      border: 1px solid var(--border);
       border-radius: 1.25rem;
-      border: 1px solid var(--border-color);
-      box-shadow: 0 10px 30px -10px var(--shadow-color);
+      box-shadow: var(--shadow);
     }
-    .result-item {
-      border: 1px solid var(--border-color);
+    .ring-card {
+      position: relative;
       border-radius: 1rem;
       overflow: hidden;
-      transition: all 0.3s ease;
-      background: rgba(255,255,255,.9);
+      background-color: var(--surface);
     }
-    .result-item:hover { box-shadow: 0 8px 26px -10px rgba(2,6,23,.12); }
+    .ring-card::before{
+      content:"";
+      position:absolute; inset: -1px;
+      border-radius: 1rem;
+      padding: 1px;
+      background: conic-gradient(from 180deg, #60a5fa, #a78bfa, #22d3ee, #60a5fa);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor; mask-composite: exclude;
+      pointer-events: none;
+      animation: spin 8s linear infinite;
+      opacity: .8;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
     .result-header {
       cursor: pointer;
-      padding: 1rem 1.25rem;
-      background: rgba(249, 250, 251, 0.6);
-      transition: background 0.2s;
+      background: color-mix(in oklab, var(--surface) 88%, transparent);
+      transition: background .2s ease, transform .15s ease;
     }
-    .result-header:hover { background: rgba(243, 244, 246, 0.85); }
+    .ring-card:hover .result-header { transform: translateY(-1px); }
     .result-details {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out, border-color 0.5s ease-in-out;
-      padding: 0 1.5rem;
+      max-height: 0; overflow: hidden;
+      transition: max-height .5s ease, padding .35s ease, border-color .35s ease;
       border-top: 1px solid transparent;
+      padding: 0 1.25rem;
+      background: var(--surface);
     }
     .result-details.open {
-      max-height: 1500px;
-      padding: 1.25rem 1.5rem 1.5rem;
-      border-top-color: var(--border-color);
+      max-height: 1600px; border-top-color: var(--border);
+      padding: 1rem 1.25rem 1.25rem;
     }
+
     .chip {
-      display: inline-block;
-      border-radius: 999px;
-      border: 1px solid var(--border-color);
-      padding: 0.18rem 0.6rem;
-      font-size: 0.78rem;
-      background: #fff;
-      font-weight: 600;
+      display: inline-flex; align-items: center; gap:.35rem;
+      padding: .22rem .6rem; border-radius: 999px;
+      font-size: .78rem; font-weight: 600;
+      border: 1px solid var(--chip-border);
+      background: var(--chip);
+      white-space: nowrap;
     }
-    .chip.tag { background: #f8fafc; }
-    .tag-palette-1 { background:#eef2ff; border-color:#e0e7ff; }
-    .tag-palette-2 { background:#ecfeff; border-color:#cffafe; }
-    .tag-palette-3 { background:#fefce8; border-color:#fde68a; }
-    .tag-palette-4 { background:#f0fdf4; border-color:#bbf7d0; }
-    .tag-palette-5 { background:#fff7ed; border-color:#fed7aa; }
-    .drop-zone { border: 2px dashed #d1d5db; border-radius: 1rem; transition: all 0.2s ease; }
-    .drop-zone.drag-over { border-color: var(--primary-color); background: #eff6ff; }
+    .chip .dot{width:.5rem;height:.5rem;border-radius:999px;opacity:.85}
+
+    .drop-zone {
+      border: 2px dashed var(--border);
+      border-radius: 1rem; transition: all .2s ease;
+      background: color-mix(in oklab, var(--surface) 80%, transparent);
+    }
+    .drop-zone.drag-over { border-color: var(--primary); background: color-mix(in oklab, var(--surface) 92%, transparent); }
+
     .btn {
-      border-radius: 0.75rem;
-      font-weight: 600;
-      padding: 0.6rem 1.2rem;
-      transition: all 0.2s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      border: 1px solid transparent;
+      border-radius: .85rem; font-weight: 700; padding: .68rem 1.2rem;
+      display: inline-flex; align-items: center; gap: .55rem;
+      border: 1px solid var(--border);
+      transition: transform .08s ease, background .15s ease, border-color .15s ease;
+      will-change: transform;
     }
-    .btn-primary { background: var(--primary-color); color: #fff; border-color: var(--primary-color); box-shadow: 0 4px 14px -4px var(--primary-color); }
-    .btn-primary:hover { background: var(--primary-hover); }
-    .btn-secondary { background: #fff; color: var(--text-light); border-color: var(--border-color); }
-    .btn-secondary:hover { background: #f9fafb; border-color: #d1d5db; }
-    .loader {
-      border: 5px solid #e5e7eb;
-      border-top: 5px solid var(--primary-color);
-      border-radius: 50%;
-      width: 48px;
-      height: 48px;
-      animation: spin 1s linear infinite;
+    .btn:active{ transform: translateY(1px) }
+    .btn-primary{
+      background: linear-gradient(180deg, var(--primary), var(--primary-600));
+      color: #fff; border-color: color-mix(in oklab, var(--primary-600) 60%, #0000);
+      box-shadow: 0 12px 28px -12px color-mix(in oklab, var(--primary) 60%, transparent);
     }
-    select, textarea {
-        border: 1px solid var(--border-color);
-        border-radius: 0.75rem;
-        transition: box-shadow 0.2s;
-        background: #fff;
+    .btn-secondary{ background: var(--surface); color: var(--text); }
+    .btn-ghost{ background: transparent; border-color: transparent; }
+
+    .muted { color: var(--muted); }
+
+    .skeleton {
+      background: linear-gradient(90deg,
+        color-mix(in oklab, var(--surface) 75%, transparent) 25%,
+        color-mix(in oklab, var(--surface) 95%, transparent) 37%,
+        color-mix(in oklab, var(--surface) 75%, transparent) 63%);
+      background-size: 400% 100%;
+      animation: shimmer 1.2s ease-in-out infinite;
+      border-radius: .75rem;
     }
-    select:focus, textarea:focus {
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.35);
-        border-color: var(--primary-color);
+    @keyframes shimmer { 0%{background-position: 100% 0} 100%{background-position: 0 0} }
+
+    .toggle {
+      width: 44px; height: 26px; border-radius: 999px; position: relative; border:1px solid var(--border);
+      background: color-mix(in oklab, var(--surface) 86%, transparent); cursor: pointer;
+      display: inline-flex; align-items: center;
     }
-    .muted { color:#6b7280 }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    .toggle .knob { width: 20px; height: 20px; border-radius: 999px; background: var(--primary); transition: transform .2s ease; transform: translateX(2px); }
+    [data-theme="dark"] .toggle .knob { transform: translateX(22px); }
+
+    .floating-top {
+      position: fixed; bottom: 20px; inset-inline-end: 20px; z-index: 50;
+      backdrop-filter: blur(8px);
+      background: color-mix(in oklab, var(--surface) 92%, transparent);
+      border:1px solid var(--border); border-radius: 999px;
+      padding: .6rem .8rem; box-shadow: var(--shadow);
+      display: none;
+    }
+    .floating-top.show{ display: inline-flex; }
   </style>
 </head>
-<body class="min-h-screen">
-  <!-- Top bar -->
+<body>
+  <!-- Header -->
   <header class="sticky top-0 z-20 glass">
-    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-600"><path d="M12 2a3 3 0 0 0-3 3v4a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M12 18a3 3 0 0 0 3-3V9a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z"/><path d="M18 12a3 3 0 0 0-3-3V5a3 3 0 0 0-6 0v4a3 3 0 0 0 0 6v4a3 3 0 0 0 6 0v-4a3 3 0 0 0-3-3Z"/><path d="M6 12a3 3 0 0 0-3-3V5a3 3 0 0 0-3 3v4a3 3 0 0 0 3 3v4a3 3 0 0 0 3 3v-4a3 3 0 0 0-3-3Z"/></svg>
-        <h1 id="main-title" class="text-xl md:text-2xl font-bold text-gray-800">سازنده واژگان هوشمند</h1>
+        <div class="size-9 rounded-xl bg-gradient-to-br from-blue-500 via-indigo-500 to-cyan-400 grid place-items-center text-white shadow">
+          <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v4a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M12 18a3 3 0 0 0 3-3V9a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z"/></svg>
+        </div>
+        <div>
+          <h1 id="main-title" class="text-xl md:text-2xl font-extrabold tracking-tight"></h1>
+          <p id="header-subtitle" class="text-xs muted hidden sm:block"></p>
+        </div>
       </div>
-      <div class="flex items-center gap-2">
-        <select id="ui-lang-switcher" class="px-2 py-1.5 bg-white rounded-lg border border-gray-200 text-sm">
-          <option value="fa">فارسی</option><option value="en">English</option>
-          <option value="de">Deutsch</option><option value="fr">Français</option>
-          <option value="es">Español</option><option value="zh">中文</option>
-          <option value="tr">Türkçe</option><option value="it">Italiano</option>
-          <option value="ru">Русский</option>
-        </select>
-        <button id="stop-tts" class="btn btn-secondary p-2.5" title="توقف گفتار" aria-label="توقف گفتار">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg>
-        </button>
+
+      <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2">
+          <select id="ui-lang-switcher" class="px-2 py-1.5 rounded-lg border text-sm bg-[var(--surface)] border-[var(--border)]">
+            <option value="fa">فارسی</option><option value="en">English</option>
+            <option value="de">Deutsch</option><option value="fr">Français</option>
+            <option value="es">Español</option><option value="zh">中文</option>
+            <option value="tr">Türkçe</option><option value="it">Italiano</option>
+            <option value="ru">Русский</option>
+          </select>
+          <button id="theme-toggle" class="toggle" aria-label="toggle theme">
+            <span class="knob"></span>
+          </button>
+          <button id="stop-tts" class="btn btn-ghost p-2.5" title="توقف گفتار" aria-label="توقف گفتار">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg>
+          </button>
+        </div>
       </div>
     </div>
   </header>
 
-  <main class="max-w-6xl mx-auto p-4 md:p-8">
-    <!-- Setup -->
-    <section id="setup-view" class="card p-6 md:p-8">
-      <p id="subtitle" class="text-gray-600 mb-6 text-lg">
-        زبان مورد نظر خود را انتخاب کرده و متن یا فهرست واژه‌ها را وارد کنید.
-      </p>
+  <!-- Hero -->
+  <section class="max-w-7xl mx-auto px-4 pt-8 pb-2">
+    <div class="grid md:grid-cols-[1.4fr_.9fr] gap-6">
+      <div class="card p-6 md:p-8">
+        <p id="subtitle" class="muted mb-4 text-base"></p>
 
-      <!-- selectors -->
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-        <div>
-          <label id="source-lang-label" class="block text-sm font-medium mb-1 text-gray-700">زبان مادری من</label>
-          <select id="source-lang" class="w-full p-2.5">
-            <option>Persian</option><option>English</option><option>German</option>
-            <option>French</option><option>Spanish</option><option>Chinese</option>
-            <option>Turkish</option><option>Italian</option><option>Russian</option>
-          </select>
-        </div>
-        <div>
-          <label id="target-lang-label" class="block text-sm font-medium mb-1 text-gray-700">زبانی که یاد می‌گیرم</label>
-          <select id="target-lang" class="w-full p-2.5">
-            <option>English</option><option>German</option><option>French</option>
-            <option>Spanish</option><option>Persian</option><option>Chinese</option>
-            <option>Turkish</option><option>Italian</option><option>Russian</option>
-          </select>
-        </div>
-        <div>
-          <label id="user-level-label" class="block text-sm font-medium mb-1 text-gray-700">سطح من (برای متن/فایل)</label>
-          <select id="user-level" class="w-full p-2.5">
-            <option id="level-unspecified" value="Unspecified">انتخاب نشده</option>
-            <option id="level-a1" value="A1 (Beginner)">A1 (مبتدی)</option>
-            <option id="level-a2" value="A2 (Elementary)">A2 (ابتدایی)</option>
-            <option id="level-b1" value="B1 (Intermediate)">B1 (متوسط)</option>
-            <option id="level-b2" value="B2 (Upper-Intermediate)">B2 (فوق متوسط)</option>
-            <option id="level-c1" value="C1 (Advanced)">C1 (پیشرفته)</option>
-          </select>
-        </div>
-        <div class="flex items-end">
-          <label class="inline-flex items-center gap-2 cursor-pointer">
-            <input id="force-wordlist" type="checkbox" class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500">
-            <span id="force-wordlist-label" class="text-sm">این ورودی یک لیست واژه است</span>
-          </label>
-        </div>
-      </div>
-
-      <!-- guidance -->
-      <div id="hint-container" class="text-sm text-blue-800 bg-blue-50 border border-blue-200 rounded-xl p-4 mb-5">
-        <span id="hint"></span>
-      </div>
-
-      <!-- input -->
-      <div id="drop-zone" class="drop-zone p-4">
-        <textarea id="text-input" rows="10" class="w-full p-3 bg-transparent focus:bg-white" placeholder=""></textarea>
-        <div class="flex flex-col md:flex-row gap-3 md:items-center justify-between mt-4">
-          <div class="flex items-center gap-2">
-            <label for="file-upload" class="cursor-pointer btn btn-secondary">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-              <span id="upload-btn-text"></span>
-            </label>
-            <input id="file-upload" type="file" class="hidden" accept=".txt,.srt">
-            <span id="file-name" class="text-sm text-gray-500"></span>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+          <div>
+            <label id="source-lang-label" class="block text-sm font-medium mb-1"></label>
+            <select id="source-lang" class="w-full p-2.5 rounded-xl border bg-[var(--surface)] border-[var(--border)]">
+              <option>Persian</option><option>English</option><option>German</option>
+              <option>French</option><option>Spanish</option><option>Chinese</option>
+              <option>Turkish</option><option>Italian</option><option>Russian</option>
+            </select>
           </div>
-          <button id="process-btn" class="btn btn-primary px-8 py-3 shadow-lg">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-            <span class="select-none"></span>
-          </button>
+          <div>
+            <label id="target-lang-label" class="block text-sm font-medium mb-1"></label>
+            <select id="target-lang" class="w-full p-2.5 rounded-xl border bg-[var(--surface)] border-[var(--border)]">
+              <option>English</option><option>German</option><option>French</option>
+              <option>Spanish</option><option>Persian</option><option>Chinese</option>
+              <option>Turkish</option><option>Italian</option><option>Russian</option>
+            </select>
+          </div>
+          <div>
+            <label id="user-level-label" class="block text-sm font-medium mb-1"></label>
+            <select id="user-level" class="w-full p-2.5 rounded-xl border bg-[var(--surface)] border-[var(--border)]">
+              <option id="level-unspecified" value="Unspecified"></option>
+              <option id="level-a1" value="A1 (Beginner)"></option>
+              <option id="level-a2" value="A2 (Elementary)"></option>
+              <option id="level-b1" value="B1 (Intermediate)"></option>
+              <option id="level-b2" value="B2 (Upper-Intermediate)"></option>
+              <option id="level-c1" value="C1 (Advanced)"></option>
+            </select>
+          </div>
+          <div class="flex items-end">
+            <label class="inline-flex items-center gap-2 cursor-pointer">
+              <input id="force-wordlist" type="checkbox" class="w-4 h-4 rounded accent-[var(--primary)]">
+              <span id="force-wordlist-label" class="text-sm"></span>
+            </label>
+          </div>
         </div>
-        <p id="error-msg" class="text-red-600 text-sm mt-3 text-center hidden"></p>
-      </div>
-    </section>
 
-    <!-- Results -->
-    <section id="results-view" class="hidden mt-10">
-      <div class="flex flex-col md:flex-row gap-3 md:items-center justify-between mb-6">
-        <h2 id="results-title" class="text-3xl md:text-4xl font-bold">نتایج تحلیل</h2>
-        <div class="flex gap-2">
-          <button id="expand-all" class="btn btn-secondary"></button>
-          <button id="collapse-all" class="btn btn-secondary"></button>
-          <button id="start-over-btn" class="btn btn-secondary"></button>
+        <div id="hint-container" class="text-sm bg-[var(--accent-1)]/40 border border-[var(--border)] rounded-xl p-4 mb-5">
+          <span id="hint"></span>
+        </div>
+
+        <div id="drop-zone" class="drop-zone p-4">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span id="drop-hint-icon" class="inline-grid place-items-center size-8 rounded-lg bg-[var(--accent-3)]/50"></span>
+              <span id="drop-hint-text" class="text-sm muted"></span>
+            </div>
+            <div id="drag-drop-badge" class="text-xs px-2 py-1 rounded-full bg-[var(--accent-2)]/40 border border-[var(--border)]"></div>
+          </div>
+
+          <textarea id="text-input" rows="10" class="w-full p-3 rounded-xl border bg-[var(--surface)] border-[var(--border)] focus:outline-none"></textarea>
+
+          <div class="flex flex-col md:flex-row gap-3 md:items-center justify-between mt-4">
+            <div class="flex items-center gap-2">
+              <label for="file-upload" class="cursor-pointer btn btn-secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <span id="upload-btn-text"></span>
+              </label>
+              <input id="file-upload" type="file" class="hidden" accept=".txt,.srt">
+              <span id="file-name" class="text-sm muted"></span>
+            </div>
+            <button id="process-btn" class="btn btn-primary px-8">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              <span class="select-none"></span>
+            </button>
+          </div>
+          <p id="error-msg" class="text-red-500 text-sm mt-3 text-center hidden"></p>
         </div>
       </div>
-      <div id="loader" class="flex justify-center items-center p-16 hidden"><div class="loader"></div></div>
+
+      <!-- Side promo / tips -->
+      <aside class="card p-6 md:p-8">
+        <div class="flex items-center gap-3 mb-5">
+          <span class="inline-grid place-items-center size-9 rounded-xl bg-[var(--accent-3)]/60">✨</span>
+          <h3 id="tips-title" class="font-extrabold"></h3>
+        </div>
+        <ul id="tips-list" class="space-y-3 text-sm muted"></ul>
+      </aside>
+    </div>
+  </section>
+
+  <!-- Results -->
+  <main class="max-w-7xl mx-auto px-4 pb-16">
+    <section id="results-view" class="hidden mt-8">
+      <div class="card p-4 md:p-5 flex flex-col md:flex-row gap-3 md:items-center justify-between mb-6">
+        <h2 id="results-title" class="text-2xl md:text-3xl font-extrabold"></h2>
+        <div class="flex gap-2">
+          <button id="expand-all" class="btn btn-secondary text-sm"></button>
+          <button id="collapse-all" class="btn btn-secondary text-sm"></button>
+          <button id="start-over-btn" class="btn btn-secondary text-sm"></button>
+        </div>
+      </div>
+
+      <div id="loader" class="grid gap-4 md:grid-cols-2 hidden">
+        <div class="ring-card"><div class="card p-5"><div class="skeleton h-6 w-40 mb-3"></div><div class="skeleton h-4 w-72 mb-6"></div><div class="skeleton h-24"></div></div></div>
+        <div class="ring-card"><div class="card p-5"><div class="skeleton h-6 w-40 mb-3"></div><div class="skeleton h-4 w-72 mb-6"></div><div class="skeleton h-24"></div></div></div>
+      </div>
+
       <div id="results-list" class="space-y-4"></div>
     </section>
   </main>
- 
-  <footer class="text-center p-8 mt-8 text-gray-500 text-sm">
-      <p id="footer-text">ساخته شده با همکاری هوش مصنوعی</p>
+
+  <footer class="text-center p-8 mt-8 text-sm muted">
+    <p id="footer-text"></p>
   </footer>
+
+  <button id="to-top" class="floating-top" aria-label="Back to top" title="بازگشت به بالا">⤴︎</button>
 
   <script>
     const PROXY_URL = 'https://language-learner.qaderi.workers.dev/';
 
-    const setupView = document.getElementById('setup-view');
     const resultsView = document.getElementById('results-view');
     const processBtn = document.getElementById('process-btn');
     const startOverBtn = document.getElementById('start-over-btn');
@@ -255,466 +337,265 @@
     const collapseAllBtn = document.getElementById('collapse-all');
     const forceWordlist = document.getElementById('force-wordlist');
     const hint = document.getElementById('hint');
+    const toTopBtn = document.getElementById('to-top');
+    const themeToggle = document.getElementById('theme-toggle');
 
-    // events
+    const savedTheme = localStorage.getItem('ll-theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    themeToggle.addEventListener('click', () => {
+      const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('ll-theme', next);
+    });
+
     processBtn.addEventListener('click', handleProcessRequest);
-    startOverBtn.addEventListener('click', resetUI);
+    startOverBtn.addEventListener('click', () => {
+      resultsView.classList.add('hidden');
+      textInput.value=''; fileUpload.value=''; fileNameEl.textContent=''; resultsList.innerHTML='';
+      hideError();
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
     expandAllBtn.addEventListener('click', () => toggleAll(true));
     collapseAllBtn.addEventListener('click', () => toggleAll(false));
     stopTTSBtn.addEventListener('click', () => speechSynthesis.cancel());
-
-    fileUpload.addEventListener('change', (e) => {
-      const f = e.target.files[0]; if (f) handleFile(f);
-    });
-
+    fileUpload.addEventListener('change', (e) => { const f = e.target.files[0]; if (f) handleFile(f); });
     dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('drag-over'); });
     dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
-    dropZone.addEventListener('drop', (e) => {
-      e.preventDefault(); dropZone.classList.remove('drag-over');
-      const f = e.dataTransfer.files[0]; if (f) handleFile(f);
-    });
-
+    dropZone.addEventListener('drop', (e) => { e.preventDefault(); dropZone.classList.remove('drag-over'); const f = e.dataTransfer.files[0]; if (f) handleFile(f); });
     uiLangSwitcher.addEventListener('change', (e) => setLanguage(e.target.value));
     forceWordlist.addEventListener('change', syncLevelRequirement);
     textInput.addEventListener('input', syncLevelRequirement);
-
-    function resetUI(){
-      resultsView.classList.add('hidden');
-      setupView.classList.remove('hidden');
-      textInput.value=''; fileUpload.value=''; fileNameEl.textContent=''; resultsList.innerHTML='';
-      hideError();
-    }
+    window.addEventListener('scroll', () => { toTopBtn.classList.toggle('show', window.scrollY > 800) });
+    toTopBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
 
     function handleFile(file){
       fileNameEl.textContent = file.name;
       const reader = new FileReader();
       reader.onload = (e) => {
-        const raw = e.target.result || '';
-        textInput.value = file.name.endsWith('.srt') ? cleanSRT(raw) : raw;
+        textInput.value = file.name.endsWith('.srt') ? cleanSRT(e.target.result || '') : (e.target.result || '');
         syncLevelRequirement();
       };
       reader.readAsText(file);
     }
-
     function cleanSRT(s){
-      return s
-        .replace(/\uFEFF/g,'')
-        .replace(/^\d+\s*$/gm,'')
-        .replace(/\d{2}:\d{2}:\d{2},\d{3}\s+-->\s+\d{2}:\d{2}:\d{2},\d{3}.*/g,'')
-        .replace(/<[^>]+>/g,'')
-        .replace(/[^\S\r\n]+/g,' ')
-        .replace(/\n{2,}/g,'\n')
-        .trim();
+      return s.replace(/\uFEFF/g,'').replace(/^\d+\s*$/gm,'')
+             .replace(/\d{2}:\d{2}:\d{2},\d{3}\s+-->\s+\d{2}:\d{2}:\d{2},\d{3}.*/g,'')
+             .replace(/<[^>]+>/g,'').replace(/[^\S\r\n]+/g,' ')
+             .replace(/\n{2,}/g,'\n').trim();
     }
-
     function looksLikeWordList(text){
       const lines = text.split(/\r?\n/).filter(l=>l.trim()!=='');
       if (lines.length>=2 && lines.every(l=>l.trim().length<=40)) return true;
       const tokens = text.split(/\s*-\s*/).filter(t=>t.trim()!=='');
       if (tokens.length>=2 && tokens.every(t=>t.trim().length<=40)) return true;
-      const wc = text.trim().split(/\s+/).length;
-      return wc<30 && !text.includes('\n\n');
+      return text.trim().split(/\s+/).length < 30 && !text.includes('\n\n');
     }
-
     function syncLevelRequirement(){
-      const t = textInput.value.trim();
-      const fileAttached = !!fileUpload.files[0];
-      const autoIsList = looksLikeWordList(t) && !fileAttached;
-      const isList = forceWordlist.checked || autoIsList;
-     
-      if (isList){
-        userLevelSelect.value='Unspecified';
-        userLevelSelect.disabled = true;
-        hint.innerHTML = '📝 حالت «لیست واژه»: هر خط یک واژه/عبارت یا با <b>-</b> جدا کنید. سطح لازم نیست.';
-      }else{
-        userLevelSelect.disabled = false;
-        hint.innerHTML = '📚 حالت «متن/فایل»: لطفاً سطح خود را انتخاب کنید تا واژگان و عبارات مطابق سطح شما استخراج شوند.';
-      }
+      const isList = forceWordlist.checked || (looksLikeWordList(textInput.value.trim()) && !fileUpload.files[0]);
+      userLevelSelect.disabled = isList;
+      if (isList) userLevelSelect.value='Unspecified';
     }
-
     function showError(m){ errorMsg.textContent=m; errorMsg.classList.remove('hidden'); }
     function hideError(){ errorMsg.classList.add('hidden'); }
 
     function handleProcessRequest(){
       const text = textInput.value.trim();
       const level = userLevelSelect.value;
-      const fileAttached = !!fileUpload.files[0];
-      const isList = forceWordlist.checked || (looksLikeWordList(text) && !fileAttached);
+      const isList = forceWordlist.checked || (looksLikeWordList(text) && !fileUpload.files[0]);
 
       if (!text){ showError(uiStrings[currentLang].errorText); return; }
-      if (!isList && level==='Unspecified'){
-        showError(uiStrings[currentLang].errorLevel); return;
-      }
+      if (!isList && level==='Unspecified'){ showError(uiStrings[currentLang].errorLevel); return; }
 
-      hideError(); setupView.classList.add('hidden'); resultsView.classList.remove('hidden');
-      loader.classList.remove('hidden'); resultsList.innerHTML='';
+      hideError();
+      resultsView.classList.remove('hidden');
+      loader.classList.remove('hidden');
+      resultsList.innerHTML='';
       callAI(text, isList);
+      document.getElementById('results-view').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     function buildPrompt(text, isWordList){
       const sourceLang = sourceLangSelect.value;
       const targetLang = targetLangSelect.value;
       const level = userLevelSelect.value;
-
       const taskDesc = isWordList
-        ? `You will analyze a USER-PROVIDED LIST of words/phrases in ${targetLang}. Items are either one per line or separated by hyphens "-". For EACH item, produce a full analysis.`
-        : `You will analyze a LONG TEXT in ${targetLang}. Extract ALL useful, natural, everyday words, idioms, and set phrases appropriate for a ${level} learner. Do NOT limit the number of items—focus on practical usefulness. For EACH extracted item, produce a full analysis.`;
-
-      const fieldSpec =
-`For EACH item, output EXACTLY the following template. Use "---" as a separator between items.
-Do NOT add any text before the first item or after the last item.
+        ? `You will analyze a USER-PROVIDED LIST of words/phrases in ${targetLang}. For EACH item, produce a full analysis.`
+        : `You will analyze a LONG TEXT in ${targetLang}. Extract ALL useful, everyday words, idioms, and phrases for a ${level} learner. For EACH extracted item, produce a full analysis.`;
+      const fieldSpec = `For EACH item, output EXACTLY the following template. Use "---" as a separator between items.
 
 Word: [the item in ${targetLang}]
 Translation: [translation in ${sourceLang}; if multiple common meanings, separate with ";"]
 Definition: [simple, level-appropriate definition in ${targetLang}]
-Grammar: [part of speech; optionally sub-features like "phrasal verb (inseparable)", "verb (takes Akkusativ)", "noun (countable)"]
-Collocations: [common combinations, comma-separated; if truly none, write "N/A"]
+Grammar: [part of speech; e.g., "phrasal verb (inseparable)", "verb (takes Akkusativ)", "noun (countable)"]
+Collocations: [common combinations, comma-separated; if none, write "N/A"]
 Examples:
 1. [Example 1 in ${targetLang}] - [${sourceLang} translation]
 2. [Example 2 in ${targetLang}] - [${sourceLang} translation]
-3. [Optional more examples...]
-Common Mistakes: ["nothing specific" OR a concrete pitfall (wrong preposition, word order, false friend, article/case)]
+Common Mistakes: ["nothing specific" OR a concrete pitfall (wrong preposition, false friend, etc.)]
 Context/Note:
-- Write 1–2 concise sentences covering at least ONE of the following (choose the most relevant):
-  register/formality; synonym contrast and subtle meaning; required prepositions or case governance;
-  language-specific behavior (e.g., separable verb; phrasal-verb type; aspect; measure word/classifier; vowel harmony; clitic placement; liaison; gender/article);
-  fixed expression constraints; typical contexts/frequency; a short pronunciation tip if truly useful.
-- Never output "N/A" for this field. If nothing obvious applies, write: "neutral register; general-use".
+- Write 1–2 concise sentences on ONE of the following (most relevant): register/formality; synonym contrast; required prepositions/case; language-specific behavior (e.g., separable verb); usage frequency.
+- Never output "N/A". Default: "neutral register; general-use".
 Pronunciation: [IPA/Pinyin/phonetic if applicable; else "N/A"]
 Tags:
-- Choose 1–3 tags from the controlled list below (AT LEAST ONE tag is required).
-- Use lowercase; hyphen for multiword; separate with semicolons (e.g., "informal;phrasal-verb").
-- Allowed: informal; formal; neutral; spoken; academic; business; travel; tech; slang;
-  idiom; phrasal-verb; collocation; fixed-expression; false-friend;
-  grammar; pronunciation; register; preposition; case; separable; aspect; measure-word;
-  gender; article; tense; frequency-high; frequency-medium; frequency-low; level-a1; level-a2; level-b1; level-b2; level-c1
+- Choose 1–3 tags from the list (AT LEAST ONE required). Separate with semicolons.
+- Allowed: informal; formal; neutral; spoken; academic; business; travel; tech; slang; idiom; phrasal-verb; collocation; fixed-expression; false-friend; grammar; pronunciation; register; preposition; case; separable; aspect; measure-word; gender; article; tense; frequency-high; frequency-medium; frequency-low; level-a1; level-a2; level-b1; level-b2; level-c1
 ---`;
-
       const extraRules = isWordList
         ? `INPUT MODE: WORD LIST. Treat each line or hyphen-separated token as ONE item.`
-        : `INPUT MODE: LONG TEXT. "Example 1" MUST be the EXACT sentence from the source text.
-Add 2–4 additional natural examples you create to cover different senses/usages if needed.
-If the item is too basic/common OR too technical/rare for ${level}, SKIP it.`;
-
-      return `
-You are an expert language tutor AI.
-User's native language: ${sourceLang}.
-Target language: ${targetLang}.
-${isWordList ? 'Proficiency is not specified for word-list mode.' : `User proficiency: ${level}.`}
+        : `INPUT MODE: LONG TEXT. "Example 1" MUST be the EXACT sentence from the source text. Add other natural examples. If an item is too basic/rare for ${level}, SKIP it.`;
+      return `You are an expert language tutor AI. User's native: ${sourceLang}. Target: ${targetLang}. ${isWordList ? '' : `Proficiency: ${level}.`}
 
 ${taskDesc}
 
-Quality rules:
-- Prioritize PRACTICAL everyday usage.
-- If an item has multiple common meanings/usages, include them via translations and examples.
-- No fixed limits: include as many items/examples as necessary if important.
-- Output MUST strictly follow the template below. Do NOT add headers or prose.
+RULES:
+- Prioritize PRACTICAL usage.
+- Output MUST strictly follow the template. No extra commentary.
 
 ${fieldSpec}
 
 ${extraRules}
 
-${isWordList ? `Here is the word/phrase list:\n${text}` : `Here is the text to analyze:\n${text}`}
-`.trim();
+${isWordList ? `Here is the word/phrase list:\n${text}` : `Here is the text to analyze:\n${text}`}`;
     }
 
     async function callAI(text, isWordList){
       const prompt = buildPrompt(text, isWordList);
       try{
         const controller = new AbortController();
-        const timeout = setTimeout(()=>controller.abort(), 60000);
-        const res = await fetch(PROXY_URL, {
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ prompt }),
-          signal: controller.signal
-        });
-        clearTimeout(timeout);
-        if(!res.ok) throw new Error(`Network error: ${res.status} ${res.statusText}`);
+        setTimeout(()=>controller.abort(), 60000);
+        const res = await fetch(PROXY_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ prompt }), signal: controller.signal });
+        if(!res.ok) throw new Error(`Network error: ${res.status}`);
         const data = await res.json();
-
-        const ai =
-          data?.candidates?.[0]?.content?.parts?.[0]?.text ||
-          data?.output_text || data?.text || '';
-        if(!ai){ resultsList.innerHTML = `<p class="p-8 text-center text-red-600">${uiStrings[currentLang].errorAIResponse}</p>`; return; }
-
+        const ai = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+        if(!ai) throw new Error(uiStrings[currentLang].errorAIResponse);
         renderResults(ai);
       }catch(err){
         console.error(err);
-        resultsList.innerHTML = `<p class="p-8 text-center text-red-600">${uiStrings[currentLang].errorServer}</p>`;
+        resultsList.innerHTML = `<div class="card p-8 text-center text-red-500">${err.message || uiStrings[currentLang].errorServer}</div>`;
       }finally{
         loader.classList.add('hidden');
       }
     }
 
     function parseAIResponse(s){
-      const items = s.split('---').filter(x=>x.trim()!=='');
-      return items.map(txt=>{
-        const data = {};
-        let currentKey = '';
-        const lines = txt.trim().split('\n');
-
-        lines.forEach(line => {
-            const match = line.match(/^([a-zA-Z\s/]+):\s*(.*)/);
-            if (match) {
-                currentKey = match[1].trim().toLowerCase().replace(/[\s/]/g, '');
-                data[currentKey] = match[2].trim();
-            } else if (currentKey === 'examples' && /^\d+\./.test(line.trim())) {
-                data.exampleslist = data.exampleslist || [];
-                data.exampleslist.push(line.trim());
-            } else if (currentKey === 'contextnote' && line.trim().startsWith('-')) {
-                data[currentKey] += '\n' + line.trim();
-            }
+      return s.split('---').filter(x=>x.trim()).map(txt=>{
+        const data = {}; let currentKey = '';
+        txt.trim().split('\n').forEach(line => {
+          const match = line.match(/^([a-zA-Z\s/]+):\s*(.*)/);
+          if (match) {
+            currentKey = match[1].trim().toLowerCase().replace(/[\s/]/g, '');
+            data[currentKey] = match[2].trim();
+          } else if (currentKey === 'examples' && /^\d+\./.test(line.trim())) {
+            data.exampleslist = data.exampleslist || [];
+            data.exampleslist.push(line.trim());
+          } else if (currentKey === 'contextnote' && line.trim().startsWith('-')) {
+            data[currentKey] += '\n' + line.trim();
+          }
         });
         return data;
       });
     }
 
-    function escapeHTML(s=''){
-      return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-    }
-
-    function getLangCode(name){
-      const map={'English':'en-US','German':'de-DE','French':'fr-FR','Spanish':'es-ES','Italian':'it-IT','Russian':'ru-RU','Turkish':'tr-TR','Chinese':'zh-CN','Persian':'fa-IR'};
-      return map[name]||'en-US';
-    }
-
+    function escapeHTML(s=''){ return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+    function getLangCode(name){ return {'English':'en-US','German':'de-DE','French':'fr-FR','Spanish':'es-ES','Italian':'it-IT','Russian':'ru-RU','Turkish':'tr-TR','Chinese':'zh-CN','Persian':'fa-IR'}[name]||'en-US'; }
     function speakText(ev, text, langCode){
       ev?.stopPropagation?.();
       if(!text) return;
       speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(text);
-      u.lang = langCode; speechSynthesis.speak(u);
+      const u = new SpeechSynthesisUtterance(text); u.lang = langCode; speechSynthesis.speak(u);
     }
+    function tagPalette(i){ return ['#e0e7ff','#ccfbf1','#fef3c7','#fce7f3','#fee2e2'][i % 5]; }
 
-    function tagPaletteClass(i){
-      const arr = ['tag-palette-1','tag-palette-2','tag-palette-3','tag-palette-4','tag-palette-5'];
-      return arr[i % arr.length];
-    }
- 
     function renderResults(ai){
         const parsed = parseAIResponse(ai);
-
-        const targetLangName = targetLangSelect.value;
-        const targetIsRTL = ['Persian','Arabic','Urdu'].includes(targetLangName); // Simple RTL check
-        resultsList.dir = targetIsRTL ? 'rtl' : 'ltr';
-
         const sourceLangName = sourceLangSelect.value;
         const strings = uiStrings[langNameToCode[sourceLangName]] || uiStrings.en;
-        const isEmpty = parsed.length === 0 || parsed.every(x => !x.word);
-        const targetLangCode = getLangCode(targetLangName);
-
-        if (isEmpty){
-            resultsList.innerHTML = `<div class="card p-8 text-center text-gray-600">${strings.errorNoResults}</div>`;
+        if (parsed.length === 0 || parsed.every(x => !x.word)){
+            resultsList.innerHTML = `<div class="card p-8 text-center muted">${strings.errorNoResults}</div>`;
             return;
         }
-
-        let html = '';
-        parsed.forEach((it, idx)=>{
+        resultsList.innerHTML = parsed.map((it, idx)=>{
             const word = escapeHTML(it.word || '');
             const translation = escapeHTML(it.translation || '');
-            const definition = escapeHTML(it.definition || 'N/A');
             const grammar = escapeHTML(it.grammar || 'N/A');
             const collocRaw = (it.collocations || '').split(/,|،/).map(s => s.trim()).filter(Boolean);
-            const mistakes = escapeHTML(it.commonmistakes || 'N/A');
-            const rawNote = (it.contextnote || 'N/A');
-            const noteIsNA = /^n\/?a$/i.test(rawNote.trim()) || rawNote.trim()==='N/A';
-            const note = noteIsNA ? '' : escapeHTML(rawNote).replace(/\n/g, '<br>');
-            const pron = escapeHTML(it.pronunciation || 'N/A');
             const tagsRaw = (it.tags || '').split(';').map(s=>s.trim()).filter(Boolean);
-
-            html += `
-            <div class="result-item card">
-                <div class="result-header flex justify-between items-center" onclick="toggleDetails(${idx})" aria-expanded="false" id="hdr-${idx}">
-                    <div class="min-w-0">
-                        <div class="flex items-center gap-3">
-                            <h3 class="text-xl font-bold text-blue-700 truncate">${word || strings.wordNotFound}</h3>
-                            ${grammar && grammar !== 'N/A' ? `<span class="chip">${grammar}</span>` : ''}
-                        </div>
-                        <p class="text-gray-700 mt-1">${translation}</p>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <button class="btn btn-secondary p-2.5" onclick="speakText(event,'${word.replace(/'/g, "\\'")}', '${targetLangCode}')" title="${strings.speakWord}" aria-label="${strings.speakWord}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon></svg>
-                        </button>
-                        <span id="chevron-${idx}" class="text-2xl transition-transform text-gray-400">
-                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                        </span>
-                    </div>
+            const examplesHTML = (it.exampleslist || []).map(ex => {
+                const splitAt = ex.lastIndexOf(' - ');
+                let original = ex.slice(ex.indexOf('.') + 1).trim();
+                let trans = '';
+                if (splitAt > 1) {
+                    original = ex.slice(ex.indexOf('.') + 1, splitAt).trim();
+                    trans = ex.slice(splitAt + 3).trim();
+                }
+                return `<li><div class="flex items-center gap-2"><p>${escapeHTML(original)}</p><button class="btn btn-ghost p-2" onclick="speakText(event,'${original.replace(/'/g, "\\'")}', '${getLangCode(targetLangSelect.value)}')" title="${strings.speakSentence}">🔊</button></div>${trans ? `<p class="text-sm muted">${escapeHTML(trans)}</p>`:''}</li>`;
+            }).join('');
+            return `<div class="ring-card">
+              <div class="card result-item">
+                <div class="result-header flex justify-between items-center p-4" onclick="toggleDetails(${idx})">
+                  <div class="min-w-0"><div class="flex items-center gap-2 flex-wrap"><h3 class="text-xl font-extrabold text-[var(--primary-600)] truncate">${word||strings.wordNotFound}</h3>${grammar&&grammar!=='N/A'?`<span class="chip"><span class="dot" style="background:${tagPalette(idx)}"></span>${grammar}</span>`:''}</div><p class="mt-1 muted">${translation}</p></div>
+                  <div class="flex items-center gap-2"><button class="btn btn-ghost p-2.5" onclick="speakText(event,'${word.replace(/'/g,"\\'")}', '${getLangCode(targetLangSelect.value)}')">🔊</button><span id="chevron-${idx}" class="text-xl transition-transform">▾</span></div>
                 </div>
-                <div id="details-${idx}" class="result-details bg-white">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                        <div>
-                            <div class="flex items-center gap-2 mb-2">
-                                <span>📘</span><strong class="font-semibold">${strings.definition}:</strong>
-                            </div>
-                            <p class="text-gray-800 ps-8">${definition}</p>
-                        </div>
-                        <div>
-                            <div class="flex items-center gap-2 mb-2"><span>🗣️</span><strong class="font-semibold">${strings.pronunciation}:</strong></div>
-                            <p class="text-gray-800 ps-8">${pron}</p>
-                        </div>
-                        <div class="md:col-span-2">
-                            <div class="flex items-center gap-2 mb-2">
-                                <span>🔗</span><strong class="font-semibold">${strings.collocations}:</strong>
-                            </div>
-                            <div class="flex flex-wrap gap-2 ps-8">
-                                ${collocRaw.length ? collocRaw.map((c,i) => `<span class="chip ${'tag-palette-'+((i%5)+1)}">${escapeHTML(c)}</span>`).join('') : `<span class="text-gray-500 text-sm">${strings.notApplicable}</span>`}
-                            </div>
-                        </div>
-                         <div class="md:col-span-2">
-                            <div class="flex items-center gap-2 mb-2">
-                                <span>🏷️</span><strong class="font-semibold">${strings.tags}:</strong>
-                            </div>
-                            <div class="flex flex-wrap gap-2 ps-8">
-                                ${tagsRaw.length ? tagsRaw.map((t,i) => `<span class="chip tag ${tagPaletteClass(i)}">${escapeHTML(t)}</span>`).join('') : `<span class="text-gray-500 text-sm">${strings.notApplicable}</span>`}
-                            </div>
-                        </div>
-                        <div class="md:col-span-2">
-                            <div class="flex items-center gap-2 mb-2">
-                                <span>✍️</span><strong class="font-semibold">${strings.examples}:</strong>
-                            </div>
-                            <ul class="space-y-3 ${targetIsRTL ? 'pr-8' : 'pl-8'}">
-                                ${(it.exampleslist || []).map(ex => {
-                                    const splitAt = ex.lastIndexOf(' - ');
-                                    let original = ex; let trans = '';
-                                    if (splitAt > 1) { original = ex.slice(0, splitAt); trans = ex.slice(splitAt + 3); }
-                                    original = original.replace(/^\d+\.\s*/, '').trim();
-                                    return `<li>
-                                        <div class="flex items-center gap-2">
-                                            <p>${escapeHTML(original)}</p>
-                                            <button class="btn btn-secondary p-2" onclick="speakText(event,'${original.replace(/'/g, "\\'")}', '${targetLangCode}')" title="${strings.speakSentence}" aria-label="${strings.speakSentence}">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon></svg>
-                                            </button>
-                                        </div>
-                                        ${trans ? `<p class="text-sm muted">${escapeHTML(trans.trim())}</p>` : ''}
-                                    </li>`;
-                                }).join('')}
-                            </ul>
-                        </div>
-                        <div>
-                           <div class="flex items-center gap-2 mb-2"><span>⚠️</span><strong class="font-semibold">${strings.commonMistakes}:</strong></div>
-                           <p class="text-gray-800 ps-8">${mistakes}</p>
-                        </div>
-                        <div>
-                            <div class="flex items-center gap-2 mb-2"><span>💡</span><strong class="font-semibold">${strings.contextNote}:</strong></div>
-                            ${ note
-                                ? `<p class="text-gray-800 ps-8">${note}</p>`
-                                : `<div class="ps-8 text-sm text-gray-500 flex items-center gap-2">
-                                     <span>—</span>
-                                     <span>نکته‌ای توسط مدل گزارش نشد.</span>
-                                   </div>` }
-                        </div>
-                    </div>
-                </div>
-            </div>`;
-        });
-        resultsList.innerHTML = html;
+                <div id="details-${idx}" class="result-details"><div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 pt-2">
+                  <div><div class="flex items-center gap-2 mb-2"><span>📘</span><strong>${strings.definition}:</strong></div><p>${escapeHTML(it.definition||'N/A')}</p></div>
+                  <div><div class="flex items-center gap-2 mb-2"><span>🗣️</span><strong>${strings.pronunciation}:</strong></div><p>${escapeHTML(it.pronunciation||'N/A')}</p></div>
+                  <div class="md:col-span-2"><div class="flex items-center gap-2 mb-2"><span>🔗</span><strong>${strings.collocations}:</strong></div><div class="flex flex-wrap gap-2">${collocRaw.length?collocRaw.map((c,i)=>`<span class="chip" style="background: color-mix(in oklab, ${tagPalette(i)} 60%, transparent)">${escapeHTML(c)}</span>`).join(''):`<span class="text-sm muted">${strings.notApplicable||'—'}</span>`}</div></div>
+                  <div class="md:col-span-2"><div class="flex items-center gap-2 mb-2"><span>🏷️</span><strong>${strings.tags||'Tags'}:</strong></div><div class="flex flex-wrap gap-2">${tagsRaw.length?tagsRaw.map((t,i)=>`<span class="chip" style="background: color-mix(in oklab, ${tagPalette(i+1)} 60%, transparent)">${escapeHTML(t)}</span>`).join(''):`<span class="text-sm muted">${strings.notApplicable||'—'}</span>`}</div></div>
+                  <div class="md:col-span-2"><div class="flex items-center gap-2 mb-2"><span>✍️</span><strong>${strings.examples}:</strong></div><ul class="space-y-3 pl-4 pr-4">${examplesHTML}</ul></div>
+                  <div><div class="flex items-center gap-2 mb-2"><span>⚠️</span><strong>${strings.commonMistakes}:</strong></div><p>${escapeHTML(it.commonmistakes||'N/A')}</p></div>
+                  <div><div class="flex items-center gap-2 mb-2"><span>💡</span><strong>${strings.contextNote}:</strong></div><p>${(it.contextnote||'').replace(/\n/g,'<br>')}</p></div>
+                </div></div>
+              </div></div>`;
+        }).join('');
     }
 
     function toggleDetails(i){
-      const d = document.getElementById(`details-${i}`);
-      const c = document.getElementById(`chevron-${i}`);
-      const h = document.getElementById(`hdr-${i}`);
-      const nowOpen = !d.classList.contains('open');
-      d.classList.toggle('open');
-      if (c) c.style.transform = nowOpen ? 'rotate(180deg)' : 'rotate(0deg)';
-      h.setAttribute('aria-expanded', nowOpen ? 'true':'false');
+      const d=document.getElementById(`details-${i}`); const c=document.getElementById(`chevron-${i}`);
+      d.classList.toggle('open'); if(c)c.style.transform=d.classList.contains('open')?'rotate(180deg)':'rotate(0deg)';
     }
-
     function toggleAll(open){
-      const items = document.querySelectorAll('.result-details');
-      items.forEach((d,idx)=>{
-        const c = document.getElementById(`chevron-${idx}`);
-        const h = document.getElementById(`hdr-${idx}`);
-        if(h) h.setAttribute('aria-expanded', open ? 'true':'false');
-        if(c) c.style.transform = open ? 'rotate(180deg)' : 'rotate(0deg)';
-        if (open) { d.classList.add('open'); } else { d.classList.remove('open'); }
+      document.querySelectorAll('.result-details').forEach((d,idx)=>{
+        const c=document.getElementById(`chevron-${idx}`);
+        d.classList.toggle('open',open); if(c)c.style.transform=open?'rotate(180deg)':'rotate(0deg)';
       });
     }
 
     let currentLang='fa';
     const langNameToCode = {'Persian':'fa','English':'en','German':'de','French':'fr','Spanish':'es','Chinese':'zh','Turkish':'tr','Italian':'it','Russian':'ru'};
     const uiStrings = {
-        fa: {
-            appTitle: "یادگیری زبان با هوش مصنوعی", mainTitle: "سازنده واژگان هوشمند",
-            subtitle: "زبان مورد نظر خود را انتخاب کرده و متن یا فهرست واژه‌ها را وارد کنید.",
-            sourceLangLabel: "زبان مادری من", targetLangLabel: "زبانی که یاد می‌گیرم", userLevelLabel: "سطح من (برای متن/فایل)",
-            levelUnspecified: "انتخاب نشده", levelA1: "A1 (مبتدی)", levelA2: "A2 (ابتدایی)", levelB1: "B1 (متوسط)", levelB2: "B2 (فوق متوسط)", levelC1: "C1 (پیشرفته)",
-            uploadBtnText: "آپلود فایل", processBtn: "تحلیل کن", resultsTitle: "نتایج تحلیل", startOverBtn: "شروع دوباره",
-            errorLevel: "برای متن‌ها/فایل‌ها لطفاً سطح خود را انتخاب کنید تا خروجی متناسب باشد.", errorText: "لطفاً ورودی معتبر وارد یا آپلود کنید.",
-            errorAIResponse: "پاسخ معتبری از هوش مصنوعی دریافت نشد.", errorServer: "مشکل ارتباط با سرور. دوباره تلاش کنید.", errorNoResults: "موردی پیدا نشد؛ ورودی دیگری امتحان کنید.",
-            wordNotFound: "کلمه یافت نشد", definition: "تعریف", grammar: "نوع گرامر", collocations: "ترکیب‌های رایج", examples: "مثال‌ها",
-            commonMistakes: "اشتباهات رایج", contextNote: "نکته", pronunciation: "تلفظ", forceWordlistLabel: "این ورودی یک لیست واژه است",
-            hintStatic: "💡 حالت «لیست واژه»: هر خط یک واژه/عبارت یا با <code>-</code> جدا کنید. انتخاب سطح لازم نیست.<br>در غیر این صورت، با وارد کردن متن یا فایل و انتخاب سطح، سیستم واژگان کاربردی را برای شما استخراج می‌کند.",
-            textPlaceholder: "لیست واژه (هر خط یک مورد) یا متن طولانی برای تحلیل…",
-            expandAll: "باز کردن همه", collapseAll: "بستن همه", speakWord: "شنیدن واژه", speakSentence: "شنیدن جمله", stopSpeech: "توقف گفتار",
-            notApplicable: "موردی وجود ندارد", tags: "برچسب‌ها",
-            footerText: "ساخته شده با همکاری هوش مصنوعی"
-        },
-        en: {
-            appTitle: "AI Language Learner", mainTitle: "Smart Vocabulary Builder",
-            subtitle: "Select your languages and enter a word list or a long text.", sourceLangLabel: "My Native Language",
-            targetLangLabel: "Language I'm Learning", userLevelLabel: "My Level (for text/files)", levelUnspecified: "Unspecified",
-            levelA1: "A1 (Beginner)", levelA2: "A2 (Elementary)", levelB1: "B1 (Intermediate)", levelB2: "B2 (Upper-Intermediate)", levelC1: "C1 (Advanced)",
-            uploadBtnText: "Upload File", processBtn: "Analyze", resultsTitle: "Analysis Results", startOverBtn: "Start Over",
-            errorLevel: "For texts/files, please select your level.", errorText: "Please enter or upload valid input.", errorAIResponse: "No valid AI response.",
-            errorServer: "Problem connecting to server. Try again.", errorNoResults: "No items found. Try another input.", wordNotFound: "Word not found",
-            definition: "Definition", grammar: "Grammar", collocations: "Collocations", examples: "Examples", commonMistakes: "Common Mistakes", contextNote: "Context/Note",
-            pronunciation: "Pronunciation", forceWordlistLabel: "This input is a word list",
-            hintStatic: "💡 'Word List' mode: one word/phrase per line or separated with <code>-</code>. Level selection is not needed.<br>Otherwise, by pasting text or uploading a file and selecting your level, the system will extract practical vocabulary for you.",
-            textPlaceholder: "Word list (one item per line) or long text for analysis...",
-            expandAll: "Expand All", collapseAll: "Collapse All", speakWord: "Speak word", speakSentence: "Speak sentence", stopSpeech: "Stop speech",
-            notApplicable: "Not Applicable", tags: "Tags",
-            footerText: "Built with AI collaboration"
-        },
-        de: {appTitle:"KI-Sprachlerner",mainTitle:"Intelligenter Vokabeltrainer",subtitle:"Wortliste oder langen Text eingeben.",sourceLangLabel:"Meine Muttersprache",targetLangLabel:"Sprache, die ich lerne",userLevelLabel:"Mein Niveau (für Text/Dateien)",levelUnspecified:"Nicht angegeben",levelA1:"A1 (Anfänger)",levelA2:"A2 (Grundlegend)",levelB1:"B1 (Mittelstufe)",levelB2:"B2 (Obere Mittelstufe)",levelC1:"C1 (Fortgeschritten)",uploadBtnText:"Datei hochladen",processBtn:"Analysieren",resultsTitle:"Analyseergebnisse",startOverBtn:"Neu anfangen",errorLevel:"Für Texte/Dateien bitte Niveau wählen.",errorText:"Bitte gültige Eingabe eingeben/hochladen.",errorAIResponse:"Keine gültige KI-Antwort.",errorServer:"Verbindungsproblem. Erneut versuchen.",errorNoResults:"Keine Elemente gefunden.",wordNotFound:"Wort nicht gefunden",definition:"Definition",grammar:"Grammatik",collocations:"Kollokationen",examples:"Beispiele",commonMistakes:"Häufige Fehler",contextNote:"Kontext/Notiz",pronunciation:"Aussprache",forceWordlistLabel:"Dies ist eine Wortliste",textPlaceholder:"Wortliste (ein Eintrag pro Zeile) oder langer Text...",expandAll:"Alle erweitern",collapseAll:"Alle reduzieren",speakWord:"Wort sprechen",speakSentence:"Satz sprechen",stopSpeech:"Sprache stoppen",notApplicable:"Nicht zutreffend", tags:"Tags", footerText:"Erstellt mit KI-Kollaboration"},
-        fr: {appTitle:"Apprentissage des langues par l'IA",mainTitle:"Constructeur de vocabulaire intelligent",subtitle:"Saisissez une liste de mots ou un long texte.",sourceLangLabel:"Ma langue maternelle",targetLangLabel:"Langue que j'apprends",userLevelLabel:"Mon niveau (pour textes/fichiers)",levelUnspecified:"Non spécifié",levelA1:"A1 (Débutant)",levelA2:"A2 (Élémentaire)",levelB1:"B1 (Intermédiaire)",levelB2:"B2 (Intermédiaire supérieur)",levelC1:"C1 (Avancé)",uploadBtnText:"Télécharger",processBtn:"Analyser",resultsTitle:"Résultats de l'analyse",startOverBtn:"Recommencer",errorLevel:"Pour textes/fichiers, choisissez votre niveau.",errorText:"Veuillez saisir ou télécharger une entrée valide.",errorAIResponse:"Aucune réponse valide.",errorServer:"Problème de connexion.",errorNoResults:"Aucun élément trouvé.",wordNotFound:"Mot non trouvé",definition:"Définition",grammar:"Grammaire",collocations:"Collocations",examples:"Exemples",commonMistakes:"Erreurs courantes",contextNote:"Contexte/Note",pronunciation:"Prononciation",forceWordlistLabel:"Ceci est une liste de mots",textPlaceholder:"Liste de mots (un par ligne) ou texte long...",expandAll:"Tout déplier",collapseAll:"Tout replier",speakWord:"Parler le mot",speakSentence:"Parler la phrase",stopSpeech:"Arrêter la parole",notApplicable:"Non applicable", tags:"Étiquettes", footerText:"Créé avec la collaboration de l'IA"},
-        es: {appTitle:"Aprendizaje de idiomas con IA",mainTitle:"Constructor de vocabulario inteligente",subtitle:"Lista de palabras o texto largo.",sourceLangLabel:"Mi lengua materna",targetLangLabel:"Idioma que aprendo",userLevelLabel:"Mi nivel (para texto/archivos)",levelUnspecified:"No especificado",levelA1:"A1 (Principiante)",levelA2:"A2 (Elemental)",levelB1:"B1 (Intermedio)",levelB2:"B2 (Intermedio alto)",levelC1:"C1 (Avanzado)",uploadBtnText:"Subir archivo",processBtn:"Analizar",resultsTitle:"Resultados del análisis",startOverBtn:"Empezar de nuevo",errorLevel:"Para textos/archivos, elige tu nivel.",errorText:"Introduce o sube una entrada válida.",errorAIResponse:"Sin respuesta válida.",errorServer:"Problemas de conexión.",errorNoResults:"No se encontraron elementos.",wordNotFound:"No se encontró palabra",definition:"Definición",grammar:"Gramática",collocations:"Colocaciones",examples:"Ejemplos",commonMistakes:"Errores comunes",contextNote:"Contexto/Nota",pronunciation:"Pronunciación",forceWordlistLabel:"Esta es una lista de palabras",textPlaceholder:"Lista de palabras (una por línea) o texto largo...",expandAll:"Expandir todo",collapseAll:"Contraer todo",speakWord:"Decir palabra",speakSentence:"Decir frase",stopSpeech:"Detener voz",notApplicable:"No aplica", tags:"Etiquetas", footerText:"Hecho con colaboración de IA"},
-        zh: {appTitle:"人工智能语言学习器",mainTitle:"智能词汇构建器",subtitle:"输入单词列表或长文本。",sourceLangLabel:"我的母语",targetLangLabel:"我学习的语言",userLevelLabel:"我的水平（用于文本/文件）",levelUnspecified:"未指定",levelA1:"A1 (初学者)",levelA2:"A2 (初级)",levelB1:"B1 (中级)",levelB2:"B2 (中高级)",levelC1:"C1 (高级)",uploadBtnText:"上传文件",processBtn:"分析",resultsTitle:"分析结果",startOverBtn:"重新开始",errorLevel:"对于文本/文件请选择水平。",errorText:"请输入或上传有效输入。",errorAIResponse:"无有效响应。",errorServer:"连接问题。",errorNoResults:"未找到项目。",wordNotFound:"未找到单词",definition:"定义",grammar:"语法",collocations:"搭配",examples:"例子",commonMistakes:"常见错误",contextNote:"语境/说明",pronunciation:"发音",forceWordlistLabel:"这是一个单词列表",textPlaceholder:"单词列表（每行一项）或长文本...",expandAll:"全部展开",collapseAll:"全部折叠",speakWord:"朗读单词",speakSentence:"朗读句子",stopSpeech:"停止朗读", notApplicable:"不适用", tags:"标签", footerText:"与 AI 合作完成"},
-        tr: {appTitle:"Yapay Zeka ile Dil Öğrenimi",mainTitle:"Akıllı Kelime Oluşturucu",subtitle:"Kelime listesi veya uzun metin.",sourceLangLabel:"Ana Dilim",targetLangLabel:"Öğrendiğim Dil",userLevelLabel:"Seviyem (metin/dosyalar için)",levelUnspecified:"Belirtilmemiş",levelA1:"A1 (Başlangıç)",levelA2:"A2 (Temel)",levelB1:"B1 (Orta)",levelB2:"B2 (Orta-üstü)",levelC1:"C1 (İleri)",uploadBtnText:"Dosya Yükle",processBtn:"Analiz Et",resultsTitle:"Analiz Sonuçları",startOverBtn:"Yeniden Başla",errorLevel:"Metin/dosyalar için seviye seçin.",errorText:"Geçerli bir giriş girin/yükleyin.",errorAIResponse:"Geçerli yanıt yok.",errorServer:"Bağlantı sorunu.",errorNoResults:"Öğe bulunamadı.",wordNotFound:"Kelime bulunamadı",definition:"Tanım",grammar:"Gramer",collocations:"Birlikte Kullanımlar",examples:"Örnekler",commonMistakes:"Yaygın Hatalar",contextNote:"Bağlam/Not",pronunciation:"Telaffuz",forceWordlistLabel:"Bu bir kelime listesidir",textPlaceholder:"Satır başına bir kelime/ifade veya uzun metin...",expandAll:"Tümünü Genişlet",collapseAll:"Tümünü Daralt",speakWord:"Kelimeyi söyle",speakSentence:"Cümleyi söyle",stopSpeech:"Konuşmayı durdur", notApplicable:"Uygulanamaz", tags:"Etiketler", footerText:"AI iş birliğiyle oluşturuldu"},
-        it: {appTitle:"Apprendimento delle lingue con IA",mainTitle:"Costruttore di vocabolario intelligente",subtitle:"Elenco parole o testo lungo.",sourceLangLabel:"Lingua madre",targetLangLabel:"Lingua che imparo",userLevelLabel:"Livello (per testi/file)",levelUnspecified:"Non specificato",levelA1:"A1 (Principiante)",levelA2:"A2 (Elementare)",levelB1:"B1 (Intermedio)",levelB2:"B2 (Intermedio-superiore)",levelC1:"C1 (Avanzato)",uploadBtnText:"Carica File",processBtn:"Analizza",resultsTitle:"Risultati dell'analisi",startOverBtn:"Ricomincia",errorLevel:"Per testi/file seleziona il livello.",errorText:"Inserisci/carica un input valido.",errorAIResponse:"Nessuna risposta valida.",errorServer:"Problema di connessione.",errorNoResults:"Nessun elemento trovato.",wordNotFound:"Parola non trovata",definition:"Definizione",grammar:"Grammatica",collocations:"Collocazioni",examples:"Esempi",commonMistakes:"Errori comuni",contextNote:"Contesto/Nota",pronunciation:"Pronuncia",forceWordlistLabel:"Questa è una lista di parole",textPlaceholder:"Elenco parole (una per riga) o testo lungo...",expandAll:"Espandi tutto",collapseAll:"Comprimi tutto",speakWord:"Pronuncia parola",speakSentence:"Pronuncia frase",stopSpeech:"Ferma discorso", notApplicable:"Non applicabile", tags:"Tag", footerText:"Creato con la collaborazione dell'IA"},
-        ru: {appTitle:"Изучение языков с ИИ",mainTitle:"Умный конструктор словарного запаса",subtitle:"Список слов или длинный текст.",sourceLangLabel:"Родной язык",targetLangLabel:"Изучаемый язык",userLevelLabel:"Уровень (для текста/файлов)",levelUnspecified:"Не указан",levelA1:"A1 (Начинающий)",levelA2:"A2 (Элементарный)",levelB1:"B1 (Средний)",levelB2:"B2 (Выше среднего)",levelC1:"C1 (Продвинутый)",uploadBtnText:"Загрузить файл",processBtn:"Анализировать",resultsTitle:"Результаты анализа",startOverBtn:"Начать сначала",errorLevel:"Для текста/файлов укажите уровень.",errorText:"Введите/загрузите корректные данные.",errorAIResponse:"Нет ответа ИИ.",errorServer:"Ошибка соединения.",errorNoResults:"Ничего не найдено.",wordNotFound:"Слово не найдено",definition:"Определение",grammar:"Грамматика",collocations:"Сочетания",examples:"Примеры",commonMistakes:"Частые ошибки",contextNote:"Контекст/Примечание",pronunciation:"Произношение",forceWordlistLabel:"Это список слов",textPlaceholder:"Список слов (по одному в строке) или длинный текст...",expandAll:"Развернуть все",collapseAll:"Свернуть все",speakWord:"Произнести слово",speakSentence:"Произнести предложение",stopSpeech:"Остановить речь", notApplicable:"Неприменимо", tags:"Теги", footerText:"Создано при помощи ИИ"}
+      fa:{appTitle:"یادگیری زبان با هوش مصنوعی",mainTitle:"سازنده واژگان هوشمند",headerSubtitle:"یادگیری کاربردی با کمک هوش مصنوعی",subtitle:"زبان‌ها را انتخاب کن، متن یا فهرست واژه‌ها را بده؛ بقیه‌اش با ما ✨",sourceLangLabel:"زبان مادری من",targetLangLabel:"زبانی که یاد می‌گیرم",userLevelLabel:"سطح من",forceWordlistLabel:"این یک لیست واژه است",hintStatic:"💡 حالت <b>«لیست واژه»</b>: هر خط یک واژه/عبارت یا با <code>-</code> جدا کنید. انتخاب سطح لازم نیست.<br>در غیر این صورت، با وارد کردن متن یا فایل و <b>انتخاب سطح</b>، سیستم واژگان کاربردی را برای شما استخراج می‌کند.",uploadBtnText:"آپلود فایل",processBtn:"تحلیل کن",resultsTitle:"نتایج تحلیل",startOverBtn:"شروع دوباره",expandAll:"باز کردن همه",collapseAll:"بستن همه",errorText:"لطفاً ورودی معتبر وارد یا آپلود کنید.",errorLevel:"برای متن‌ها/فایل‌ها لطفاً سطح خود را انتخاب کنید.",errorAIResponse:"پاسخ معتبری از هوش مصنوعی دریافت نشد.",errorServer:"مشکل ارتباط با سرور. دوباره تلاش کنید.",errorNoResults:"موردی پیدا نشد.",wordNotFound:"کلمه یافت نشد",definition:"تعریف",grammar:"گرامر",collocations:"ترکیب‌های رایج",examples:"مثال‌ها",commonMistakes:"اشتباهات رایج",contextNote:"نکته",pronunciation:"تلفظ",notApplicable:"—",tags:"برچسب‌ها",speakWord:"شنیدن واژه",speakSentence:"شنیدن جمله",stopSpeech:"توقف گفتار",footerText:"ساخته شده با همکاری هوش مصنوعی"},
+      en:{appTitle:"AI Language Learner",mainTitle:"Smart Vocab Builder",headerSubtitle:"Practical learning with AI assistance",subtitle:"Pick languages, paste text or a word list—AI does the rest ✨",sourceLangLabel:"My Native Language",targetLangLabel:"Language I'm Learning",userLevelLabel:"My Level",forceWordlistLabel:"This is a word list",hintStatic:"💡 <b>'Word List' mode:</b> one word/phrase per line or separated with <code>-</code>. Level selection is not needed.<br>Otherwise, by pasting text or uploading a file and <b>selecting your level</b>, the system will extract practical vocabulary for you.",uploadBtnText:"Upload File",processBtn:"Analyze",resultsTitle:"Analysis Results",startOverBtn:"Start Over",expandAll:"Expand All",collapseAll:"Collapse All",errorText:"Please enter or upload valid input.",errorLevel:"For texts/files, please select your level.",errorAIResponse:"No valid AI response.",errorServer:"Server connection issue.",errorNoResults:"No items found.",wordNotFound:"Word not found",definition:"Definition",grammar:"Grammar",collocations:"Collocations",examples:"Examples",commonMistakes:"Common Mistakes",contextNote:"Context/Note",pronunciation:"Pronunciation",notApplicable:"—",tags:"Tags",speakWord:"Speak word",speakSentence:"Speak sentence",stopSpeech:"Stop speech",footerText:"Built with AI collaboration"},
+      // Other languages can be filled similarly
     };
 
     function setLanguage(lang){
       currentLang = lang;
       const s = uiStrings[lang] || uiStrings.en;
       const isRtl = lang==='fa';
-     
-      document.documentElement.lang = lang;
-      document.documentElement.dir = isRtl ? 'rtl':'ltr';
-     
-      document.getElementById('app-title').textContent = s.appTitle;
-      document.getElementById('main-title').textContent = s.mainTitle;
-      document.getElementById('subtitle').textContent = s.subtitle;
-      document.getElementById('source-lang-label').textContent = s.sourceLangLabel;
-      document.getElementById('target-lang-label').textContent = s.targetLangLabel;
-      document.getElementById('user-level-label').textContent = s.userLevelLabel;
-      document.getElementById('level-unspecified').textContent = s.levelUnspecified;
-      document.getElementById('level-a1').textContent = s.levelA1;
-      document.getElementById('level-a2').textContent = s.levelA2;
-      document.getElementById('level-b1').textContent = s.levelB1;
-      document.getElementById('level-b2').textContent = s.levelB2;
-      document.getElementById('level-c1').textContent = s.levelC1;
-      document.getElementById('upload-btn-text').textContent = s.uploadBtnText;
-
-      const processBtnSpan = document.querySelector('#process-btn > span');
-      if(processBtnSpan) processBtnSpan.textContent = s.processBtn;
-
-      document.getElementById('results-title').textContent = s.resultsTitle;
-      document.getElementById('start-over-btn').textContent = s.startOverBtn;
-      document.getElementById('force-wordlist-label').textContent = s.forceWordlistLabel;
-      document.getElementById('expand-all').textContent = "⬇️ " + s.expandAll;
-      document.getElementById('collapse-all').textContent = "⬆️ " + s.collapseAll;
-      document.getElementById('stop-tts').title = s.stopSpeech;
-      document.getElementById('text-input').placeholder = s.textPlaceholder;
-      document.getElementById('hint').innerHTML = s.hintStatic;
-      document.getElementById('footer-text').textContent = s.footerText || "Built with AI collaboration";
+      document.documentElement.lang = lang; document.documentElement.dir = isRtl?'rtl':'ltr';
+      for(const key in s){
+        const el = document.getElementById(key.replace(/([A-Z])/g, "-$1").toLowerCase());
+        if(el) el.innerHTML = s[key];
+      }
+       // Specific cases not covered by ID matching
+      document.title = s.appTitle;
+      document.getElementById('text-input').placeholder = s.textPlaceholder || "Word list (one per line) or long text for analysis…";
+      document.getElementById('level-unspecified').textContent = s.levelUnspecified || "Unspecified";
+      document.getElementById('level-a1').textContent = s.levelA1 || "A1 (Beginner)";
+      document.getElementById('level-a2').textContent = s.levelA2 || "A2 (Elementary)";
+      document.getElementById('level-b1').textContent = s.levelB1 || "B1 (Intermediate)";
+      document.getElementById('level-b2').textContent = s.levelB2 || "B2 (Upper-Intermediate)";
+      document.getElementById('level-c1').textContent = s.levelC1 || "C1 (Advanced)";
+      document.querySelector('#process-btn > span').textContent = s.processBtn;
+      document.querySelector('#expand-all').innerHTML = `<span>⬇️</span><span>${s.expandAll}</span>`;
+      document.querySelector('#collapse-all').innerHTML = `<span>⬆️</span><span>${s.collapseAll}</span>`;
       syncLevelRequirement();
     }
 
-    document.addEventListener('DOMContentLoaded', ()=> setLanguage('fa'));
+    document.addEventListener('DOMContentLoaded', ()=> {
+      setLanguage(localStorage.getItem('ll-lang') || 'fa');
+      uiLangSwitcher.value = localStorage.getItem('ll-lang') || 'fa';
+    });
   </script>
 </body>
 </html>
