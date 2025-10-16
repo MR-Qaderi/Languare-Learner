@@ -162,7 +162,7 @@
                        <label for="file-upload" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-300 rounded-lg shadow-sm cursor-pointer">
                            <span id="upload-btn-text"></span>
                        </label>
-                       <input id="file-upload" type="file" class="hidden" accept=".txt,.srt,.doc,.docx">
+                       <input id="file-upload" type="file" class="hidden" accept=".txt,.srt">
                        <span id="file-name" class="text-sm text-gray-500"></span>
                     </div>
                     <button id="process-btn" class="bg-blue-600 text-white font-bold py-2 px-8 rounded-lg hover:bg-blue-700 transition-colors shadow-md">
@@ -260,9 +260,6 @@
                 textInput.value = e.target.result;
             };
             reader.readAsText(file);
-        } else if (file.name.endsWith('.doc') || file.name.endsWith('.docx')) {
-             textInput.value = ''; // Clear textarea
-             showError(uiStrings[currentLang].errorWordFile);
         } else {
             showError(uiStrings[currentLang].errorFileType);
         }
@@ -511,7 +508,7 @@
             levelB2: "B2 (فوق متوسط)",
             levelC1: "C1 (پیشرفته)",
             textPlaceholder: "لیست کلمات خود را اینجا وارد کنید، یا یک متن طولانی برای تحلیل جای‌گذاری کنید...",
-            uploadBtnText: "آپلود فایل (.txt, .srt, .doc)",
+            uploadBtnText: "آپلود فایل (.txt, .srt)",
             processBtn: "تحلیل کن",
             resultsTitle: "نتایج تحلیل",
             startOverBtn: "شروع دوباره",
@@ -520,7 +517,6 @@
             errorAIResponse: "پاسخ معتبری از هوش مصنوعی دریافت نشد.",
             errorServer: "مشکلی در ارتباط با سرور پیش آمد. لطفاً دوباره تلاش کنید.",
             errorNoResults: "هوش مصنوعی موردی متناسب با درخواست شما پیدا نکرد. لطفاً متن دیگری را امتحان کنید.",
-            errorWordFile: "خواندن محتوای فایل Word در حال حاضر پشتیبانی نمی‌شود.",
             errorFileType: "نوع فایل پشتیبانی نمی‌شود.",
             wordNotFound: "کلمه یافت نشد",
             definition: "تعریف",
@@ -544,7 +540,7 @@
             levelB2: "B2 (Upper-Intermediate)",
             levelC1: "C1 (Advanced)",
             textPlaceholder: "Enter your word list here, or paste a long text to analyze...",
-            uploadBtnText: "Upload File (.txt, .srt, .doc)",
+            uploadBtnText: "Upload File (.txt, .srt)",
             processBtn: "Analyze",
             resultsTitle: "Analysis Results",
             startOverBtn: "Start Over",
@@ -553,7 +549,6 @@
             errorAIResponse: "No valid response from AI.",
             errorServer: "A problem occurred connecting to the server. Please try again.",
             errorNoResults: "The AI did not find any items matching your request. Please try another text.",
-            errorWordFile: "Reading content from Word files is not supported yet.",
             errorFileType: "File type not supported.",
             wordNotFound: "Word not found",
             definition: "Definition",
@@ -577,7 +572,7 @@
             levelB2: "B2 (Obere Mittelstufe)",
             levelC1: "C1 (Fortgeschritten)",
             textPlaceholder: "Geben Sie hier Ihre Wortliste ein oder fügen Sie einen langen Text zur Analyse ein...",
-            uploadBtnText: "Datei hochladen (.txt, .srt, .doc)",
+            uploadBtnText: "Datei hochladen (.txt, .srt)",
             processBtn: "Analysieren",
             resultsTitle: "Analyseergebnisse",
             startOverBtn: "Neu anfangen",
@@ -586,7 +581,6 @@
             errorAIResponse: "Keine gültige Antwort von der KI.",
             errorServer: "Problem bei der Verbindung zum Server. Bitte versuchen Sie es erneut.",
             errorNoResults: "Die KI hat keine passenden Elemente gefunden. Bitte versuchen Sie einen anderen Text.",
-            errorWordFile: "Das Lesen von Word-Dateien wird noch nicht unterstützt.",
             errorFileType: "Dateityp nicht unterstützt.",
             wordNotFound: "Wort nicht gefunden",
             definition: "Definition",
@@ -610,7 +604,7 @@
             levelB2: "B2 (Intermédiaire supérieur)",
             levelC1: "C1 (Avancé)",
             textPlaceholder: "Entrez votre liste de mots ici, ou collez un long texte à analyser...",
-            uploadBtnText: "Télécharger un fichier (.txt, .srt, .doc)",
+            uploadBtnText: "Télécharger un fichier (.txt, .srt)",
             processBtn: "Analyser",
             resultsTitle: "Résultats de l'analyse",
             startOverBtn: "Recommencer",
@@ -619,7 +613,6 @@
             errorAIResponse: "Aucune réponse valide de l'IA.",
             errorServer: "Un problème est survenu lors de la connexion au serveur. Veuillez réessayer.",
             errorNoResults: "L'IA n'a trouvé aucun élément correspondant. Veuillez essayer un autre texte.",
-            errorWordFile: "La lecture des fichiers Word n'est pas encore prise en charge.",
             errorFileType: "Type de fichier non pris en charge.",
             wordNotFound: "Mot non trouvé",
             definition: "Définition",
@@ -643,7 +636,7 @@
             levelB2: "B2 (Intermedio alto)",
             levelC1: "C1 (Avanzado)",
             textPlaceholder: "Ingrese su lista de palabras aquí, o pegue un texto largo para analizar...",
-            uploadBtnText: "Subir archivo (.txt, .srt, .doc)",
+            uploadBtnText: "Subir archivo (.txt, .srt)",
             processBtn: "Analizar",
             resultsTitle: "Resultados del análisis",
             startOverBtn: "Empezar de nuevo",
@@ -652,7 +645,6 @@
             errorAIResponse: "No hay respuesta válida de la IA.",
             errorServer: "Ocurrió un problema al conectarse al servidor. Por favor, inténtelo de nuevo.",
             errorNoResults: "La IA no encontró ningún elemento coincidente. Por favor, intente con otro texto.",
-            errorWordFile: "La lectura de archivos de Word aún no es compatible.",
             errorFileType: "Tipo de archivo no compatible.",
             wordNotFound: "Palabra no encontrada",
             definition: "Definición",
@@ -676,7 +668,7 @@
             levelB2: "B2 (中高级)",
             levelC1: "C1 (高级)",
             textPlaceholder: "在此处输入您的单词列表，或粘贴长文本进行分析...",
-            uploadBtnText: "上传文件 (.txt, .srt, .doc)",
+            uploadBtnText: "上传文件 (.txt, .srt)",
             processBtn: "分析",
             resultsTitle: "分析结果",
             startOverBtn: "重新开始",
@@ -685,7 +677,6 @@
             errorAIResponse: "AI无有效响应。",
             errorServer: "连接服务器时出现问题。请再试一次。",
             errorNoResults: "AI未找到任何匹配项。请尝试其他文本。",
-            errorWordFile: "尚不支持读取Word文件内容。",
             errorFileType: "不支持的文件类型。",
             wordNotFound: "未找到单词",
             definition: "定义",
@@ -709,7 +700,7 @@
             levelB2: "B2 (Orta-üstü)",
             levelC1: "C1 (İleri)",
             textPlaceholder: "Kelime listenizi buraya girin veya analiz için uzun bir metin yapıştırın...",
-            uploadBtnText: "Dosya Yükle (.txt, .srt, .doc)",
+            uploadBtnText: "Dosya Yükle (.txt, .srt)",
             processBtn: "Analiz Et",
             resultsTitle: "Analiz Sonuçları",
             startOverBtn: "Yeniden Başla",
@@ -718,7 +709,6 @@
             errorAIResponse: "Yapay zekadan geçerli bir yanıt alınamadı.",
             errorServer: "Sunucuya bağlanırken bir sorun oluştu. Lütfen tekrar deneyin.",
             errorNoResults: "Yapay zeka isteğinizle eşleşen bir öğe bulamadı. Lütfen başka bir metin deneyin.",
-            errorWordFile: "Word dosyalarının içeriği henüz okunamıyor.",
             errorFileType: "Dosya türü desteklenmiyor.",
             wordNotFound: "Kelime bulunamadı",
             definition: "Tanım",
@@ -742,7 +732,7 @@
             levelB2: "B2 (Intermedio-superiore)",
             levelC1: "C1 (Avanzato)",
             textPlaceholder: "Inserisci qui la tua lista di parole, o incolla un testo lungo da analizzare...",
-            uploadBtnText: "Carica File (.txt, .srt, .doc)",
+            uploadBtnText: "Carica File (.txt, .srt)",
             processBtn: "Analizza",
             resultsTitle: "Risultati dell'analisi",
             startOverBtn: "Ricomincia",
@@ -751,7 +741,6 @@
             errorAIResponse: "Nessuna risposta valida dall'IA.",
             errorServer: "Si è verificato un problema durante la connessione al server. Riprova.",
             errorNoResults: "L'IA non ha trovato elementi corrispondenti. Prova con un altro testo.",
-            errorWordFile: "La lettura del contenuto dei file Word non è ancora supportata.",
             errorFileType: "Tipo di file non supportato.",
             wordNotFound: "Parola non trovata",
             definition: "Definizione",
@@ -775,7 +764,7 @@
             levelB2: "B2 (Выше среднего)",
             levelC1: "C1 (Продвинутый)",
             textPlaceholder: "Введите свой список слов здесь или вставьте длинный текст для анализа...",
-            uploadBtnText: "Загрузить файл (.txt, .srt, .doc)",
+            uploadBtnText: "Загрузить файл (.txt, .srt)",
             processBtn: "Анализировать",
             resultsTitle: "Результаты анализа",
             startOverBtn: "Начать сначала",
@@ -784,7 +773,6 @@
             errorAIResponse: "Нет действительного ответа от ИИ.",
             errorServer: "Возникла проблема с подключением к серверу. Пожалуйста, попробуйте еще раз.",
             errorNoResults: "ИИ не нашел совпадений. Пожалуйста, попробуйте другой текст.",
-            errorWordFile: "Чтение содержимого файлов Word пока не поддерживается.",
             errorFileType: "Тип файла не поддерживается.",
             wordNotFound: "Слово не найдено",
             definition: "Определение",
