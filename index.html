@@ -160,9 +160,9 @@
                 <div class="flex justify-between items-center mt-4">
                     <div class="flex items-center gap-2">
                        <label for="file-upload" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-300 rounded-lg shadow-sm cursor-pointer">
-                           <span id="upload-btn-text">آپلود فایل (.txt, .srt)</span>
+                           <span id="upload-btn-text"></span>
                        </label>
-                       <input id="file-upload" type="file" class="hidden" accept=".txt,.srt">
+                       <input id="file-upload" type="file" class="hidden" accept=".txt,.srt,.doc,.docx">
                        <span id="file-name" class="text-sm text-gray-500"></span>
                     </div>
                     <button id="process-btn" class="bg-blue-600 text-white font-bold py-2 px-8 rounded-lg hover:bg-blue-700 transition-colors shadow-md">
@@ -253,15 +253,18 @@
 
     // --- توابع اصلی ---
     function handleFile(file) {
+        fileNameEl.textContent = file.name;
         if (file.type === "text/plain" || file.name.endsWith('.srt')) {
-            fileNameEl.textContent = file.name;
             const reader = new FileReader();
             reader.onload = (e) => {
                 textInput.value = e.target.result;
             };
             reader.readAsText(file);
+        } else if (file.name.endsWith('.doc') || file.name.endsWith('.docx')) {
+             textInput.value = ''; // Clear textarea
+             showError(uiStrings[currentLang].errorWordFile);
         } else {
-            fileNameEl.textContent = "File not supported";
+            showError(uiStrings[currentLang].errorFileType);
         }
     }
 
@@ -300,7 +303,7 @@
         if (isWordList) {
             taskDescription = `For EACH word/phrase in the following list: "${text}", provide a detailed analysis.`;
         } else {
-            taskDescription = `Analyze the following text. Extract the most important and practical words, idioms, and common phrases that are suitable for a ${level} learner. For EACH item you extract, provide a detailed analysis.`;
+            taskDescription = `Analyze the following text. Extract ALL important and practical words, idioms, and common phrases suitable for a ${level} learner. Do not limit the number of items extracted. For EACH item you extract, provide a detailed analysis.`;
         }
 
         return `
@@ -312,11 +315,11 @@
             For EACH item, provide the analysis in the following structured format EXACTLY. Use "---" as a separator between each item. Do not add any text before the first item or after the last item.
 
             Word: [The extracted word or phrase in ${targetLang}]
-            Translation: [The translation in ${sourceLang}]
+            Translation: [The translation in ${sourceLang}. If there are multiple common meanings, list them all separated by a semicolon ';']
             Definition: [A simple definition in ${targetLang} suitable for a ${level} learner]
             Grammar: [Part of speech, e.g., noun, verb, adjective, idiom]
             Collocations: [Common word combinations, or "N/A"]
-            Examples:
+            Examples: [Provide as many examples as necessary to show the usage. Each example on a new numbered line.]
             1. [Example 1 in ${targetLang}] - [Translation of Example 1 in ${sourceLang}]
             2. [Example 2 in ${targetLang}] - [Translation of Example 2 in ${sourceLang}]
             Common Mistakes: [Common mistakes or "nothing specific"]
@@ -379,13 +382,16 @@
 
     function renderResults(aiResponse) {
         const parsedData = parseAIResponse(aiResponse);
-        const lang = currentLang;
-        const isRtl = lang === 'fa';
+        
+        const sourceLangName = sourceLangSelect.value;
+        const langCode = langNameToCode[sourceLangName] || 'en';
+        const strings = uiStrings[langCode];
+        const isRtl = langCode === 'fa';
 
         resultsList.dir = isRtl ? 'rtl' : 'ltr';
 
         if (parsedData.length === 0 || parsedData.some(item => !item.word)) {
-            resultsList.innerHTML = `<p class="text-center p-8 text-gray-600">${uiStrings[lang].errorNoResults}</p>`;
+            resultsList.innerHTML = `<p class="text-center p-8 text-gray-600">${strings.errorNoResults}</p>`;
             return;
         }
 
@@ -399,7 +405,7 @@
                 <div class="result-item">
                     <div class="result-header flex justify-between items-center" onclick="toggleDetails(${index})">
                         <div>
-                            <h3 class="text-lg font-bold text-blue-700">${item.word || uiStrings[lang].wordNotFound}</h3>
+                            <h3 class="text-lg font-bold text-blue-700">${item.word || strings.wordNotFound}</h3>
                             <p class="text-md text-gray-700">${item.translation || ''}</p>
                         </div>
                         <div class="flex items-center gap-4">
@@ -409,19 +415,19 @@
                     </div>
                     <div id="details-${index}" class="result-details bg-white border-t border-gray-200 space-y-4">
                         <div>
-                            <strong>${uiStrings[lang].definition}:</strong>
+                            <strong>${strings.definition}:</strong>
                             <p class="mt-1 text-gray-800">${item.definition || 'N/A'}</p>
                         </div>
                         <div>
-                            <strong>${uiStrings[lang].grammar}:</strong>
+                            <strong>${strings.grammar}:</strong>
                             <p class="mt-1 text-gray-800">${item.grammar || 'N/A'}</p>
                         </div>
                         <div>
-                            <strong>${uiStrings[lang].collocations}:</strong>
+                            <strong>${strings.collocations}:</strong>
                             <p class="mt-1 text-gray-800">${item.collocations || 'N/A'}</p>
                         </div>
                         <div>
-                            <strong>${uiStrings[lang].examples}:</strong>
+                            <strong>${strings.examples}:</strong>
                             <ul class="list-disc ${listPaddingClass} mt-1 space-y-2">
                                 ${ (item.exampleslist || []).map(ex => {
                                     const parts = ex.split(' - ');
@@ -438,11 +444,11 @@
                             </ul>
                         </div>
                          <div>
-                            <strong>${uiStrings[lang].commonMistakes}:</strong>
+                            <strong>${strings.commonMistakes}:</strong>
                             <p class="mt-1 text-gray-800">${item.commonmistakes || 'N/A'}</p>
                         </div>
                         <div>
-                            <strong>${uiStrings[lang].contextNote}:</strong>
+                            <strong>${strings.contextNote}:</strong>
                             <p class="mt-1 text-gray-800">${item.contextnote || 'N/A'}</p>
                         </div>
                     </div>
@@ -484,6 +490,12 @@
 
     // --- Internationalization (i18n) ---
     let currentLang = 'fa';
+
+    const langNameToCode = {
+        'Persian': 'fa', 'English': 'en', 'German': 'de', 'French': 'fr', 'Spanish': 'es', 
+        'Chinese': 'zh', 'Turkish': 'tr', 'Italian': 'it', 'Russian': 'ru'
+    };
+
     const uiStrings = {
         fa: {
             appTitle: "یادگیری زبان با هوش مصنوعی",
@@ -499,7 +511,7 @@
             levelB2: "B2 (فوق متوسط)",
             levelC1: "C1 (پیشرفته)",
             textPlaceholder: "لیست کلمات خود را اینجا وارد کنید، یا یک متن طولانی برای تحلیل جای‌گذاری کنید...",
-            uploadBtnText: "آپلود فایل (.txt, .srt)",
+            uploadBtnText: "آپلود فایل (.txt, .srt, .doc)",
             processBtn: "تحلیل کن",
             resultsTitle: "نتایج تحلیل",
             startOverBtn: "شروع دوباره",
@@ -508,6 +520,8 @@
             errorAIResponse: "پاسخ معتبری از هوش مصنوعی دریافت نشد.",
             errorServer: "مشکلی در ارتباط با سرور پیش آمد. لطفاً دوباره تلاش کنید.",
             errorNoResults: "هوش مصنوعی موردی متناسب با درخواست شما پیدا نکرد. لطفاً متن دیگری را امتحان کنید.",
+            errorWordFile: "خواندن محتوای فایل Word در حال حاضر پشتیبانی نمی‌شود.",
+            errorFileType: "نوع فایل پشتیبانی نمی‌شود.",
             wordNotFound: "کلمه یافت نشد",
             definition: "تعریف",
             grammar: "نوع گرامر",
@@ -530,7 +544,7 @@
             levelB2: "B2 (Upper-Intermediate)",
             levelC1: "C1 (Advanced)",
             textPlaceholder: "Enter your word list here, or paste a long text to analyze...",
-            uploadBtnText: "Upload File (.txt, .srt)",
+            uploadBtnText: "Upload File (.txt, .srt, .doc)",
             processBtn: "Analyze",
             resultsTitle: "Analysis Results",
             startOverBtn: "Start Over",
@@ -539,6 +553,8 @@
             errorAIResponse: "No valid response from AI.",
             errorServer: "A problem occurred connecting to the server. Please try again.",
             errorNoResults: "The AI did not find any items matching your request. Please try another text.",
+            errorWordFile: "Reading content from Word files is not supported yet.",
+            errorFileType: "File type not supported.",
             wordNotFound: "Word not found",
             definition: "Definition",
             grammar: "Grammar",
@@ -547,7 +563,7 @@
             commonMistakes: "Common Mistakes",
             contextNote: "Context/Note",
         },
-        de: {
+        de: { // German translations
             appTitle: "KI-Sprachlerner",
             mainTitle: "Intelligenter Vokabeltrainer",
             subtitle: "Wählen Sie Ihre Sprachen aus und geben Sie Text zur Analyse ein.",
@@ -561,7 +577,7 @@
             levelB2: "B2 (Obere Mittelstufe)",
             levelC1: "C1 (Fortgeschritten)",
             textPlaceholder: "Geben Sie hier Ihre Wortliste ein oder fügen Sie einen langen Text zur Analyse ein...",
-            uploadBtnText: "Datei hochladen (.txt, .srt)",
+            uploadBtnText: "Datei hochladen (.txt, .srt, .doc)",
             processBtn: "Analysieren",
             resultsTitle: "Analyseergebnisse",
             startOverBtn: "Neu anfangen",
@@ -570,6 +586,8 @@
             errorAIResponse: "Keine gültige Antwort von der KI.",
             errorServer: "Problem bei der Verbindung zum Server. Bitte versuchen Sie es erneut.",
             errorNoResults: "Die KI hat keine passenden Elemente gefunden. Bitte versuchen Sie einen anderen Text.",
+            errorWordFile: "Das Lesen von Word-Dateien wird noch nicht unterstützt.",
+            errorFileType: "Dateityp nicht unterstützt.",
             wordNotFound: "Wort nicht gefunden",
             definition: "Definition",
             grammar: "Grammatik",
@@ -578,7 +596,7 @@
             commonMistakes: "Häufige Fehler",
             contextNote: "Kontext/Notiz",
         },
-        fr: {
+        fr: { // French translations
             appTitle: "Apprentissage des langues par l'IA",
             mainTitle: "Constructeur de vocabulaire intelligent",
             subtitle: "Sélectionnez vos langues et entrez du texte à analyser.",
@@ -592,7 +610,7 @@
             levelB2: "B2 (Intermédiaire supérieur)",
             levelC1: "C1 (Avancé)",
             textPlaceholder: "Entrez votre liste de mots ici, ou collez un long texte à analyser...",
-            uploadBtnText: "Télécharger un fichier (.txt, .srt)",
+            uploadBtnText: "Télécharger un fichier (.txt, .srt, .doc)",
             processBtn: "Analyser",
             resultsTitle: "Résultats de l'analyse",
             startOverBtn: "Recommencer",
@@ -601,6 +619,8 @@
             errorAIResponse: "Aucune réponse valide de l'IA.",
             errorServer: "Un problème est survenu lors de la connexion au serveur. Veuillez réessayer.",
             errorNoResults: "L'IA n'a trouvé aucun élément correspondant. Veuillez essayer un autre texte.",
+            errorWordFile: "La lecture des fichiers Word n'est pas encore prise en charge.",
+            errorFileType: "Type de fichier non pris en charge.",
             wordNotFound: "Mot non trouvé",
             definition: "Définition",
             grammar: "Grammaire",
@@ -609,7 +629,7 @@
             commonMistakes: "Erreurs courantes",
             contextNote: "Contexte/Note",
         },
-        es: {
+        es: { // Spanish translations
             appTitle: "Aprendizaje de idiomas con IA",
             mainTitle: "Constructor de vocabulario inteligente",
             subtitle: "Seleccione sus idiomas e ingrese texto para analizar.",
@@ -623,7 +643,7 @@
             levelB2: "B2 (Intermedio alto)",
             levelC1: "C1 (Avanzado)",
             textPlaceholder: "Ingrese su lista de palabras aquí, o pegue un texto largo para analizar...",
-            uploadBtnText: "Subir archivo (.txt, .srt)",
+            uploadBtnText: "Subir archivo (.txt, .srt, .doc)",
             processBtn: "Analizar",
             resultsTitle: "Resultados del análisis",
             startOverBtn: "Empezar de nuevo",
@@ -632,6 +652,8 @@
             errorAIResponse: "No hay respuesta válida de la IA.",
             errorServer: "Ocurrió un problema al conectarse al servidor. Por favor, inténtelo de nuevo.",
             errorNoResults: "La IA no encontró ningún elemento coincidente. Por favor, intente con otro texto.",
+            errorWordFile: "La lectura de archivos de Word aún no es compatible.",
+            errorFileType: "Tipo de archivo no compatible.",
             wordNotFound: "Palabra no encontrada",
             definition: "Definición",
             grammar: "Gramática",
@@ -640,7 +662,7 @@
             commonMistakes: "Errores comunes",
             contextNote: "Contexto/Nota",
         },
-        zh: {
+        zh: { // Chinese translations
             appTitle: "人工智能语言学习器",
             mainTitle: "智能词汇构建器",
             subtitle: "选择您的语言并输入文本进行分析。",
@@ -654,7 +676,7 @@
             levelB2: "B2 (中高级)",
             levelC1: "C1 (高级)",
             textPlaceholder: "在此处输入您的单词列表，或粘贴长文本进行分析...",
-            uploadBtnText: "上传文件 (.txt, .srt)",
+            uploadBtnText: "上传文件 (.txt, .srt, .doc)",
             processBtn: "分析",
             resultsTitle: "分析结果",
             startOverBtn: "重新开始",
@@ -663,6 +685,8 @@
             errorAIResponse: "AI无有效响应。",
             errorServer: "连接服务器时出现问题。请再试一次。",
             errorNoResults: "AI未找到任何匹配项。请尝试其他文本。",
+            errorWordFile: "尚不支持读取Word文件内容。",
+            errorFileType: "不支持的文件类型。",
             wordNotFound: "未找到单词",
             definition: "定义",
             grammar: "语法",
@@ -671,7 +695,7 @@
             commonMistakes: "常见错误",
             contextNote: "语境/说明",
         },
-        tr: {
+        tr: { // Turkish translations
             appTitle: "Yapay Zeka ile Dil Öğrenimi",
             mainTitle: "Akıllı Kelime Oluşturucu",
             subtitle: "Dillerinizi seçin ve analiz etmek için metin girin.",
@@ -685,7 +709,7 @@
             levelB2: "B2 (Orta-üstü)",
             levelC1: "C1 (İleri)",
             textPlaceholder: "Kelime listenizi buraya girin veya analiz için uzun bir metin yapıştırın...",
-            uploadBtnText: "Dosya Yükle (.txt, .srt)",
+            uploadBtnText: "Dosya Yükle (.txt, .srt, .doc)",
             processBtn: "Analiz Et",
             resultsTitle: "Analiz Sonuçları",
             startOverBtn: "Yeniden Başla",
@@ -694,6 +718,8 @@
             errorAIResponse: "Yapay zekadan geçerli bir yanıt alınamadı.",
             errorServer: "Sunucuya bağlanırken bir sorun oluştu. Lütfen tekrar deneyin.",
             errorNoResults: "Yapay zeka isteğinizle eşleşen bir öğe bulamadı. Lütfen başka bir metin deneyin.",
+            errorWordFile: "Word dosyalarının içeriği henüz okunamıyor.",
+            errorFileType: "Dosya türü desteklenmiyor.",
             wordNotFound: "Kelime bulunamadı",
             definition: "Tanım",
             grammar: "Gramer",
@@ -702,7 +728,7 @@
             commonMistakes: "Yaygın Hatalar",
             contextNote: "Bağlam/Not",
         },
-        it: {
+        it: { // Italian translations
             appTitle: "Apprendimento delle lingue con IA",
             mainTitle: "Costruttore di vocabolario intelligente",
             subtitle: "Seleziona le tue lingue e inserisci il testo da analizzare.",
@@ -716,7 +742,7 @@
             levelB2: "B2 (Intermedio-superiore)",
             levelC1: "C1 (Avanzato)",
             textPlaceholder: "Inserisci qui la tua lista di parole, o incolla un testo lungo da analizzare...",
-            uploadBtnText: "Carica File (.txt, .srt)",
+            uploadBtnText: "Carica File (.txt, .srt, .doc)",
             processBtn: "Analizza",
             resultsTitle: "Risultati dell'analisi",
             startOverBtn: "Ricomincia",
@@ -725,6 +751,8 @@
             errorAIResponse: "Nessuna risposta valida dall'IA.",
             errorServer: "Si è verificato un problema durante la connessione al server. Riprova.",
             errorNoResults: "L'IA non ha trovato elementi corrispondenti. Prova con un altro testo.",
+            errorWordFile: "La lettura del contenuto dei file Word non è ancora supportata.",
+            errorFileType: "Tipo di file non supportato.",
             wordNotFound: "Parola non trovata",
             definition: "Definizione",
             grammar: "Grammatica",
@@ -733,7 +761,7 @@
             commonMistakes: "Errori comuni",
             contextNote: "Contesto/Nota",
         },
-        ru: {
+        ru: { // Russian translations
             appTitle: "Изучение языков с ИИ",
             mainTitle: "Умный конструктор словарного запаса",
             subtitle: "Выберите языки и введите текст для анализа.",
@@ -747,7 +775,7 @@
             levelB2: "B2 (Выше среднего)",
             levelC1: "C1 (Продвинутый)",
             textPlaceholder: "Введите свой список слов здесь или вставьте длинный текст для анализа...",
-            uploadBtnText: "Загрузить файл (.txt, .srt)",
+            uploadBtnText: "Загрузить файл (.txt, .srt, .doc)",
             processBtn: "Анализировать",
             resultsTitle: "Результаты анализа",
             startOverBtn: "Начать сначала",
@@ -756,6 +784,8 @@
             errorAIResponse: "Нет действительного ответа от ИИ.",
             errorServer: "Возникла проблема с подключением к серверу. Пожалуйста, попробуйте еще раз.",
             errorNoResults: "ИИ не нашел совпадений. Пожалуйста, попробуйте другой текст.",
+            errorWordFile: "Чтение содержимого файлов Word пока не поддерживается.",
+            errorFileType: "Тип файла не поддерживается.",
             wordNotFound: "Слово не найдено",
             definition: "Определение",
             grammar: "Грамматика",
