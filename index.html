@@ -10,15 +10,24 @@
   <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #f7f9fc; --surface: #ffffff; --text: #111827; --muted: #6b7280;
-      --border: rgba(17, 24, 39, 0.08); --shadow: 0 10px 30px -12px rgba(2,6,23,.18);
-      --primary: #3b82f6; --primary-600:#2563eb; --chip:#f8fafc; --chip-border:#e5e7eb;
+      --bg: #f6f8fb; --surface: #ffffff; --text: #0f172a; --muted: #6b7280;
+      --border: rgba(15, 23, 42, 0.14); /* کمی پررنگ‌تر */
+      --border-strong: rgba(15, 23, 42, 0.25);
+      --shadow: 0 10px 30px -12px rgba(2,6,23,.18);
+      --shadow-strong: 0 18px 42px -14px rgba(2,6,23,.28);
+      --primary: #3b82f6; --primary-600:#2563eb;
+      --chip:#f8fafc; --chip-border:#e5e7eb;
       --accent-1: #e0e7ff; --accent-2: #fce7f3; --accent-3: #ccfbf1; --accent-4: #fef3c7;
+      --ring: rgba(59,130,246,.35);
     }
     [data-theme="dark"]{
-      --bg:#0b1220; --surface:#0f172a; --text:#e5e7eb; --muted:#9ca3af; --border:rgba(148,163,184,.15);
-      --shadow:0 14px 42px -12px rgba(2,6,23,.6); --primary:#60a5fa; --primary-600:#3b82f6;
-      --chip:#0b1220; --chip-border:#1f2937; --accent-1:#1e293b; --accent-2:#1f2540; --accent-3:#0f2f2b; --accent-4:#2a1f0f;
+      --bg:#0b1220; --surface:#0f172a; --text:#e5e7eb; --muted:#9ca3af;
+      --border:rgba(148,163,184,.22); --border-strong:rgba(148,163,184,.35);
+      --shadow:0 14px 42px -12px rgba(2,6,23,.6); --shadow-strong:0 24px 60px -18px rgba(2,6,23,.75);
+      --primary:#60a5fa; --primary-600:#3b82f6;
+      --chip:#0b1220; --chip-border:#1f2937;
+      --accent-1:#1e293b; --accent-2:#1f2540; --accent-3:#0f2f2b; --accent-4:#2a1f0f;
+      --ring: rgba(96,165,250,.45);
     }
     html { scroll-behavior: smooth; }
     body {
@@ -30,13 +39,20 @@
       color: var(--text); min-height: 100vh;
     }
     .glass{ backdrop-filter:saturate(160%) blur(12px); background: color-mix(in oklab, var(--surface) 78%, transparent); border-bottom:1px solid var(--border); }
-    .card{ background: color-mix(in oklab, var(--surface) 94%, transparent); border:1px solid var(--border); border-radius:1.25rem; box-shadow:var(--shadow); }
+    .card{
+      background: color-mix(in oklab, var(--surface) 94%, transparent);
+      border:1px solid var(--border);
+      border-radius:1.25rem;
+      box-shadow:var(--shadow);
+      transition: border-color .18s ease, box-shadow .18s ease, transform .12s ease;
+    }
+    .card:hover{ border-color: var(--border-strong); box-shadow: var(--shadow-strong); transform: translateY(-2px); }
     .ring-card{ position:relative; border-radius:1rem; overflow:hidden; background:var(--surface); }
     .ring-card::before{
       content:""; position:absolute; inset:-1px; border-radius:1rem; padding:1px;
       background: conic-gradient(from 180deg, #60a5fa, #a78bfa, #22d3ee, #60a5fa);
       -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-      -webkit-mask-composite: xor; mask-composite: exclude; pointer-events:none; animation:spin 8s linear infinite; opacity:.75;
+      -webkit-mask-composite: xor; mask-composite: exclude; pointer-events:none; animation:spin 8s linear infinite; opacity:.6;
     }
     @keyframes spin{ to{ transform:rotate(360deg) } }
     .result-header{ cursor:pointer; background: color-mix(in oklab, var(--surface) 88%, transparent); transition: background .2s ease, transform .15s ease; }
@@ -45,9 +61,14 @@
     .result-details.open{ max-height:1600px; border-top-color:var(--border); padding:1rem 1.25rem 1.25rem; }
     .chip{ display:inline-flex; align-items:center; gap:.35rem; padding:.22rem .6rem; border-radius:999px; font-size:.78rem; font-weight:600; border:1px solid var(--chip-border); background:var(--chip); white-space:nowrap; }
     .chip .dot{ width:.5rem; height:.5rem; border-radius:999px; opacity:.85 }
-    .drop-zone{ border:2px dashed var(--border); border-radius:1rem; transition:.2s; background: color-mix(in oklab, var(--surface) 80%, transparent); }
-    .drop-zone.drag-over{ border-color:var(--primary); background: color-mix(in oklab, var(--surface) 92%, transparent); }
-    .btn{ border-radius:.85rem; font-weight:700; padding:.68rem 1.2rem; display:inline-flex; align-items:center; gap:.55rem; border:1px solid var(--border); transition: transform .08s, background .15s, border-color .15s; }
+    .drop-zone{
+      border:2px dashed var(--border);
+      border-radius:1rem; transition:.2s;
+      background: color-mix(in oklab, var(--surface) 80%, transparent);
+    }
+    .drop-zone.drag-over{ border-color:var(--primary); background: color-mix(in oklab, var(--surface) 92%, transparent); box-shadow: 0 0 0 4px var(--ring); }
+    .btn{ border-radius:.85rem; font-weight:700; padding:.68rem 1.2rem; display:inline-flex; align-items:center; gap:.55rem; border:1px solid var(--border); transition: transform .08s, background .15s, border-color .15s, box-shadow .15s; }
+    .btn:focus-visible{ outline: none; box-shadow: 0 0 0 4px var(--ring); }
     .btn:active{ transform: translateY(1px) }
     .btn-primary{ background:linear-gradient(180deg, var(--primary), var(--primary-600)); color:#fff; border-color:color-mix(in oklab, var(--primary-600) 60%, #0000); box-shadow:0 12px 28px -12px color-mix(in oklab, var(--primary) 60%, transparent); }
     .btn-secondary{ background:var(--surface); color:var(--text); }
@@ -117,10 +138,10 @@
         <div class="hidden md:block"></div>
       </div>
 
-      <!-- توضیح بزرگِ محصول (جایگزین subtitle قبلی) -->
+      <!-- توضیح بزرگِ محصول -->
       <div id="big-desc" class="mb-5 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-5 md:p-6 text-lg md:text-xl leading-9 font-semibold"></div>
 
-      <!-- راهنمای ورودی -->
+      <!-- راهنمای استفاده (ادغام‌شده و شفاف) -->
       <div id="hint-container" class="mb-5 rounded-xl border border-[var(--border)] bg-[var(--surface)]">
         <div class="px-4 py-3 flex items-start gap-3">
           <div class="size-8 rounded-lg bg-[var(--accent-1)]/60 grid place-items-center mt-1">💡</div>
@@ -291,7 +312,7 @@
               .replace(/\n{2,}/g,'\n').trim();
     }
 
-    // *** BUGFIX: متن خالی = لیست نیست (تا «سطح من» از ابتدا غیرفعال نشود)
+    // Heuristic
     function looksLikeWordList(text){
       const t = (text || '').trim();
       if (!t) return false;
@@ -330,7 +351,6 @@
 
       if (!text){ showError(s.errorText); return; }
       if (!isList && level==='Unspecified'){
-        // هشدارِ زیبا زیر باکس
         showLevelWarning(s.pleasePickLevel);
         return;
       }
@@ -397,9 +417,7 @@ ${isWordList ? `Here is the word/phrase list:\n${text}` : `Here is the text to a
         const ai = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
         if(!ai) throw new Error(uiStrings[currentLang].errorAIResponse);
 
-        // برای ری‌رندر سریع پس از تغییر زبان مادری
         resultsList.dataset.lastRaw = ai;
-
         renderResults(ai);
       }catch(err){
         console.error(err);
@@ -438,8 +456,6 @@ ${isWordList ? `Here is the word/phrase list:\n${text}` : `Here is the text to a
 
     function renderResults(ai){
       const parsed = parseAIResponse(ai);
-
-      // *** مهم: برچسب‌های نتایج از «زبان مادری» خوانده شود
       const sourceCode = (sourceLangSelect.value || '').trim() || currentLang;
       const strings = uiStrings[sourceCode] || uiStrings.en;
 
@@ -541,18 +557,32 @@ ${isWordList ? `Here is the word/phrase list:\n${text}` : `Here is the text to a
 
     // i18n
     let currentLang='fa';
+    const FOOTER_NAME = 'MohammadReza Qaderi';
+    const LI_URL = 'https://www.linkedin.com/in/mr-qaderi/';
+    const IG_URL = 'https://www.instagram.com/qaderi.mr?igsh=MTlnYzhwdGpmdnR4ag==';
+
+    const linkedInSVG = '<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5zM.5 8.5h4V24h-4V8.5zM8.5 8.5h3.8v2.1h.1c.5-1 1.9-2.1 3.9-2.1 4.1 0 4.9 2.7 4.9 6.2V24h-4v-6.7c0-1.6 0-3.7-2.3-3.7s-2.7 1.8-2.7 3.6V24h-4V8.5z"/></svg>';
+    const instagramSVG = '<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 1.9.2 2.3.4.6.2 1 .4 1.5.9.5.5.7.9.9 1.5.2.4.3 1.1.4 2.3.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.2 1.9-.4 2.3-.2.6-.4 1-.9 1.5-.5.5-.9.7-1.5.9-.4.2-1.1.3-2.3.4-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.9-.2-2.3-.4-.6-.2-1-.4-1.5-.9-.5-.5-.7-.9-.9-1.5-.2-.4-.3-1.1-.4-2.3C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.9c.1-1.2.2-1.9.4-2.3.2-.6.4-1 .9-1.5.5-.5.9-.7 1.5-.9.4-.2 1.1-.3 2.3-.4C8.4 2.2 8.8 2.2 12 2.2m0-2.2C8.7 0 8.3 0 7 0 5.7 0 4.8.1 4 .3c-.9.2-1.7.5-2.5 1.3C.7 2.3.4 3.1.3 4 .1 4.8 0 5.7 0 7c0 1.3 0 1.7 0 5s0 3.7.3 5c.1.8.4 1.7 1.2 2.5.8.8 1.6 1.1 2.5 1.3.8.2 1.7.3 3 .3s1.7 0 5 0 3.7 0 5-.3c.8-.1 1.7-.4 2.5-1.2.8-.8 1.1-1.6 1.3-2.5.2-.8.3-1.7.3-3s0-1.7 0-5 0-3.7-.3-5c-.1-.8-.4-1.7-1.2-2.5C21.7.7 20.9.4 20 .3 19.2.1 18.3 0 17 0s-1.7 0-5 0z"/><path d="M12 5.8A6.2 6.2 0 1 0 18.2 12 6.2 6.2 0 0 0 12 5.8m0 10.2A4 4 0 1 1 16 12a4 4 0 0 1-4 4z"/><circle cx="18.4" cy="5.6" r="1.3"/></svg>';
+
     const uiStrings = {
-      // Persian
       fa:{
         appTitle:"یادگیری زبان با هوش مصنوعی",
         mainTitle:"یادگیری لغات جدید زبان",
         headerSubtitle:"",
-        bigDesc:"اینجا متناسب با سطح زبان شما، از متن شما (خبر، داستان، زیرنویس فیلم و ...) اصطلاحات و جملات کاربردی استخراج می‌شود، معنی، تلفظ و کاربردها نمایش داده می‌شود و به شما در یادگیری زبان جدید کمک می‌کند.",
+        bigDesc:"🔍 چی کار می‌کنیم؟ <span class='font-bold'>از متن یا لیست شما</span> اصطلاحات و کلمات کاربردی را جدا می‌کنیم و <span class='font-bold'>معنی، مثال، گرامر و تلفظ</span> را نمایش می‌دهیم تا یادگیری زبان برایتان سریع‌تر و هدفمندتر شود.",
         sourceLangLabel:"زبان مادری من",
         targetLangLabel:"زبانی که یاد می‌گیرم",
         userLevelLabel:"سطح من",
         forceWordlistLabel:"این یک لیست واژه است",
-        hintStatic:"<ul class='list-disc pr-5 space-y-1'><li>اگر <b>لیست کلمات</b> خودتان را دارید، در هر خط یک کلمه بنویسید یا با <code>-</code> جدا کنید؛ <b>نیازی به انتخاب سطح نیست</b> و گزینه «این یک لیست واژه است» را فعال کنید.</li><li>اگر می‌خواهید ما کلمات را استخراج کنیم، <b>سطح زبان</b> را از منوی بالا انتخاب کنید تا از متنی که ارسال کرده‌اید، اصطلاحات کاربردی <b>متناسب با سطح شما</b> استخراج شود.</li></ul>",
+        hintStatic:`
+          <div class="space-y-2 leading-7">
+            <div>🧭 <b>به دو روش می‌توان از برنامه استفاده کرد:</b></div>
+            <ol class="list-decimal pr-5 space-y-2">
+              <li>🧾 <b>تحلیل یک متن</b> (خبر، داستان، زیرنویس فیلم و …): سطح زبان‌تان را از بالا انتخاب کنید؛ سیستم هوشمند، متناسب با سطح شما، <b>کلمات و اصطلاحات مهم</b> را استخراج می‌کند و <b>ترجمه، مثال، گرامر و تلفظ</b> را نشان می‌دهد.</li>
+              <li>🗒️ <b>لیستِ آمادهٔ خودتان</b>: فقط کلمات/اصطلاحاتی را که دارید وارد کنید (هر خط یک مورد یا با «-» جدا کنید) و تیکِ <b>«این یک لیست واژه است»</b> را بزنید تا برای همان موارد <b>معنی، مثال، تلفظ و گرامر</b> ببینید.</li>
+            </ol>
+            <div>✨ <i>نکته:</i> اگر لیست دارید نیازی به انتخاب سطح نیست.</div>
+          </div>`,
         uploadBtnText:"آپلود فایل (.txt, .srt)",
         processBtn:"تحلیل کن",
         resultsTitle:"نتایج تحلیل",
@@ -582,19 +612,37 @@ ${isWordList ? `Here is the word/phrase list:\n${text}` : `Here is the text to a
         dropHint:"می‌توانید کلمات را تایپ کنید یا فایل .txt/.srt را بکشید و رها کنید.",
         modeWordlist:"حالت: لیست کلمات",
         modeText:"حالت: متن/فایل",
-        footerBuilder:`سازنده: <a href="https://www.linkedin.com/in/mr-qaderi/" target="_blank" rel="noopener" class="text-[var(--primary-600)] hover:underline font-semibold">MohammadReza Qaderi</a>`
+        footerBuilder:`
+          <span>سازنده:</span>
+          <span class="font-semibold"> ${FOOTER_NAME}</span>
+          <span class="inline-flex items-center gap-3 ms-3">
+            <a href="${LI_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
+              ${linkedInSVG}<span>LinkedIn</span>
+            </a>
+            <span class="opacity-50">•</span>
+            <a href="${IG_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
+              ${instagramSVG}<span>Instagram</span>
+            </a>
+          </span>`
       },
-      // English
       en:{
         appTitle:"AI Language Learner",
         mainTitle:"Learn New Vocabulary",
         headerSubtitle:"",
-        bigDesc:"Based on your level, we extract useful expressions and sentences from your text (news, stories, movie subtitles, etc.), show meaning, pronunciation and usage—to help you learn a new language.",
+        bigDesc:"🔍 What we do: from <span class='font-bold'>your text or your word list</span>, we extract useful items and show <span class='font-bold'>meaning, examples, grammar, and pronunciation</span> so you learn faster and smarter.",
         sourceLangLabel:"My Native Language",
         targetLangLabel:"Language I'm Learning",
         userLevelLabel:"My Level",
         forceWordlistLabel:"This is a word list",
-        hintStatic:"<ul class='list-disc pl-5 space-y-1'><li>If you already have a <b>word list</b>, put one item per line or separate with <code>-</code>; <b>no level selection needed</b> and enable “This is a word list”.</li><li>If you want us to extract words, <b>pick your level</b> above so we can extract expressions <b>matched to your level</b> from your text.</li></ul>",
+        hintStatic:`
+          <div class="space-y-2 leading-7">
+            <div>🧭 <b>Two ways to use:</b></div>
+            <ol class="list-decimal pl-5 space-y-2">
+              <li>🧾 <b>Analyze a text</b> (news, story, subtitles, etc.): pick your level above; we extract <b>level-appropriate</b> items and show <b>translation, examples, grammar, pronunciation</b>.</li>
+              <li>🗒️ <b>Your own list</b>: enter items (one per line or separated by “-”) and enable <b>“This is a word list”</b> to get <b>meaning, examples, pronunciation, grammar</b> for them.</li>
+            </ol>
+            <div>✨ <i>Tip:</i> If you already have a list, no need to select a level.</div>
+          </div>`,
         uploadBtnText:"Upload File (.txt, .srt)",
         processBtn:"Analyze",
         resultsTitle:"Analysis Results",
@@ -624,19 +672,29 @@ ${isWordList ? `Here is the word/phrase list:\n${text}` : `Here is the text to a
         dropHint:"Type your words or drag & drop a .txt/.srt file.",
         modeWordlist:"Mode: Word list",
         modeText:"Mode: Text/File",
-        footerBuilder:`Built by <a href="https://www.linkedin.com/in/mr-qaderi/" target="_blank" rel="noopener" class="text-[var(--primary-600)] hover:underline font-semibold">MohammadReza Qaderi</a>`
+        footerBuilder:`
+          <span>Built by</span>
+          <span class="font-semibold"> ${FOOTER_NAME}</span>
+          <span class="inline-flex items-center gap-3 ms-3">
+            <a href="${LI_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
+              ${linkedInSVG}<span>LinkedIn</span>
+            </a>
+            <span class="opacity-50">•</span>
+            <a href="${IG_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
+              ${instagramSVG}<span>Instagram</span>
+            </a>
+          </span>`
       },
-      // German
       de:{
         appTitle:"KI Sprachlerner",
         mainTitle:"Neue Vokabeln lernen",
         headerSubtitle:"",
-        bigDesc:"Je nach deinem Sprachniveau extrahieren wir aus deinem Text (Nachrichten, Geschichten, Filmuntertitel usw.) nützliche Ausdrücke und Sätze und zeigen Bedeutung, Aussprache und Verwendung.",
+        bigDesc:"🔍 Was wir tun: Aus <span class='font-bold'>deinem Text oder deiner Wortliste</span> extrahieren wir nützliche Einträge und zeigen <span class='font-bold'>Bedeutung, Beispiele, Grammatik, Aussprache</span> für schnelleres Lernen.",
         sourceLangLabel:"Meine Muttersprache",
         targetLangLabel:"Lernsprache",
         userLevelLabel:"Mein Niveau",
         forceWordlistLabel:"Dies ist eine Wortliste",
-        hintStatic:"<ul class='list-disc pl-5 space-y-1'><li>Hast du bereits eine <b>Wortliste</b>? Schreibe pro Zeile ein Element oder trenne mit <code>-</code>; <b>keine Niveauauswahl nötig</b> und aktiviere „Dies ist eine Wortliste“.</li><li>Möchtest du, dass wir Wörter extrahieren? <b>Wähle dein Niveau</b>, damit wir passende Ausdrücke aus deinem Text finden.</li></ul>",
+        hintStatic:`<div class="space-y-2 leading-7"><div>🧭 <b>Zwei Nutzungsarten:</b></div><ol class="list-decimal pl-5 space-y-2"><li>🧾 <b>Text analysieren</b> (Nachrichten, Geschichte, Untertitel usw.): Wähle dein Niveau; wir extrahieren passende Einträge und zeigen <b>Übersetzung, Beispiele, Grammatik, Aussprache</b>.</li><li>🗒️ <b>Eigene Liste</b>: Einträge (eine pro Zeile oder mit „-“ getrennt) eingeben und <b>„Dies ist eine Wortliste“</b> aktivieren.</li></ol><div>✨ <i>Tipp:</i> Bei Wortliste ist keine Niveaustufe nötig.</div></div>`,
         uploadBtnText:"Datei hochladen (.txt, .srt)",
         processBtn:"Analysieren",
         resultsTitle:"Analyse-Ergebnisse",
@@ -666,19 +724,29 @@ ${isWordList ? `Here is the word/phrase list:\n${text}` : `Here is the text to a
         dropHint:"Wörter tippen oder .txt/.srt ziehen und ablegen.",
         modeWordlist:"Modus: Wortliste",
         modeText:"Modus: Text/Datei",
-        footerBuilder:`Erstellt von <a href="https://www.linkedin.com/in/mr-qaderi/" target="_blank" rel="noopener" class="text-[var(--primary-600)] hover:underline font-semibold">MohammadReza Qaderi</a>`
+        footerBuilder:`
+          <span>Erstellt von</span>
+          <span class="font-semibold"> ${FOOTER_NAME}</span>
+          <span class="inline-flex items-center gap-3 ms-3">
+            <a href="${LI_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
+              ${linkedInSVG}<span>LinkedIn</span>
+            </a>
+            <span class="opacity-50">•</span>
+            <a href="${IG_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
+              ${instagramSVG}<span>Instagram</span>
+            </a>
+          </span>`
       },
-      // French
       fr:{
         appTitle:"Apprenant de langues IA",
         mainTitle:"Apprendre de nouveaux mots",
         headerSubtitle:"",
-        bigDesc:"Selon votre niveau, nous extrayons de votre texte (actualités, histoires, sous-titres, etc.) des expressions utiles et affichons sens, prononciation et usage.",
+        bigDesc:"🔍 Ce que nous faisons : à partir de <span class='font-bold'>votre texte ou votre liste</span>, nous extrayons des éléments utiles et affichons <span class='font-bold'>sens, exemples, grammaire et prononciation</span> pour apprendre plus vite.",
         sourceLangLabel:"Ma langue maternelle",
         targetLangLabel:"Langue que j'apprends",
         userLevelLabel:"Mon niveau",
         forceWordlistLabel:"Ceci est une liste de mots",
-        hintStatic:"<ul class='list-disc pl-5 space-y-1'><li>Vous avez déjà une <b>liste de mots</b> ? Un élément par ligne ou séparé par <code>-</code> ; <b>pas besoin de choisir le niveau</b> et activez « Ceci est une liste de mots ».</li><li>Vous voulez que nous extrayions ? <b>Choisissez votre niveau</b> pour obtenir des expressions adaptées à votre niveau.</li></ul>",
+        hintStatic:`<div class="space-y-2 leading-7"><div>🧭 <b>Deux modes d’utilisation :</b></div><ol class="list-decimal pl-5 space-y-2"><li>🧾 <b>Analyser un texte</b> (actu, histoire, sous-titres…): choisissez votre niveau; nous extrayons des éléments adaptés et montrons <b>traduction, exemples, grammaire, prononciation</b>.</li><li>🗒️ <b>Votre propre liste</b> : entrez les éléments (un par ligne ou séparés par « - ») et activez <b>« Ceci est une liste de mots »</b>.</li></ol><div>✨ <i>Astuce :</i> avec une liste, pas besoin de niveau.</div></div>`,
         uploadBtnText:"Téléverser un fichier (.txt, .srt)",
         processBtn:"Analyser",
         resultsTitle:"Résultats d’analyse",
@@ -708,19 +776,29 @@ ${isWordList ? `Here is the word/phrase list:\n${text}` : `Here is the text to a
         dropHint:"Saisir des mots ou glisser-déposer un .txt/.srt.",
         modeWordlist:"Mode : Liste de mots",
         modeText:"Mode : Texte/Fichier",
-        footerBuilder:`Réalisé par <a href="https://www.linkedin.com/in/mr-qaderi/" target="_blank" rel="noopener" class="text-[var(--primary-600)] hover:underline font-semibold">MohammadReza Qaderi</a>`
+        footerBuilder:`
+          <span>Réalisé par</span>
+          <span class="font-semibold"> ${FOOTER_NAME}</span>
+          <span class="inline-flex items-center gap-3 ms-3">
+            <a href="${LI_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
+              ${linkedInSVG}<span>LinkedIn</span>
+            </a>
+            <span class="opacity-50">•</span>
+            <a href="${IG_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
+              ${instagramSVG}<span>Instagram</span>
+            </a>
+          </span>`
       },
-      // Spanish
       es:{
         appTitle:"Aprendiz de idiomas con IA",
         mainTitle:"Aprender vocabulario nuevo",
         headerSubtitle:"",
-        bigDesc:"Según tu nivel, extraemos de tu texto (noticias, historias, subtítulos, etc.) expresiones útiles y mostramos significado, pronunciación y uso.",
+        bigDesc:"🔍 Qué hacemos: a partir de <span class='font-bold'>tu texto o tu lista</span> extraemos elementos útiles y mostramos <span class='font-bold'>significado, ejemplos, gramática y pronunciación</span> para aprender más rápido.",
         sourceLangLabel:"Mi lengua materna",
         targetLangLabel:"Idioma que aprendo",
         userLevelLabel:"Mi nivel",
         forceWordlistLabel:"Esta es una lista de palabras",
-        hintStatic:"<ul class='list-disc pl-5 space-y-1'><li>¿Ya tienes una <b>lista de palabras</b>? Un elemento por línea o separado con <code>-</code>; <b>no necesitas elegir nivel</b> y activa «Esta es una lista de palabras».</li><li>Si quieres que extraigamos palabras, <b>elige tu nivel</b> para obtener expresiones acordes a ti.</li></ul>",
+        hintStatic:`<div class="space-y-2 leading-7"><div>🧭 <b>Dos formas de usarlo:</b></div><ol class="list-decimal pl-5 space-y-2"><li>🧾 <b>Analizar un texto</b> (noticia, historia, subtítulos, etc.): elige tu nivel; extraemos elementos adecuados y mostramos <b>traducción, ejemplos, gramática y pronunciación</b>.</li><li>🗒️ <b>Tu propia lista</b>: introduce elementos (uno por línea o separados por «-») y activa <b>«Esta es una lista de palabras»</b>.</li></ol><div>✨ <i>Tip:</i> si ya tienes lista, no hace falta elegir nivel.</div></div>`,
         uploadBtnText:"Subir archivo (.txt, .srt)",
         processBtn:"Analizar",
         resultsTitle:"Resultados del análisis",
@@ -747,22 +825,32 @@ ${isWordList ? `Here is the word/phrase list:\n${text}` : `Here is the text to a
         speakSentence:"Pronunciar frase",
         stopSpeech:"Detener voz",
         textPlaceholder:"Introduce tu lista o pega un texto/archivo…",
-        dropHint:"Escribe palabras o arrastra y suelta un .txt/.srt.",
+        dropHint:"Escribe palabras o arrastra y suelta un .txt/.srt archivo.",
         modeWordlist:"Modo: Lista de palabras",
         modeText:"Modo: Texto/Archivo",
-        footerBuilder:`Hecho por <a href="https://www.linkedin.com/in/mr-qaderi/" target="_blank" rel="noopener" class="text-[var(--primary-600)] hover:underline font-semibold">MohammadReza Qaderi</a>`
+        footerBuilder:`
+          <span>Hecho por</span>
+          <span class="font-semibold"> ${FOOTER_NAME}</span>
+          <span class="inline-flex items-center gap-3 ms-3">
+            <a href="${LI_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
+              ${linkedInSVG}<span>LinkedIn</span>
+            </a>
+            <span class="opacity-50">•</span>
+            <a href="${IG_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
+              ${instagramSVG}<span>Instagram</span>
+            </a>
+          </span>`
       },
-      // Chinese
       zh:{
         appTitle:"AI 语言学习助手",
         mainTitle:"学习新词汇",
         headerSubtitle:"",
-        bigDesc:"根据你的水平，从你的文本（新闻、故事、电影字幕等）提取有用表达与句子，并展示含义、发音和用法。",
+        bigDesc:"🔍 我们会从<span class='font-bold'>你的文本或词表</span>中提取有用条目，并提供<span class='font-bold'>释义、例句、语法与发音</span>，帮助更快更聪明地学习。",
         sourceLangLabel:"母语",
         targetLangLabel:"正在学习的语言",
         userLevelLabel:"我的水平",
         forceWordlistLabel:"这是一个单词列表",
-        hintStatic:"<ul class='list-disc pl-5 space-y-1'><li>已有<b>单词列表</b>：每行一个，或用 <code>-</code> 分隔；<b>无需选择水平</b>，并勾选“这是一个单词列表”。</li><li>需要我们提取：请先<b>选择水平</b>，我们会按你的水平提取表达。</li></ul>",
+        hintStatic:`<div class="space-y-2 leading-7"><div>🧭 <b>两种使用方式：</b></div><ol class="list-decimal pl-5 space-y-2"><li>🧾 <b>分析文本</b>（新闻/故事/字幕）：选择水平；我们提取适合的条目并展示<b>翻译、例句、语法、发音</b>。</li><li>🗒️ <b>已有词表</b>：逐行输入或用“-”分隔，并勾选<b>“这是一个单词列表”</b>。</li></ol><div>✨ <i>提示：</i> 有词表时无需选择水平。</div></div>`,
         uploadBtnText:"上传文件 (.txt, .srt)",
         processBtn:"分析",
         resultsTitle:"分析结果",
@@ -792,19 +880,29 @@ ${isWordList ? `Here is the word/phrase list:\n${text}` : `Here is the text to a
         dropHint:"输入单词或拖拽 .txt/.srt 文件。",
         modeWordlist:"模式：单词列表",
         modeText:"模式：文本/文件",
-        footerBuilder:`制作：<a href="https://www.linkedin.com/in/mr-qaderi/" target="_blank" rel="noopener" class="text-[var(--primary-600)] hover:underline font-semibold">MohammadReza Qaderi</a>`
+        footerBuilder:`
+          <span>制作：</span>
+          <span class="font-semibold"> ${FOOTER_NAME}</span>
+          <span class="inline-flex items-center gap-3 ms-3">
+            <a href="${LI_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
+              ${linkedInSVG}<span>LinkedIn</span>
+            </a>
+            <span class="opacity-50">•</span>
+            <a href="${IG_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
+              ${instagramSVG}<span>Instagram</span>
+            </a>
+          </span>`
       },
-      // Turkish
       tr:{
         appTitle:"YZ Dil Öğrenici",
         mainTitle:"Yeni kelimeler öğren",
         headerSubtitle:"",
-        bigDesc:"Seviyene göre metninden (haber, hikâye, altyazı vb.) faydalı ifadeler ve cümleler çıkarır; anlam, telaffuz ve kullanımını gösterir.",
+        bigDesc:"🔍 Ne yapıyoruz: <span class='font-bold'>metninizden veya listenizden</span> faydalı maddeleri çıkarır, <span class='font-bold'>anlam, örnek, dil bilgisi ve telaffuz</span> gösteririz.",
         sourceLangLabel:"Anadilim",
         targetLangLabel:"Öğrendiğim dil",
         userLevelLabel:"Seviyem",
         forceWordlistLabel:"Bu bir kelime listesi",
-        hintStatic:"<ul class='list-disc pl-5 space-y-1'><li><b>Kelimelerin listesi</b> varsa: satır başı bir öğe veya <code>-</code> ile ayır; <b>seviye seçmeye gerek yok</b> ve “Bu bir kelime listesi”ni işaretle.</li><li>Bizim çıkarmamızı istiyorsan: <b>seviyeni seç</b>, metninden seviyene uygun ifadeleri çıkaralım.</li></ul>",
+        hintStatic:`<div class="space-y-2 leading-7"><div>🧭 <b>İki kullanım:</b></div><ol class="list-decimal pl-5 space-y-2"><li>🧾 <b>Metin analizi</b>: seviyeni seç; uygun maddeleri çıkarıp <b>çeviri, örnek, dil bilgisi, telaffuz</b> gösteririz.</li><li>🗒️ <b>Hazır listen</</b>: satır satır ya da “-” ile; <b>“Bu bir kelime listesi”</b>ni işaretle.</li></ol><div>✨ <i>İpucu:</i> Listede seviye seçimi gerekmez.</div></div>`,
         uploadBtnText:"Dosya yükle (.txt, .srt)",
         processBtn:"Analiz et",
         resultsTitle:"Analiz Sonuçları",
@@ -834,19 +932,29 @@ ${isWordList ? `Here is the word/phrase list:\n${text}` : `Here is the text to a
         dropHint:".txt/.srt dosyasını sürükleyip bırakabilirsiniz.",
         modeWordlist:"Mod: Kelime listesi",
         modeText:"Mod: Metin/Dosya",
-        footerBuilder:`Hazırlayan: <a href="https://www.linkedin.com/in/mr-qaderi/" target="_blank" rel="noopener" class="text-[var(--primary-600)] hover:underline font-semibold">MohammadReza Qaderi</a>`
+        footerBuilder:`
+          <span>Hazırlayan:</span>
+          <span class="font-semibold"> ${FOOTER_NAME}</span>
+          <span class="inline-flex items-center gap-3 ms-3">
+            <a href="${LI_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
+              ${linkedInSVG}<span>LinkedIn</span>
+            </a>
+            <span class="opacity-50">•</span>
+            <a href="${IG_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
+              ${instagramSVG}<span>Instagram</span>
+            </a>
+          </span>`
       },
-      // Italian
       it:{
         appTitle:"Apprendimento lingue con IA",
         mainTitle:"Impara nuovo vocabolario",
         headerSubtitle:"",
-        bigDesc:"In base al tuo livello estraiamo dal tuo testo (notizie, storie, sottotitoli, ecc.) espressioni utili e mostriamo significato, pronuncia e uso.",
+        bigDesc:"🔍 Cosa facciamo: da <span class='font-bold'>tuo testo o lista</span> estraiamo elementi utili e mostriamo <span class='font-bold'>significato, esempi, grammatica e pronuncia</span> per imparare più rapidamente.",
         sourceLangLabel:"Lingua madre",
         targetLangLabel:"Lingua che sto imparando",
         userLevelLabel:"Il mio livello",
         forceWordlistLabel:"Questa è una lista di parole",
-        hintStatic:"<ul class='list-disc pl-5 space-y-1'><li>Hai già una <b>lista di parole</b>? Un elemento per riga o separato con <code>-</code>; <b>non serve scegliere il livello</b> e attiva “Questa è una lista di parole”.</li><li>Vuoi che estraiamo noi? <b>Scegli il tuo livello</b> per ottenere espressioni adatte a te.</li></ul>",
+        hintStatic:`<div class="space-y-2 leading-7"><div>🧭 <b>Due modalità d’uso:</b></div><ol class="list-decimal pl-5 space-y-2"><li>🧾 <b>Analizza un testo</b>: scegli il livello; estraiamo voci adatte e mostriamo <b>traduzione, esempi, grammatica, pronuncia</b>.</li><li>🗒️ <b>La tua lista</b>: inserisci elementi (uno per riga o separati da “-”) e abilita <b>“Questa è una lista di parole”</b>.</li></ol><div>✨ <i>Nota:</i> con la lista non serve scegliere il livello.</div></div>`,
         uploadBtnText:"Carica file (.txt, .srt)",
         processBtn:"Analizza",
         resultsTitle:"Risultati dell’analisi",
@@ -876,19 +984,29 @@ ${isWordList ? `Here is the word/phrase list:\n${text}` : `Here is the text to a
         dropHint:"Scrivi parole o trascina un .txt/.srt.",
         modeWordlist:"Modalità: Lista",
         modeText:"Modalità: Testo/File",
-        footerBuilder:`Creato da <a href="https://www.linkedin.com/in/mr-qaderi/" target="_blank" rel="noopener" class="text-[var(--primary-600)] hover:underline font-semibold">MohammadReza Qaderi</a>`
+        footerBuilder:`
+          <span>Creato da</span>
+          <span class="font-semibold"> ${FOOTER_NAME}</span>
+          <span class="inline-flex items-center gap-3 ms-3">
+            <a href="${LI_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
+              ${linkedInSVG}<span>LinkedIn</span>
+            </a>
+            <span class="opacity-50">•</span>
+            <a href="${IG_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
+              ${instagramSVG}<span>Instagram</span>
+            </a>
+          </span>`
       },
-      // Russian
       ru:{
         appTitle:"Изучение языков с ИИ",
         mainTitle:"Учите новые слова",
         headerSubtitle:"",
-        bigDesc:"В зависимости от уровня мы извлекаем из вашего текста (новости, истории, субтитры и т.п.) полезные выражения и показываем значение, произношение и употребление.",
+        bigDesc:"🔍 Что мы делаем: из <span class='font-bold'>вашего текста или списка</span> извлекаем полезные единицы и показываем <span class='font-bold'>значение, примеры, грамматику и произношение</span> для более быстрого обучения.",
         sourceLangLabel:"Родной язык",
         targetLangLabel:"Изучаемый язык",
         userLevelLabel:"Мой уровень",
         forceWordlistLabel:"Это список слов",
-        hintStatic:"<ul class='list-disc pl-5 space-y-1'><li>У вас уже есть <b>список слов</b>? По одному в строке или через <code>-</code>; <b>уровень выбирать не нужно</b> и включите «Это список слов».</li><li>Хотите, чтобы мы извлекли выражения? <b>Выберите свой уровень</b>, чтобы получить подходящие выражения.</li></ul>",
+        hintStatic:`<div class="space-y-2 leading-7"><div>🧭 <b>Два способа использования:</b></div><ol class="list-decimal pl-5 space-y-2"><li>🧾 <b>Анализ текста</b> (новости, рассказ, субтитры и т.д.): выберите уровень; мы извлечем подходящие единицы и покажем <b>перевод, примеры, грамматику, произношение</b>.</li><li>🗒️ <b>Собственный список</b>: введите элементы (по одному в строке или через «-») и включите <b>«Это список слов»</b>.</li></ol><div>✨ <i>Подсказка:</i> при списке уровень выбирать не нужно.</div></div>`,
         uploadBtnText:"Загрузить файл (.txt, .srt)",
         processBtn:"Анализировать",
         resultsTitle:"Результаты анализа",
@@ -918,7 +1036,18 @@ ${isWordList ? `Here is the word/phrase list:\n${text}` : `Here is the text to a
         dropHint:"Введите слова или перетащите .txt/.srt.",
         modeWordlist:"Режим: список слов",
         modeText:"Режим: текст/файл",
-        footerBuilder:`Автор: <a href="https://www.linkedin.com/in/mr-qaderi/" target="_blank" rel="noopener" class="text-[var(--primary-600)] hover:underline font-semibold">MohammadReza Qaderi</a>`
+        footerBuilder:`
+          <span>Автор:</span>
+          <span class="font-semibold"> ${FOOTER_NAME}</span>
+          <span class="inline-flex items-center gap-3 ms-3">
+            <a href="${LI_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
+              ${linkedInSVG}<span>LinkedIn</span>
+            </a>
+            <span class="opacity-50">•</span>
+            <a href="${IG_URL}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[var(--primary-600)] hover:underline">
+              ${instagramSVG}<span>Instagram</span>
+            </a>
+          </span>`
       },
     };
 
@@ -929,7 +1058,6 @@ ${isWordList ? `Here is the word/phrase list:\n${text}` : `Here is the text to a
       document.documentElement.lang = lang;
       document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
 
-      // متن‌ها
       const map = {
         'main-title':s.mainTitle,
         'header-subtitle':s.headerSubtitle,
@@ -954,7 +1082,7 @@ ${isWordList ? `Here is the word/phrase list:\n${text}` : `Here is the text to a
       document.getElementById('to-top').title = isRtl ? 'بازگشت به بالا' : 'Back to top';
       document.getElementById('text-input').placeholder = s.textPlaceholder;
 
-      // Level options (نمایش بر اساس زبان UI)
+      // Level options
       document.getElementById('level-unspecified').textContent = isRtl ? 'انتخاب نشده' :
         (lang==='fr'?'Non spécifié': lang==='de'?'Nicht angegeben': lang==='es'?'Sin especificar': lang==='it'?'Non specificato': lang==='ru'?'Не указано': 'Unspecified');
       document.getElementById('level-a1').textContent = isRtl ? 'A1 (مبتدی)' :
@@ -968,14 +1096,12 @@ ${isWordList ? `Here is the word/phrase list:\n${text}` : `Here is the text to a
       document.getElementById('level-c1').textContent = isRtl ? 'C1 (پیشرفته)' :
         (lang==='fr'?'C1 (Avancé)': lang==='de'?'C1 (Fortgeschritten)': lang==='es'?'C1 (Avanzado)': lang==='it'?'C1 (Avanzato)': lang==='ru'?'C1 (Продвинутый)':'C1 (Advanced)');
 
-      // Footer (خط همکاری حذف شد؛ فقط سازنده)
       document.getElementById('footer-text-line2').innerHTML = s.footerBuilder;
 
       updateModeBadge();
     }
 
     document.addEventListener('DOMContentLoaded', ()=> {
-      // پر کردن سلکت‌ها
       [uiLangSwitcher, sourceLangSelect, targetLangSelect].forEach(sel => {
         sel.innerHTML = LANGS.map(l => `<option value="${l.code}">${l.label}</option>`).join('');
       });
