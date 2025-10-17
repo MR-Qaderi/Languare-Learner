@@ -10,38 +10,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #f7f9fc;
-      --surface: #ffffff;
-      --text: #111827;
-      --muted: #6b7280;
-      --border: rgba(17, 24, 39, 0.08);
-      --shadow: 0 10px 30px -12px rgba(2, 6, 23, .18);
-      --primary: #3b82f6;
-      --primary-600:#2563eb;
-      --chip:#f8fafc;
-      --chip-border:#e5e7eb;
-      --accent-1: #e0e7ff;
-      --accent-2: #fce7f3;
-      --accent-3: #ccfbf1;
-      --accent-4: #fef3c7;
+      --bg: #f7f9fc; --surface: #ffffff; --text: #111827; --muted: #6b7280;
+      --border: rgba(17, 24, 39, 0.08); --shadow: 0 10px 30px -12px rgba(2, 6, 23, .18);
+      --primary: #3b82f6; --primary-600:#2563eb; --chip:#f8fafc; --chip-border:#e5e7eb;
+      --accent-1: #e0e7ff; --accent-2: #fce7f3; --accent-3: #ccfbf1; --accent-4: #fef3c7;
     }
     [data-theme="dark"]{
-      --bg: #0b1220;
-      --surface: #0f172a;
-      --text: #e5e7eb;
-      --muted: #9ca3af;
-      --border: rgba(148, 163, 184, 0.15);
-      --shadow: 0 14px 42px -12px rgba(2, 6, 23, .6);
-      --primary: #60a5fa;
-      --primary-600:#3b82f6;
-      --chip:#0b1220;
-      --chip-border:#1f2937;
-      --accent-1: #1e293b;
-      --accent-2: #1f2540;
-      --accent-3: #0f2f2b;
-      --accent-4: #2a1f0f;
+      --bg: #0b1220; --surface: #0f172a; --text: #e5e7eb; --muted: #9ca3af;
+      --border: rgba(148, 163, 184, 0.15); --shadow: 0 14px 42px -12px rgba(2, 6, 23, .6);
+      --primary: #60a5fa; --primary-600:#3b82f6; --chip:#0b1220; --chip-border:#1f2937;
+      --accent-1: #1e293b; --accent-2: #1f2540; --accent-3: #0f2f2b; --accent-4: #2a1f0f;
     }
-
     html { scroll-behavior: smooth; }
     body {
       font-family: 'Vazirmatn', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
@@ -49,124 +28,39 @@
       background-image:
         radial-gradient(1200px 600px at 100% -10%, var(--accent-1), transparent 60%),
         radial-gradient(900px 500px at -10% 110%, var(--accent-2), transparent 60%);
-      color: var(--text);
-      min-height: 100vh;
+      color: var(--text); min-height: 100vh;
     }
-
-    .glass {
-      backdrop-filter: saturate(160%) blur(12px);
-      background: color-mix(in oklab, var(--surface) 78%, transparent);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .card {
-      background: color-mix(in oklab, var(--surface) 94%, transparent);
-      border: 1px solid var(--border);
-      border-radius: 1.25rem;
-      box-shadow: var(--shadow);
-    }
-
-    .ring-card {
-      position: relative;
-      border-radius: 1rem;
-      overflow: hidden;
-      background-color: var(--surface);
-    }
-    .ring-card::before{
-      content:"";
-      position:absolute; inset: -1px;
-      border-radius: 1rem;
-      padding: 1px;
+    .glass { backdrop-filter: saturate(160%) blur(12px); background: color-mix(in oklab, var(--surface) 78%, transparent); border-bottom: 1px solid var(--border); }
+    .card { background: color-mix(in oklab, var(--surface) 94%, transparent); border: 1px solid var(--border); border-radius: 1.25rem; box-shadow: var(--shadow); }
+    .ring-card { position: relative; border-radius: 1rem; overflow: hidden; background-color: var(--surface); }
+    .ring-card::before{ content:""; position:absolute; inset: -1px; border-radius: 1rem; padding: 1px;
       background: conic-gradient(from 180deg, #60a5fa, #a78bfa, #22d3ee, #60a5fa);
       -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-      -webkit-mask-composite: xor; mask-composite: exclude;
-      pointer-events: none;
-      animation: spin 8s linear infinite;
-      opacity: .75;
-    }
+      -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; animation: spin 8s linear infinite; opacity: .75; }
     @keyframes spin { to { transform: rotate(360deg); } }
-
-    .result-header {
-      cursor: pointer;
-      background: color-mix(in oklab, var(--surface) 88%, transparent);
-      transition: background .2s ease, transform .15s ease;
-    }
+    .result-header { cursor: pointer; background: color-mix(in oklab, var(--surface) 88%, transparent); transition: background .2s ease, transform .15s ease; }
     .ring-card:hover .result-header { transform: translateY(-1px); }
-    .result-details {
-      max-height: 0; overflow: hidden;
-      transition: max-height .5s ease, padding .35s ease, border-color .35s ease;
-      border-top: 1px solid transparent;
-      padding: 0 1.25rem;
-      background: var(--surface);
-    }
-    .result-details.open {
-      max-height: 1600px; border-top-color: var(--border);
-      padding: 1rem 1.25rem 1.25rem;
-    }
-
-    .chip {
-      display: inline-flex; align-items: center; gap:.35rem;
-      padding: .22rem .6rem; border-radius: 999px;
-      font-size: .78rem; font-weight: 600;
-      border: 1px solid var(--chip-border);
-      background: var(--chip);
-      white-space: nowrap;
-    }
+    .result-details { max-height: 0; overflow: hidden; transition: max-height .5s ease, padding .35s ease, border-color .35s ease; border-top: 1px solid transparent; padding: 0 1.25rem; background: var(--surface); }
+    .result-details.open { max-height: 1600px; border-top-color: var(--border); padding: 1rem 1.25rem 1.25rem; }
+    .chip { display: inline-flex; align-items: center; gap:.35rem; padding: .22rem .6rem; border-radius: 999px; font-size: .78rem; font-weight: 600; border: 1px solid var(--chip-border); background: var(--chip); white-space: nowrap; }
     .chip .dot{width:.5rem;height:.5rem;border-radius:999px;opacity:.85}
-
-    .drop-zone {
-      border: 2px dashed var(--border);
-      border-radius: 1rem; transition: all .2s ease;
-      background: color-mix(in oklab, var(--surface) 80%, transparent);
-    }
+    .drop-zone { border: 2px dashed var(--border); border-radius: 1rem; transition: all .2s ease; background: color-mix(in oklab, var(--surface) 80%, transparent); }
     .drop-zone.drag-over { border-color: var(--primary); background: color-mix(in oklab, var(--surface) 92%, transparent); }
-
-    .btn {
-      border-radius: .85rem; font-weight: 700; padding: .68rem 1.2rem;
-      display: inline-flex; align-items: center; gap: .55rem;
-      border: 1px solid var(--border);
-      transition: transform .08s ease, background .15s ease, border-color .15s ease;
-      will-change: transform;
-    }
+    .btn { border-radius: .85rem; font-weight: 700; padding: .68rem 1.2rem; display: inline-flex; align-items: center; gap: .55rem; border: 1px solid var(--border); transition: transform .08s ease, background .15s ease, border-color .15s ease; will-change: transform; }
     .btn:active{ transform: translateY(1px) }
-    .btn-primary{
-      background: linear-gradient(180deg, var(--primary), var(--primary-600));
-      color: #fff; border-color: color-mix(in oklab, var(--primary-600) 60%, #0000);
-      box-shadow: 0 12px 28px -12px color-mix(in oklab, var(--primary) 60%, transparent);
-    }
+    .btn-primary{ background: linear-gradient(180deg, var(--primary), var(--primary-600)); color: #fff; border-color: color-mix(in oklab, var(--primary-600) 60%, #0000); box-shadow: 0 12px 28px -12px color-mix(in oklab, var(--primary) 60%, transparent); }
     .btn-secondary{ background: var(--surface); color: var(--text); }
     .btn-ghost{ background: transparent; border-color: transparent; }
-
     .muted { color: var(--muted); }
-
-    .skeleton {
-      background: linear-gradient(90deg,
-        color-mix(in oklab, var(--surface) 75%, transparent) 25%,
-        color-mix(in oklab, var(--surface) 95%, transparent) 37%,
-        color-mix(in oklab, var(--surface) 75%, transparent) 63%);
-      background-size: 400% 100%;
-      animation: shimmer 1.2s ease-in-out infinite;
-      border-radius: .75rem;
-    }
+    .skeleton { background: linear-gradient(90deg, color-mix(in oklab, var(--surface) 75%, transparent) 25%, color-mix(in oklab, var(--surface) 95%, transparent) 37%, color-mix(in oklab, var(--surface) 75%, transparent) 63%); background-size: 400% 100%; animation: shimmer 1.2s ease-in-out infinite; border-radius: .75rem; }
     @keyframes shimmer { 0%{background-position: 100% 0} 100%{background-position: 0 0} }
-
-    .toggle {
-      width: 44px; height: 26px; border-radius: 999px; position: relative; border:1px solid var(--border);
-      background: color-mix(in oklab, var(--surface) 86%, transparent); cursor: pointer;
-      display: inline-flex; align-items: center;
-    }
+    .toggle { width: 44px; height: 26px; border-radius: 999px; position: relative; border:1px solid var(--border); background: color-mix(in oklab, var(--surface) 86%, transparent); cursor: pointer; display: inline-flex; align-items: center; }
     .toggle .knob { width: 20px; height: 20px; border-radius: 999px; background: var(--primary); transition: transform .2s ease; transform: translateX(2px); }
     [data-theme="dark"] .toggle .knob { transform: translateX(22px); }
-
-    .floating-top {
-      position: fixed; bottom: 20px; inset-inline-end: 20px; z-index: 50;
-      backdrop-filter: blur(8px);
-      background: color-mix(in oklab, var(--surface) 92%, transparent);
-      border:1px solid var(--border); border-radius: 999px;
-      padding: .6rem .8rem; box-shadow: var(--shadow);
-      display: none;
-    }
+    .floating-top { position: fixed; bottom: 20px; inset-inline-end: 20px; z-index: 50; backdrop-filter: blur(8px); background: color-mix(in oklab, var(--surface) 92%, transparent); border:1px solid var(--border); border-radius: 999px; padding: .6rem .8rem; box-shadow: var(--shadow); display: none; }
     .floating-top.show{ display: inline-flex; }
+    .warn { border: 1px dashed rgba(234,88,12,.5); background: color-mix(in oklab, #fed7aa 30%, var(--surface)); color:#7c2d12; }
+    .info { border:1px solid var(--border); background: color-mix(in oklab, var(--accent-1) 30%, var(--surface)); }
   </style>
 </head>
 <body>
@@ -185,10 +79,10 @@
 
       <div class="flex items-center gap-3">
         <div class="flex items-center gap-2">
-            <div class="relative flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-3 rtl:right-3 rtl:left-auto size-4 pointer-events-none text-[var(--muted)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-                <select id="ui-lang-switcher" class="appearance-none w-full pl-10 pr-4 rtl:pr-10 rtl:pl-4 py-1.5 rounded-lg border text-sm bg-[var(--surface)] border-[var(--border)]"></select>
-            </div>
+          <div class="relative flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-3 rtl:right-3 rtl:left-auto size-4 pointer-events-none text-[var(--muted)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+            <select id="ui-lang-switcher" class="appearance-none w-full pl-10 pr-4 rtl:pr-10 rtl:pl-4 py-1.5 rounded-lg border text-sm bg-[var(--surface)] border-[var(--border)]"></select>
+          </div>
           <button id="theme-toggle" class="toggle" aria-label="toggle theme">
             <span class="knob"></span>
           </button>
@@ -202,72 +96,81 @@
 
   <!-- Hero -->
   <section class="max-w-5xl mx-auto px-4 pt-8 pb-2">
-      <div class="card p-6 md:p-8">
-        <p id="subtitle" class="muted mb-4 text-base"></p>
+    <div class="card p-6 md:p-8">
+      <p id="subtitle" class="muted mb-4 text-base"></p>
 
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-          <div>
-            <label id="source-lang-label" class="block text-sm font-medium mb-1"></label>
-            <select id="source-lang" class="w-full p-2.5 rounded-xl border bg-[var(--surface)] border-[var(--border)]"></select>
-          </div>
-          <div>
-            <label id="target-lang-label" class="block text-sm font-medium mb-1"></label>
-            <select id="target-lang" class="w-full p-2.5 rounded-xl border bg-[var(--surface)] border-[var(--border)]"></select>
-          </div>
-          <div>
-            <label id="user-level-label" class="block text-sm font-medium mb-1"></label>
-            <select id="user-level" class="w-full p-2.5 rounded-xl border bg-[var(--surface)] border-[var(--border)]">
-              <option id="level-unspecified" value="Unspecified"></option>
-              <option id="level-a1" value="A1 (Beginner)"></option>
-              <option id="level-a2" value="A2 (Elementary)"></option>
-              <option id="level-b1" value="B1 (Intermediate)"></option>
-              <option id="level-b2" value="B2 (Upper-Intermediate)"></option>
-              <option id="level-c1" value="C1 (Advanced)"></option>
-            </select>
-          </div>
-          <div class="flex items-end">
-            <label class="inline-flex items-center gap-2 cursor-pointer">
-              <input id="force-wordlist" type="checkbox" class="w-4 h-4 rounded accent-[var(--primary)]">
-              <span id="force-wordlist-label" class="text-sm"></span>
-            </label>
-          </div>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+        <div>
+          <label id="source-lang-label" class="block text-sm font-medium mb-1"></label>
+          <select id="source-lang" class="w-full p-2.5 rounded-xl border bg-[var(--surface)] border-[var(--border)]"></select>
+        </div>
+        <div>
+          <label id="target-lang-label" class="block text-sm font-medium mb-1"></label>
+          <select id="target-lang" class="w-full p-2.5 rounded-xl border bg-[var(--surface)] border-[var(--border)]"></select>
+        </div>
+        <div>
+          <label id="user-level-label" class="block text-sm font-medium mb-1"></label>
+          <select id="user-level" class="w-full p-2.5 rounded-xl border bg-[var(--surface)] border-[var(--border)]">
+            <option id="level-unspecified" value="Unspecified"></option>
+            <option id="level-a1" value="A1"></option>
+            <option id="level-a2" value="A2"></option>
+            <option id="level-b1" value="B1"></option>
+            <option id="level-b2" value="B2"></option>
+            <option id="level-c1" value="C1"></option>
+          </select>
         </div>
 
-        <div id="hint-container" class="mb-5 rounded-xl border border-[var(--border)] bg-[var(--surface)]">
-            <div class="px-4 py-3 flex items-start gap-3">
-              <div class="size-8 rounded-lg bg-[var(--accent-1)]/60 grid place-items-center mt-1">💡</div>
-              <div id="hint" class="text-sm muted space-y-1"></div>
-            </div>
-        </div>
+        <!-- moved checkbox next to the textarea area: we'll keep a placeholder here for spacing on md -->
+        <div class="hidden md:block"></div>
+      </div>
 
-        <div id="drop-zone" class="drop-zone p-4">
-          <div class="flex items-center justify-between mb-3">
-            <div class="flex items-center gap-2">
-              <span id="drop-hint-icon" class="inline-grid place-items-center size-8 rounded-lg bg-[var(--accent-3)]/50">📝</span>
-              <span id="drop-hint-text" class="text-sm muted"></span>
-            </div>
-            <div id="drag-drop-badge" class="text-xs px-2 py-1 rounded-full bg-[var(--accent-2)]/40 border border-[var(--border)]"></div>
-          </div>
-
-          <textarea id="text-input" rows="10" class="w-full p-3 rounded-xl border bg-[var(--surface)] border-[var(--border)] focus:outline-none"></textarea>
-
-          <div class="flex flex-col md:flex-row gap-3 md:items-center justify-between mt-4">
-            <div class="flex items-center gap-2">
-              <label for="file-upload" class="cursor-pointer btn btn-secondary">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                <span id="upload-btn-text"></span>
-              </label>
-              <input id="file-upload" type="file" class="hidden" accept=".txt,.srt">
-              <span id="file-name" class="text-sm muted"></span>
-            </div>
-            <button id="process-btn" class="btn btn-primary px-8">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-              <span class="select-none"></span>
-            </button>
-          </div>
-          <p id="error-msg" class="text-red-500 text-sm mt-3 text-center hidden"></p>
+      <div id="hint-container" class="mb-5 rounded-xl border border-[var(--border)] bg-[var(--surface)]">
+        <div class="px-4 py-3 flex items-start gap-3">
+          <div class="size-8 rounded-lg bg-[var(--accent-1)]/60 grid place-items-center mt-1">💡</div>
+          <div id="hint" class="text-sm muted space-y-1"></div>
         </div>
       </div>
+
+      <div id="drop-zone" class="drop-zone p-4">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2">
+            <span id="drop-hint-icon" class="inline-grid place-items-center size-8 rounded-lg bg-[var(--accent-3)]/50">📝</span>
+            <span id="drop-hint-text" class="text-sm muted"></span>
+          </div>
+          <div id="drag-drop-badge" class="text-xs px-2 py-1 rounded-full bg-[var(--accent-2)]/40 border border-[var(--border)]"></div>
+        </div>
+
+        <textarea id="text-input" rows="10" class="w-full p-3 rounded-xl border bg-[var(--surface)] border-[var(--border)] focus:outline-none"></textarea>
+
+        <!-- checkbox moved close to textarea -->
+        <div class="mt-3 flex items-center justify-between gap-3">
+          <label class="inline-flex items-center gap-2 cursor-pointer">
+            <input id="force-wordlist" type="checkbox" class="w-4 h-4 rounded accent-[var(--primary)]">
+            <span id="force-wordlist-label" class="text-sm"></span>
+          </label>
+
+          <div class="flex items-center gap-2">
+            <label for="file-upload" class="cursor-pointer btn btn-secondary">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <span id="upload-btn-text"></span>
+            </label>
+            <input id="file-upload" type="file" class="hidden" accept=".txt,.srt">
+            <span id="file-name" class="text-sm muted"></span>
+          </div>
+        </div>
+
+        <!-- long-text + no level warning -->
+        <div id="level-warning" class="hidden mt-4 p-3 rounded-xl warn text-sm"></div>
+
+        <div class="flex flex-col md:flex-row gap-3 md:items-center justify-between mt-4">
+          <button id="process-btn" class="btn btn-primary px-8">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            <span class="select-none"></span>
+          </button>
+        </div>
+        <p id="error-msg" class="text-red-500 text-sm mt-3 text-center hidden"></p>
+      </div>
+    </div>
   </section>
 
   <!-- Results -->
@@ -292,30 +195,28 @@
   </main>
 
   <footer class="text-center p-8 mt-8 text-sm muted">
-      <p id="footer-text-line1"></p>
-      <p id="footer-text-line2" class="mt-1"></p>
+    <p id="footer-text-line1"></p>
+    <p id="footer-text-line2" class="mt-1"></p>
   </footer>
 
   <button id="to-top" class="floating-top" aria-label="Back to top" title="بازگشت به بالا">⤴︎</button>
 
   <script>
     const PROXY_URL = 'https://language-learner.qaderi.workers.dev/';
-    
-    // === Languages (فقط همین 9تا؛ tts برای دکمه‌ی پخش لازم بود)
     const LANGS = [
-      { code:'fa', label:'فارسی',   en:'Persian',  tts:'fa-IR' },
-      { code:'en', label:'English', en:'English',  tts:'en-US' },
-      { code:'de', label:'Deutsch', en:'German',   tts:'de-DE' },
-      { code:'fr', label:'Français',en:'French',   tts:'fr-FR' },
-      { code:'es', label:'Español', en:'Spanish',  tts:'es-ES' },
-      { code:'zh', label:'中文',     en:'Chinese',  tts:'zh-CN' },
-      { code:'tr', label:'Türkçe',  en:'Turkish',  tts:'tr-TR' },
-      { code:'it', label:'Italiano',en:'Italian',  tts:'it-IT' },
-      { code:'ru', label:'Русский', en:'Russian',  tts:'ru-RU' },
+      { code:'fa', label:'فارسی', en:'Persian', tts:'fa-IR' },
+      { code:'en', label:'English', en:'English', tts:'en-US' },
+      { code:'de', label:'Deutsch', en:'German', tts:'de-DE' },
+      { code:'fr', label:'Français', en:'French', tts:'fr-FR' },
+      { code:'es', label:'Español', en:'Spanish', tts:'es-ES' },
+      { code:'zh', label:'中文', en:'Chinese', tts:'zh-CN' },
+      { code:'tr', label:'Türkçe', en:'Turkish', tts:'tr-TR' },
+      { code:'it', label:'Italiano', en:'Italian', tts:'it-IT' },
+      { code:'ru', label:'Русский', en:'Russian', tts:'ru-RU' }
     ];
     const RTL_LANGS = new Set(['fa']);
 
-    // ====== Grab elements
+    // DOM
     const resultsView = document.getElementById('results-view');
     const processBtn = document.getElementById('process-btn');
     const startOverBtn = document.getElementById('start-over-btn');
@@ -323,6 +224,7 @@
     const fileUpload = document.getElementById('file-upload');
     const fileNameEl = document.getElementById('file-name');
     const errorMsg = document.getElementById('error-msg');
+    const levelWarning = document.getElementById('level-warning');
     const userLevelSelect = document.getElementById('user-level');
     const sourceLangSelect = document.getElementById('source-lang');
     const targetLangSelect = document.getElementById('target-lang');
@@ -337,7 +239,7 @@
     const toTopBtn = document.getElementById('to-top');
     const themeToggle = document.getElementById('theme-toggle');
 
-    // ===== Theme
+    // Theme
     const savedTheme = localStorage.getItem('ll-theme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
     themeToggle.addEventListener('click', () => {
@@ -346,12 +248,12 @@
       localStorage.setItem('ll-theme', next);
     });
 
-    // ===== Events
+    // Events
     processBtn.addEventListener('click', handleProcessRequest);
     startOverBtn.addEventListener('click', () => {
       resultsView.classList.add('hidden');
       textInput.value=''; fileUpload.value=''; fileNameEl.textContent=''; resultsList.innerHTML='';
-      hideError();
+      hideError(); hideLevelWarning();
       window.scrollTo({top:0, behavior:'smooth'});
       updateModeBadge();
     });
@@ -371,7 +273,6 @@
     window.addEventListener('scroll', () => { toTopBtn.classList.toggle('show', window.scrollY > 800) });
     toTopBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
 
-    // ===== File helpers
     function handleFile(file){
       fileNameEl.textContent = file.name;
       const reader = new FileReader();
@@ -383,12 +284,10 @@
     }
     function cleanSRT(s){
       return s.replace(/\uFEFF/g,'').replace(/^\d+\s*$/gm,'')
-             .replace(/\d{2}:\d{2}:\d{2},\d{3}\s+-->\s+\d{2}:\d{2}:\d{2},\d{3}.*/g,'')
-             .replace(/<[^>]+>/g,'').replace(/[^\S\r\n]+/g,' ')
-             .replace(/\n{2,}/g,'\n').trim();
+        .replace(/\d{2}:\d{2}:\d{2},\d{3}\s+-->\s+\d{2}:\d{2}:\d{2},\d{3}.*/g,'')
+        .replace(/<[^>]+>/g,'').replace(/[^\S\r\n]+/g,' ')
+        .replace(/\n{2,}/g,'\n').trim();
     }
-
-    // ===== UX helpers
     function looksLikeWordList(text){
       const lines = text.split(/\r?\n/).filter(l=>l.trim()!=='');
       if (lines.length>=2 && lines.every(l=>l.trim().length<=40)) return true;
@@ -403,24 +302,42 @@
       badge.textContent = isList ? s.modeWordlist : s.modeText;
     }
     function syncLevelRequirement(){
-      const isList = forceWordlist.checked || (looksLikeWordList(textInput.value.trim()) && !fileUpload.files[0]);
+      const txt = textInput.value.trim();
+      const isList = forceWordlist.checked || (looksLikeWordList(txt) && !fileUpload.files[0]);
       userLevelSelect.disabled = isList;
       if (isList) userLevelSelect.value='Unspecified';
       updateModeBadge();
+      // Smart warning visibility (do not show unless long text & not list)
+      if (!isList && userLevelSelect.value==='Unspecified' && (txt.length > 160 || txt.split(/\s+/).length > 35)) {
+        showLevelWarning();
+      } else {
+        hideLevelWarning();
+      }
     }
+
     function showError(m){ errorMsg.textContent=m; errorMsg.classList.remove('hidden'); }
     function hideError(){ errorMsg.classList.add('hidden'); }
+    function showLevelWarning(){
+      const s = uiStrings[currentLang] || uiStrings.en;
+      levelWarning.innerHTML = s.levelWarning;
+      levelWarning.classList.remove('hidden');
+    }
+    function hideLevelWarning(){ levelWarning.classList.add('hidden'); }
 
-    // ===== Flow
     function handleProcessRequest(){
       const text = textInput.value.trim();
       const level = userLevelSelect.value;
       const isList = forceWordlist.checked || (looksLikeWordList(text) && !fileUpload.files[0]);
 
       if (!text){ showError(uiStrings[currentLang].errorText); return; }
-      if (!isList && level==='Unspecified'){ showError(uiStrings[currentLang].errorLevel); return; }
+      if (!isList && level==='Unspecified'){
+        // nicer warning box
+        showLevelWarning();
+        showError(uiStrings[currentLang].errorLevel);
+        return;
+      }
 
-      hideError();
+      hideError(); hideLevelWarning();
       resultsView.classList.remove('hidden');
       loader.classList.remove('hidden');
       resultsList.innerHTML='';
@@ -428,12 +345,9 @@
       document.getElementById('results-view').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    function englishName(code){ return LANGS.find(l=>l.code===code)?.en || code; }
-    function ttsCode(code){ return LANGS.find(l=>l.code===code)?.tts || 'en-US'; }
-
     function buildPrompt(text, isWordList){
-      const sourceLang = englishName(sourceLangSelect.value);
-      const targetLang = englishName(targetLangSelect.value);
+      const sourceLang = LANGS.find(l=>l.code===sourceLangSelect.value)?.en || 'Persian';
+      const targetLang = LANGS.find(l=>l.code===targetLangSelect.value)?.en || 'English';
       const level = userLevelSelect.value;
       const taskDesc = isWordList
         ? `You will analyze a USER-PROVIDED LIST of words/phrases in ${targetLang}. For EACH item, produce a full analysis.`
@@ -494,7 +408,6 @@ ${isWordList ? `Here is the word/phrase list:\n${text}` : `Here is the text to a
       }
     }
 
-    // ===== Parse AI
     function parseAIResponse(s){
       return s.split('---').filter(x=>x.trim()).map(txt=>{
         const data = {}; let currentKey = '';
@@ -514,7 +427,6 @@ ${isWordList ? `Here is the word/phrase list:\n${text}` : `Here is the text to a
       });
     }
 
-    // ===== Utils
     function escapeHTML(s=''){ return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
     function speakText(ev, text, langCode){
       ev?.stopPropagation?.();
@@ -525,45 +437,91 @@ ${isWordList ? `Here is the word/phrase list:\n${text}` : `Here is the text to a
     function tagPalette(i){ return ['#e0e7ff','#ccfbf1','#fef3c7','#fce7f3','#fee2e2'][i % 5]; }
 
     function renderResults(ai){
-        const parsed = parseAIResponse(ai);
-        const strings = uiStrings[currentLang] || uiStrings.en;
-        if (parsed.length === 0 || parsed.every(x => !x.word)){
-            resultsList.innerHTML = `<div class="card p-8 text-center muted">${strings.errorNoResults}</div>`;
-            return;
-        }
-        const tts = ttsCode(targetLangSelect.value);
-        resultsList.innerHTML = parsed.map((it, idx)=>{
-            const word = escapeHTML(it.word || '');
-            const translation = escapeHTML(it.translation || '');
-            const grammar = escapeHTML(it.grammar || 'N/A');
-            const collocRaw = (it.collocations || '').split(/,|،/).map(s => s.trim()).filter(Boolean);
-            const tagsRaw = (it.tags || '').split(';').map(s=>s.trim()).filter(Boolean);
-            const examplesHTML = (it.exampleslist || []).map(ex => {
-                const splitAt = ex.lastIndexOf(' - ');
-                let original = ex.slice(ex.indexOf('.') + 1).trim();
-                let trans = '';
-                if (splitAt > 1) {
-                    original = ex.slice(ex.indexOf('.') + 1, splitAt).trim();
-                    trans = ex.slice(splitAt + 3).trim();
-                }
-                return `<li><div class="flex items-center gap-2"><p>${escapeHTML(original)}</p><button class="btn btn-ghost p-2" onclick="speakText(event,'${original.replace(/'/g, "\\'")}', '${tts}')" title="${strings.speakSentence}">🔊</button></div>${trans ? `<p class="text-sm muted">${escapeHTML(trans)}</p>`:''}</li>`;
-            }).join('');
-            return `<div class="ring-card">
-              <div class="card result-item">
-                <div class="result-header flex justify-between items-center p-4" onclick="toggleDetails(${idx})">
-                  <div class="min-w-0"><div class="flex items-center gap-2 flex-wrap"><h3 class="text-xl font-extrabold text-[var(--primary-600)] truncate">${word||strings.wordNotFound}</h3>${grammar&&grammar!=='N/A'?`<span class="chip"><span class="dot" style="background:${tagPalette(idx)}"></span>${grammar}</span>`:''}</div><p class="mt-1 muted">${translation}</p></div>
-                  <div class="flex items-center gap-2"><button class="btn btn-ghost p-2.5" onclick="speakText(event,'${word.replace(/'/g,"\\'")}', '${tts}')" title="${strings.speakWord}">🔊</button><span id="chevron-${idx}" class="text-xl transition-transform">▾</span></div>
-                </div>
-                <div id="details-${idx}" class="result-details"><div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 pt-2">
-                  <div><div class="flex items-center gap-2 mb-2"><span>📘</span><strong>${strings.definition}:</strong></div><p>${escapeHTML(it.definition||'N/A')}</p></div>
-                  <div><div class="flex items-center gap-2 mb-2"><span>🗣️</span><strong>${strings.pronunciation}:</strong></div><p>${escapeHTML(it.pronunciation||'N/A')}</p></div>
-                  <div class="md:col-span-2"><div class="flex items-center gap-2 mb-2"><span>🔗</span><strong>${strings.collocations}:</strong></div><div class="flex flex-wrap gap-2">${collocRaw.length?collocRaw.map((c,i)=>`<span class="chip" style="background: color-mix(in oklab, ${tagPalette(i)} 60%, transparent)">${escapeHTML(c)}</span>`).join(''):`<span class="text-sm muted">${strings.notApplicable||'—'}</span>`}</div></div>
-                  <div class="md:col-span-2"><div class="flex items-center gap-2 mb-2"><span>✍️</span><strong>${strings.examples}:</strong></div><ul class="space-y-3 pl-4 pr-4">${examplesHTML}</ul></div>
-                  <div><div class="flex items-center gap-2 mb-2"><span>⚠️</span><strong>${strings.commonMistakes}:</strong></div><p>${escapeHTML(it.commonmistakes||'N/A')}</p></div>
-                  <div><div class="flex items-center gap-2 mb-2"><span>💡</span><strong>${strings.contextNote}:</strong></div><p>${(it.contextnote||'').replace(/\n/g,'<br>')}</p></div>
-                </div></div>
-              </div></div>`;
+      const parsed = parseAIResponse(ai);
+      // LABELS based on SOURCE language (user's native)
+      const sourceCode = sourceLangSelect.value || currentLang;
+      const strings = uiStrings[sourceCode] || uiStrings.en;
+      const tts = (LANGS.find(l=>l.code===targetLangSelect.value)?.tts) || 'en-US';
+      if (parsed.length === 0 || parsed.every(x => !x.word)){
+        resultsList.innerHTML = `<div class="card p-8 text-center muted">${strings.errorNoResults}</div>`;
+        return;
+      }
+      resultsList.innerHTML = parsed.map((it, idx)=>{
+        const word = escapeHTML(it.word || '');
+        const translation = escapeHTML(it.translation || '');
+        const grammar = escapeHTML(it.grammar || 'N/A');
+        const collocRaw = (it.collocations || '').split(/,|،/).map(s => s.trim()).filter(Boolean);
+        const tagsRaw = (it.tags || '').split(';').map(s=>s.trim()).filter(Boolean);
+        const examplesHTML = (it.exampleslist || []).map(ex => {
+          const splitAt = ex.lastIndexOf(' - ');
+          let original = ex.slice(ex.indexOf('.') + 1).trim();
+          let trans = '';
+          if (splitAt > 1) {
+            original = ex.slice(ex.indexOf('.') + 1, splitAt).trim();
+            trans = ex.slice(splitAt + 3).trim();
+          }
+          return `<li>
+              <div class="flex items-center gap-2">
+                <p>${escapeHTML(original)}</p>
+                <button class="btn btn-ghost p-2" onclick="speakText(event,'${original.replace(/'/g, "\\'")}', '${tts}')" title="${strings.speakSentence}">🔊</button>
+              </div>
+              ${trans ? `<p class="text-sm muted">${escapeHTML(trans)}</p>`:''}
+          </li>`;
         }).join('');
+        return `<div class="ring-card">
+          <div class="card result-item">
+            <div class="result-header flex justify-between items-center p-4" onclick="toggleDetails(${idx})">
+              <div class="min-w-0">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <h3 class="text-xl font-extrabold text-[var(--primary-600)] truncate">${word||strings.wordNotFound}</h3>
+                  ${grammar&&grammar!=='N/A'?`<span class="chip"><span class="dot" style="background:${tagPalette(idx)}"></span>${grammar}</span>`:''}
+                </div>
+                <p class="mt-1 muted">${translation}</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <button class="btn btn-ghost p-2.5" onclick="speakText(event,'${word.replace(/'/g,"\\'")}', '${tts}')" title="${strings.speakWord}">🔊</button>
+                <span id="chevron-${idx}" class="text-xl transition-transform">▾</span>
+              </div>
+            </div>
+            <div id="details-${idx}" class="result-details">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 pt-2">
+                <div>
+                  <div class="flex items-center gap-2 mb-2"><span>📘</span><strong>${strings.definition}:</strong></div>
+                  <p>${escapeHTML(it.definition||'N/A')}</p>
+                </div>
+                <div>
+                  <div class="flex items-center gap-2 mb-2"><span>🗣️</span><strong>${strings.pronunciation}:</strong></div>
+                  <p>${escapeHTML(it.pronunciation||'N/A')}</p>
+                </div>
+                <div class="md:col-span-2">
+                  <div class="flex items-center gap-2 mb-2"><span>🔗</span><strong>${strings.collocations}:</strong></div>
+                  <div class="flex flex-wrap gap-2">
+                    ${collocRaw.length?collocRaw.map((c,i)=>`<span class="chip" style="background: color-mix(in oklab, ${tagPalette(i)} 60%, transparent)">${escapeHTML(c)}</span>`).join(''):`<span class="text-sm muted">${strings.notApplicable||'—'}</span>`}
+                  </div>
+                </div>
+                <div class="md:col-span-2">
+                  <div class="flex items-center gap-2 mb-2"><span>🏷️</span><strong>${strings.tags||'Tags'}:</strong></div>
+                  <div class="flex flex-wrap gap-2">
+                    ${tagsRaw.length?tagsRaw.map((t,i)=>`<span class="chip" style="background: color-mix(in oklab, ${tagPalette(i+1)} 60%, transparent)">${escapeHTML(t)}</span>`).join(''):`<span class="text-sm muted">${strings.notApplicable||'—'}</span>`}
+                  </div>
+                </div>
+                <div class="md:col-span-2">
+                  <div class="flex items-center gap-2 mb-2"><span>✍️</span><strong>${strings.examples}:</strong></div>
+                  <ul class="space-y-3 pl-4 pr-4">${examplesHTML}</ul>
+                </div>
+                <div>
+                  <div class="flex items-center gap-2 mb-2"><span>⚠️</span><strong>${strings.commonMistakes}:</strong></div>
+                  <p>${escapeHTML(it.commonmistakes||'N/A')}</p>
+                </div>
+                <div>
+                  <div class="flex items-center gap-2 mb-2"><span>💡</span><strong>${strings.contextNote}:</strong></div>
+                  <p>${(it.contextnote||'').replace(/\n/g,'<br>')}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
     }
 
     function toggleDetails(i){
@@ -577,18 +535,397 @@ ${isWordList ? `Here is the word/phrase list:\n${text}` : `Here is the text to a
       });
     }
 
-    // i18n — ترجمه‌ی کامل UI برای 9 زبان
+    // i18n
     let currentLang='fa';
+    // Translations for 9 languages
     const uiStrings = {
-      fa:{appTitle:"یادگیری زبان با هوش مصنوعی",mainTitle:"سازنده واژگان هوشمند",headerSubtitle:"یادگیری کاربردی با کمک هوش مصنوعی",subtitle:"زبان‌ها را انتخاب کن، متن یا فهرست واژه‌ها را بده؛ بقیه‌اش با ما ✨",sourceLangLabel:"زبان مادری من",targetLangLabel:"زبانی که یاد می‌گیرم",userLevelLabel:"سطح من",forceWordlistLabel:"این یک لیست واژه است",hintStatic:"<p class='font-semibold mb-1'>راهنمای ورودی:</p><ul class='list-disc pr-4 space-y-1'><li>اگر <b>لیست کلمات</b> دارید: هر خط یک کلمه/عبارت بنویسید یا با <code>-</code> جدا کنید. <b>نیازی به انتخاب سطح نیست</b>.</li><li>اگر <b>متن یا فایل</b> دارید: سطح‌تان را انتخاب کنید تا کلمات، اصطلاحات و جملات کاربردی <b>متناسب با سطح شما</b> استخراج شود.</li></ul>",uploadBtnText:"آپلود فایل (.txt, .srt)",processBtn:"تحلیل کن",resultsTitle:"نتایج تحلیل",startOverBtn:"شروع دوباره",expandAll:"باز کردن همه",collapseAll:"بستن همه",errorText:"لطفاً ورودی معتبر وارد یا آپلود کنید.",errorLevel:"برای متن‌ها/فایل‌ها لطفاً سطح خود را انتخاب کنید.",errorAIResponse:"پاسخ معتبری از هوش مصنوعی دریافت نشد.",errorServer:"مشکل ارتباط با سرور. دوباره تلاش کنید.",errorNoResults:"موردی پیدا نشد.",wordNotFound:"کلمه یافت نشد",definition:"تعریف",grammar:"گرامر",collocations:"ترکیب‌های رایج",examples:"مثال‌ها",commonMistakes:"اشتباهات رایج",contextNote:"نکته",pronunciation:"تلفظ",notApplicable:"—",tags:"برچسب‌ها",speakWord:"شنیدن واژه",speakSentence:"شنیدن جمله",stopSpeech:"توقف گفتار",footerLine1:"ساخته شده با همکاری هوش مصنوعی", footerLine2:`سازنده: <a href="https://www.linkedin.com/in/mr-qaderi/" target="_blank" rel="noopener" class="text-[var(--primary-600)] hover:underline font-semibold">MohammadReza Qaderi</a>`, textPlaceholder:"لیست کلمات خود را اینجا وارد کنید یا متن/فایل را Paste کنید…", dropHint:"می‌توانید کلمات را تایپ کنید یا فایل .txt/.srt را بکشید و رها کنید.",modeWordlist:"حالت: لیست کلمات",modeText:"حالت: متن/فایل"},
-      en:{appTitle:"AI Language Learner",mainTitle:"Smart Vocab Builder",headerSubtitle:"Practical learning with AI assistance",subtitle:"Pick languages, paste text or a word list—AI does the rest ✨",sourceLangLabel:"My Native Language",targetLangLabel:"Language I'm Learning",userLevelLabel:"My Level",forceWordlistLabel:"This is a word list",hintStatic:"<p class='font-semibold mb-1'>Input Guide:</p><ul class='list-disc pl-4 space-y-1'><li>If you have a <b>word list</b>: one item per line or separated with <code>-</code>. <b>No level selection needed</b>.</li><li>If you have a <b>text or file</b>: pick your level so we extract vocabulary <b>matched to you</b>.</li></ul>",uploadBtnText:"Upload File (.txt, .srt)",processBtn:"Analyze",resultsTitle:"Analysis Results",startOverBtn:"Start Over",expandAll:"Expand All",collapseAll:"Collapse All",errorText:"Please enter or upload valid input.",errorLevel:"For texts/files, please select your level.",errorAIResponse:"No valid AI response.",errorServer:"Server connection issue.",errorNoResults:"No items found.",wordNotFound:"Word not found",definition:"Definition",grammar:"Grammar",collocations:"Collocations",examples:"Examples",commonMistakes:"Common Mistakes",contextNote:"Context/Note",pronunciation:"Pronunciation",notApplicable:"—",tags:"Tags",speakWord:"Speak word",speakSentence:"Speak sentence",stopSpeech:"Stop speech",footerLine1:"Built with AI collaboration", footerLine2:`Built by <a href="https://www.linkedin.com/in/mr-qaderi/" target="_blank" rel="noopener" class="text-[var(--primary-600)] hover:underline font-semibold">MohammadReza Qaderi</a>`, textPlaceholder:"Enter your word list here or paste a text/file…", dropHint:"Type your words or drag & drop a .txt/.srt file.",modeWordlist:"Mode: Word list",modeText:"Mode: Text/File"},
-      de:{appTitle:"KI-Sprachlerner",mainTitle:"Intelligenter Vokabeltrainer",headerSubtitle:"Praktisches Lernen mit KI-Unterstützung",subtitle:"Sprachen wählen, Text oder Wortliste einfügen – den Rest übernimmt die KI ✨",sourceLangLabel:"Meine Muttersprache",targetLangLabel:"Sprache, die ich lerne",userLevelLabel:"Mein Niveau",forceWordlistLabel:"Dies ist eine Wortliste",hintStatic:"<p class='font-semibold mb-1'>Eingabehinweise:</p><ul class='list-disc pl-4 space-y-1'><li>Bei einer <b>Wortliste</b>: ein Eintrag pro Zeile oder mit <code>-</code> trennen. <b>Kein Niveau nötig</b>.</li><li>Bei <b>Text/Datei</b>: wähle dein Niveau, damit passende Vokabeln extrahiert werden.</li></ul>",uploadBtnText:"Datei hochladen (.txt, .srt)",processBtn:"Analysieren",resultsTitle:"Analyseergebnisse",startOverBtn:"Neu starten",expandAll:"Alle öffnen",collapseAll:"Alle schließen",errorText:"Bitte gültige Eingabe eingeben oder hochladen.",errorLevel:"Bitte bei Text/Datei ein Niveau wählen.",errorAIResponse:"Keine gültige KI-Antwort.",errorServer:"Serververbindungsproblem.",errorNoResults:"Keine Einträge gefunden.",wordNotFound:"Wort nicht gefunden",definition:"Definition",grammar:"Grammatik",collocations:"Kollokationen",examples:"Beispiele",commonMistakes:"Häufige Fehler",contextNote:"Hinweis",pronunciation:"Aussprache",notApplicable:"—",tags:"Tags",speakWord:"Wort vorlesen",speakSentence:"Satz vorlesen",stopSpeech:"Sprachausgabe stoppen",footerLine1:"Erstellt mit KI-Unterstützung", footerLine2:`Erstellt von <a href="https://www.linkedin.com/in/mr-qaderi/" target="_blank" rel="noopener" class="text-[var(--primary-600)] hover:underline font-semibold">MohammadReza Qaderi</a>`, textPlaceholder:"Füge hier deine Wortliste oder einen Text ein…", dropHint:"Wörter eingeben oder .txt/.srt per Drag & Drop.",modeWordlist:"Modus: Wortliste",modeText:"Modus: Text/Datei"},
-      fr:{appTitle:"Apprenant de langues IA",mainTitle:"Générateur de vocabulaire intelligent",headerSubtitle:"Apprentissage pratique assisté par IA",subtitle:"Choisissez les langues, collez un texte ou une liste — l’IA fait le reste ✨",sourceLangLabel:"Ma langue maternelle",targetLangLabel:"Langue que j’apprends",userLevelLabel:"Mon niveau",forceWordlistLabel:"Ceci est une liste de mots",hintStatic:"<p class='font-semibold mb-1'>Guide de saisie :</p><ul class='list-disc pl-4 space-y-1'><li>Avec une <b>liste de mots</b> : un élément par ligne ou séparés par <code>-</code>. <b>Pas besoin de niveau</b>.</li><li>Avec un <b>texte/fichier</b> : choisissez votre niveau pour extraire un vocabulaire <b>adapté</b>.</li></ul>",uploadBtnText:"Téléverser un fichier (.txt, .srt)",processBtn:"Analyser",resultsTitle:"Résultats de l’analyse",startOverBtn:"Recommencer",expandAll:"Tout déplier",collapseAll:"Tout replier",errorText:"Veuillez saisir ou téléverser une entrée valide.",errorLevel:"Pour les textes/fichiers, choisissez votre niveau.",errorAIResponse:"Aucune réponse IA valide.",errorServer:"Problème de connexion serveur.",errorNoResults:"Aucun élément trouvé.",wordNotFound:"Mot introuvable",definition:"Définition",grammar:"Grammaire",collocations:"Collocations",examples:"Exemples",commonMistakes:"Erreurs courantes",contextNote:"Contexte/Note",pronunciation:"Prononciation",notApplicable:"—",tags:"Étiquettes",speakWord:"Prononcer le mot",speakSentence:"Prononcer la phrase",stopSpeech:"Arrêter la voix",footerLine1:"Créé avec l’aide de l’IA", footerLine2:`Créé par <a href="https://www.linkedin.com/in/mr-qaderi/" target="_blank" rel="noopener" class="text-[var(--primary-600)] hover:underline font-semibold">MohammadReza Qaderi</a>`, textPlaceholder:"Entrez votre liste de mots ou collez un texte/fichier…", dropHint:"Saisissez des mots ou glissez-déposez un .txt/.srt.",modeWordlist:"Mode : liste de mots",modeText:"Mode : texte/fichier"},
-      es:{appTitle:"Aprendiz de idiomas con IA",mainTitle:"Constructor de vocabulario inteligente",headerSubtitle:"Aprendizaje práctico con ayuda de IA",subtitle:"Elige idiomas, pega texto o una lista — la IA hace el resto ✨",sourceLangLabel:"Mi lengua materna",targetLangLabel:"Idioma que estoy aprendiendo",userLevelLabel:"Mi nivel",forceWordlistLabel:"Esto es una lista de palabras",hintStatic:"<p class='font-semibold mb-1'>Guía de entrada:</p><ul class='list-disc pl-4 space-y-1'><li>Con una <b>lista de palabras</b>: un elemento por línea o separado con <code>-</code>. <b>No hace falta nivel</b>.</li><li>Con <b>texto/archivo</b>: elige tu nivel para extraer vocabulario <b>adecuado</b>.</li></ul>",uploadBtnText:"Subir archivo (.txt, .srt)",processBtn:"Analizar",resultsTitle:"Resultados del análisis",startOverBtn:"Empezar de nuevo",expandAll:"Expandir todo",collapseAll:"Contraer todo",errorText:"Introduce o sube una entrada válida.",errorLevel:"Para textos/archivos, elige tu nivel.",errorAIResponse:"Respuesta de IA no válida.",errorServer:"Problema de conexión con el servidor.",errorNoResults:"No se encontraron elementos.",wordNotFound:"Palabra no encontrada",definition:"Definición",grammar:"Gramática",collocations:"Colocaciones",examples:"Ejemplos",commonMistakes:"Errores comunes",contextNote:"Contexto/Nota",pronunciation:"Pronunciación",notApplicable:"—",tags:"Etiquetas",speakWord:"Pronunciar palabra",speakSentence:"Pronunciar frase",stopSpeech:"Detener voz",footerLine1:"Creado con ayuda de IA", footerLine2:`Creado por <a href="https://www.linkedin.com/in/mr-qaderi/" target="_blank" rel="noopener" class="text-[var(--primary-600)] hover:underline font-semibold">MohammadReza Qaderi</a>`, textPlaceholder:"Introduce tu lista o pega un texto/archivo…", dropHint:"Escribe palabras o arrastra un .txt/.srt.",modeWordlist:"Modo: lista de palabras",modeText:"Modo: texto/archivo"},
-      zh:{appTitle:"AI 语言学习助手",mainTitle:"智能词汇生成器",headerSubtitle:"在 AI 的帮助下高效学习",subtitle:"选择语言，粘贴文本或词表——其余交给 AI ✨",sourceLangLabel:"母语",targetLangLabel:"正在学习的语言",userLevelLabel:"我的水平",forceWordlistLabel:"这是一个词表",hintStatic:"<p class='font-semibold mb-1'>输入指南：</p><ul class='list-disc pl-4 space-y-1'><li>如果是<b>词表</b>：每行一个词/短语，或用 <code>-</code> 分隔。<b>无需选择水平</b>。</li><li>如果是<b>文本/文件</b>：选择你的水平，以提取<b>适合你</b>的词汇。</li></ul>",uploadBtnText:"上传文件 (.txt, .srt)",processBtn:"分析",resultsTitle:"分析结果",startOverBtn:"重新开始",expandAll:"全部展开",collapseAll:"全部收起",errorText:"请输入或上传有效内容。",errorLevel:"文本/文件请先选择水平。",errorAIResponse:"未获得有效的 AI 响应。",errorServer:"服务器连接问题。",errorNoResults:"未找到任何条目。",wordNotFound:"未找到词语",definition:"定义",grammar:"语法",collocations:"搭配",examples:"例句",commonMistakes:"常见错误",contextNote:"注释",pronunciation:"发音",notApplicable:"—",tags:"标签",speakWord:"朗读单词",speakSentence:"朗读句子",stopSpeech:"停止朗读",footerLine1:"在 AI 协助下构建", footerLine2:`由 <a href="https://www.linkedin.com/in/mr-qaderi/" target="_blank" rel="noopener" class="text-[var(--primary-600)] hover:underline font-semibold">MohammadReza Qaderi</a> 构建`, textPlaceholder:"在此输入词表或粘贴文本/文件…", dropHint:"输入词语或拖拽 .txt/.srt 文件。",modeWordlist:"模式：词表",modeText:"模式：文本/文件"},
-      tr:{appTitle:"YZ Dil Öğrenici",mainTitle:"Akıllı Kelime Oluşturucu",headerSubtitle:"YZ desteğiyle pratik öğrenme",subtitle:"Dilleri seç, metni ya da kelime listesini yapıştır — gerisini YZ halleder ✨",sourceLangLabel:"Anadilim",targetLangLabel:"Öğrendiğim dil",userLevelLabel:"Seviyem",forceWordlistLabel:"Bu bir kelime listesi",hintStatic:"<p class='font-semibold mb-1'>Girdi rehberi:</p><ul class='list-disc pl-4 space-y-1'><li><b>Kelime listesi</b> için: satır başına bir öğe veya <code>-</code> ile ayırın. <b>Seviye gerekmez</b>.</li><li><b>Metin/dosya</b> için: seviyeni seç ki sana <b>uygun</b> kelimeler çıkarılsın.</li></ul>",uploadBtnText:"Dosya yükle (.txt, .srt)",processBtn:"Analiz et",resultsTitle:"Analiz Sonuçları",startOverBtn:"Baştan başla",expandAll:"Tümünü aç",collapseAll:"Tümünü kapat",errorText:"Lütfen geçerli bir girdi girin veya yükleyin.",errorLevel:"Metin/dosya için lütfen seviyeni seç.",errorAIResponse:"Geçerli bir YZ yanıtı yok.",errorServer:"Sunucu bağlantı sorunu.",errorNoResults:"Öğe bulunamadı.",wordNotFound:"Kelime bulunamadı",definition:"Tanım",grammar:"Dilbilgisi",collocations:"Sıklıkla kullanılan birliktelikler",examples:"Örnekler",commonMistakes:"Yaygın hatalar",contextNote:"Bağlam/Not",pronunciation:"Telaffuz",notApplicable:"—",tags:"Etiketler",speakWord:"Kelimeyi oku",speakSentence:"Cümleyi oku",stopSpeech:"Sesi durdur",footerLine1:"YZ desteğiyle oluşturuldu", footerLine2:`Oluşturan: <a href="https://www.linkedin.com/in/mr-qaderi/" target="_blank" rel="noopener" class="text-[var(--primary-600)] hover:underline font-semibold">MohammadReza Qaderi</a>`, textPlaceholder:"Kelime listesini buraya gir veya metin/dosya yapıştır…", dropHint:"Kelimeleri yaz veya .txt/.srt sürükle-bırak.",modeWordlist:"Mod: Kelime listesi",modeText:"Mod: Metin/Dosya"},
-      it:{appTitle:"Apprendimento lingue con IA",mainTitle:"Generatore intelligente di vocabolario",headerSubtitle:"Apprendimento pratico con l’aiuto dell’IA",subtitle:"Scegli le lingue, incolla un testo o una lista — al resto pensa l’IA ✨",sourceLangLabel:"Lingua madre",targetLangLabel:"Lingua che sto imparando",userLevelLabel:"Il mio livello",forceWordlistLabel:"Questa è una lista di parole",hintStatic:"<p class='font-semibold mb-1'>Guida all’input:</p><ul class='list-disc pl-4 space-y-1'><li>Con una <b>lista di parole</b>: un elemento per riga o separati con <code>-</code>. <b>Nessun livello necessario</b>.</li><li>Con <b>testo/file</b>: scegli il tuo livello per estrarre vocabolario <b>adatto a te</b>.</li></ul>",uploadBtnText:"Carica file (.txt, .srt)",processBtn:"Analizza",resultsTitle:"Risultati dell’analisi",startOverBtn:"Ricomincia",expandAll:"Espandi tutto",collapseAll:"Comprimi tutto",errorText:"Inserisci o carica un input valido.",errorLevel:"Per testi/file seleziona il livello.",errorAIResponse:"Nessuna risposta valida dell’IA.",errorServer:"Problema di connessione al server.",errorNoResults:"Nessun elemento trovato.",wordNotFound:"Parola non trovata",definition:"Definizione",grammar:"Grammatica",collocations:"Collocazioni",examples:"Esempi",commonMistakes:"Errori comuni",contextNote:"Contesto/Nota",pronunciation:"Pronuncia",notApplicable:"—",tags:"Tag",speakWord:"Pronuncia parola",speakSentence:"Pronuncia frase",stopSpeech:"Ferma voce",footerLine1:"Creato con l’aiuto dell’IA", footerLine2:`Creato da <a href="https://www.linkedin.com/in/mr-qaderi/" target="_blank" rel="noopener" class="text-[var(--primary-600)] hover:underline font-semibold">MohammadReza Qaderi</a>`, textPlaceholder:"Inserisci qui la lista o incolla un testo/file…", dropHint:"Scrivi parole o trascina .txt/.srt.",modeWordlist:"Modalità: lista",modeText:"Modalità: testo/file"},
-      ru:{appTitle:"Изучение языков с ИИ",mainTitle:"Умный словарный тренажёр",headerSubtitle:"Практичное обучение при помощи ИИ",subtitle:"Выберите языки, вставьте текст или список — дальше всё сделает ИИ ✨",sourceLangLabel:"Мой родной язык",targetLangLabel:"Язык, который я изучаю",userLevelLabel:"Мой уровень",forceWordlistLabel:"Это список слов",hintStatic:"<p class='font-semibold mb-1'>Подсказки по вводу:</p><ul class='list-disc pl-4 space-y-1'><li>Если это <b>список слов</b>: по одному элементу в строке или разделяйте <code>-</code>. <b>Уровень выбирать не нужно</b>.</li><li>Если это <b>текст/файл</b>: выберите уровень, чтобы извлечь <b>подходящую</b> лексику.</li></ul>",uploadBtnText:"Загрузить файл (.txt, .srt)",processBtn:"Анализировать",resultsTitle:"Результаты анализа",startOverBtn:"Начать заново",expandAll:"Раскрыть всё",collapseAll:"Свернуть всё",errorText:"Введите или загрузите корректные данные.",errorLevel:"Для текста/файла выберите уровень.",errorAIResponse:"Нет корректного ответа ИИ.",errorServer:"Проблема соединения с сервером.",errorNoResults:"Ничего не найдено.",wordNotFound:"Слово не найдено",definition:"Определение",grammar:"Грамматика",collocations:"Коллокации",examples:"Примеры",commonMistakes:"Типичные ошибки",contextNote:"Контекст/Заметка",pronunciation:"Произношение",notApplicable:"—",tags:"Теги",speakWord:"Озвучить слово",speakSentence:"Озвучить предложение",stopSpeech:"Остановить озвучку",footerLine1:"Создано при поддержке ИИ", footerLine2:`Автор: <a href="https://www.linkedin.com/in/mr-qaderi/" target="_blank" rel="noopener" class="text-[var(--primary-600)] hover:underline font-semibold">MohammadReza Qaderi</a>`, textPlaceholder:"Введите список слов или вставьте текст/файл…", dropHint:"Введите слова или перетащите .txt/.srt.",modeWordlist:"Режим: список слов",modeText:"Режим: текст/файл"},
+      fa:{
+        appTitle:"یادگیری زبان با هوش مصنوعی",
+        mainTitle:"سازنده واژگان هوشمند",
+        headerSubtitle:"اینجا متناسب با سطح زبان شما، از متن شما (خبر، داستان، زیرنویس فیلم و ...) اصطلاحات و جملات کاربردی استخراج میشه، معنی، تلفظ و کاربردها نمایش داده میشه و به شما در یاد گرفتن زبان جدید کمک میکنه.",
+        subtitle:"زبان‌ها را انتخاب کن، متن یا فهرست واژه‌ها را بده؛ بقیه‌اش با ما ✨",
+        sourceLangLabel:"زبان مادری من",
+        targetLangLabel:"زبانی که یاد می‌گیرم",
+        userLevelLabel:"سطح من",
+        levels:{unspecified:"انتخاب نشده", A1:"A1 (مبتدی)", A2:"A2 (ابتدایی)", B1:"B1 (متوسط)", B2:"B2 (فوق‌متوسط)", C1:"C1 (پیشرفته)"},
+        forceWordlistLabel:"این یک لیست واژه است",
+        hintStatic:"<p class='font-semibold mb-1'>راهنمای ورودی:</p><ul class='list-disc pr-4 space-y-1'><li>اگر <b>لیست کلمات</b> خودتون رو دارید، <b>در هر خط یک کلمه</b> بنویسید یا با <code>-</code> جدا کنید؛ در این حالت <b>نیازی به انتخاب سطح نیست</b> و گزینه «این لیست واژه است» را فعال کنید.</li><li>اگر می‌خواهید ما از <b>متن</b> شما استخراج کنیم، <b>سطح زبان</b> را از منوی بالا انتخاب کنید تا اصطلاحات کاربردی <b>متناسب با سطح شما</b> استخراج شود.</li></ul>",
+        uploadBtnText:"آپلود فایل (.txt, .srt)",
+        processBtn:"تحلیل کن",
+        resultsTitle:"نتایج تحلیل",
+        startOverBtn:"شروع دوباره",
+        expandAll:"باز کردن همه",
+        collapseAll:"بستن همه",
+        errorText:"لطفاً ورودی معتبر وارد یا آپلود کنید.",
+        errorLevel:"برای متن‌ها/فایل‌ها لطفاً سطح خود را انتخاب کنید.",
+        errorAIResponse:"پاسخ معتبری از هوش مصنوعی دریافت نشد.",
+        errorServer:"مشکل ارتباط با سرور. دوباره تلاش کنید.",
+        errorNoResults:"موردی پیدا نشد.",
+        wordNotFound:"کلمه یافت نشد",
+        definition:"تعریف",
+        grammar:"گرامر",
+        collocations:"ترکیب‌های رایج",
+        examples:"مثال‌ها",
+        commonMistakes:"اشتباهات رایج",
+        contextNote:"نکته",
+        pronunciation:"تلفظ",
+        notApplicable:"—",
+        tags:"برچسب‌ها",
+        speakWord:"شنیدن واژه",
+        speakSentence:"شنیدن جمله",
+        stopSpeech:"توقف گفتار",
+        footerLine1:"ساخته شده با همکاری هوش مصنوعی",
+        footerLine2:`سازنده: <a href="https://www.linkedin.com/in/mr-qaderi/" target="_blank" rel="noopener" class="text-[var(--primary-600)] hover:underline font-semibold">MohammadReza Qaderi</a>`,
+        textPlaceholder:"لیست کلمات خود را اینجا وارد کنید یا متن/فایل را Paste کنید…",
+        dropHint:"می‌توانید کلمات را تایپ کنید یا فایل .txt/.srt را بکشید و رها کنید.",
+        modeWordlist:"حالت: لیست کلمات",
+        modeText:"حالت: متن/فایل",
+        levelWarning:"لطفاً <b>سطح زبان</b> خود را انتخاب کنید تا اصطلاحات متناسب با سطح شما استخراج شود."
+      },
+      en:{
+        appTitle:"AI Language Learner",
+        mainTitle:"Smart Vocab Builder",
+        headerSubtitle:"We extract practical phrases from your text (news, story, subtitles, …) based on your level, show meaning, pronunciation, usage—and help you learn faster.",
+        subtitle:"Pick languages, paste text or a word list—AI does the rest ✨",
+        sourceLangLabel:"My Native Language",
+        targetLangLabel:"Language I'm Learning",
+        userLevelLabel:"My Level",
+        levels:{unspecified:"Unspecified", A1:"A1 (Beginner)", A2:"A2 (Elementary)", B1:"B1 (Intermediate)", B2:"B2 (Upper-Intermediate)", C1:"C1 (Advanced)"},
+        forceWordlistLabel:"This is a word list",
+        hintStatic:"<p class='font-semibold mb-1'>Input Guide:</p><ul class='list-disc pl-4 space-y-1'><li>If you already have a <b>word list</b>, write <b>one item per line</b> or separate with <code>-</code>. <b>No need to select level</b>—then check “This is a word list”.</li><li>If you want us to extract from a <b>text</b>, please choose your <b>level</b> so we pull phrases <b>matched to you</b>.</li></ul>",
+        uploadBtnText:"Upload File (.txt, .srt)",
+        processBtn:"Analyze",
+        resultsTitle:"Analysis Results",
+        startOverBtn:"Start Over",
+        expandAll:"Expand All",
+        collapseAll:"Collapse All",
+        errorText:"Please enter or upload valid input.",
+        errorLevel:"For texts/files, please select your level.",
+        errorAIResponse:"No valid AI response.",
+        errorServer:"Server connection issue.",
+        errorNoResults:"No items found.",
+        wordNotFound:"Word not found",
+        definition:"Definition",
+        grammar:"Grammar",
+        collocations:"Collocations",
+        examples:"Examples",
+        commonMistakes:"Common Mistakes",
+        contextNote:"Context/Note",
+        pronunciation:"Pronunciation",
+        notApplicable:"—",
+        tags:"Tags",
+        speakWord:"Speak word",
+        speakSentence:"Speak sentence",
+        stopSpeech:"Stop speech",
+        footerLine1:"Built with AI collaboration",
+        footerLine2:`Built by <a href="https://www.linkedin.com/in/mr-qaderi/" target="_blank" rel="noopener" class="text-[var(--primary-600)] hover:underline font-semibold">MohammadReza Qaderi</a>`,
+        textPlaceholder:"Enter your word list here or paste a text/file…",
+        dropHint:"Type your words or drag & drop a .txt/.srt file.",
+        modeWordlist:"Mode: Word list",
+        modeText:"Mode: Text/File",
+        levelWarning:"Please select your <b>level</b> so we can extract phrases matched to you."
+      },
+      de:{
+        appTitle:"KI-Sprachlerner",
+        mainTitle:"Intelligenter Wortschatztrainer",
+        headerSubtitle:"Wir extrahieren passende Redewendungen aus deinem Text (Nachrichten, Geschichten, Untertitel …) gemäß deinem Niveau und zeigen Bedeutung, Aussprache und Verwendung.",
+        subtitle:"Sprachen wählen, Text oder Wortliste einfügen – die KI erledigt den Rest ✨",
+        sourceLangLabel:"Meine Muttersprache",
+        targetLangLabel:"Zielsprache",
+        userLevelLabel:"Mein Niveau",
+        levels:{unspecified:"Nicht angegeben", A1:"A1 (Anfänger)", A2:"A2 (Grundlegend)", B1:"B1 (Mittelstufe)", B2:"B2 (Obere Mittelstufe)", C1:"C1 (Fortgeschritten)"},
+        forceWordlistLabel:"Dies ist eine Wortliste",
+        hintStatic:"<p class='font-semibold mb-1'>Eingabe-Hinweis:</p><ul class='list-disc pl-4 space-y-1'><li><b>Wortliste</b> vorhanden? <b>Ein Eintrag pro Zeile</b> oder mit <code>-</code> trennen. <b>Niveau nicht nötig</b> – Checkbox aktivieren.</li><li>Aus <b>Text</b> extrahieren? Bitte dein <b>Niveau</b> wählen, damit wir passende Ausdrücke finden.</li></ul>",
+        uploadBtnText:"Datei hochladen (.txt, .srt)",
+        processBtn:"Analysieren",
+        resultsTitle:"Analyse-Ergebnisse",
+        startOverBtn:"Neu starten",
+        expandAll:"Alle öffnen",
+        collapseAll:"Alle schließen",
+        errorText:"Bitte gültige Eingabe eingeben oder hochladen.",
+        errorLevel:"Für Texte/Dateien bitte dein Niveau wählen.",
+        errorAIResponse:"Keine gültige KI-Antwort.",
+        errorServer:"Serververbindungsproblem.",
+        errorNoResults:"Keine Einträge gefunden.",
+        wordNotFound:"Wort nicht gefunden",
+        definition:"Definition",
+        grammar:"Grammatik",
+        collocations:"Kollokationen",
+        examples:"Beispiele",
+        commonMistakes:"Häufige Fehler",
+        contextNote:"Hinweis",
+        pronunciation:"Aussprache",
+        notApplicable:"—",
+        tags:"Tags",
+        speakWord:"Wort vorlesen",
+        speakSentence:"Satz vorlesen",
+        stopSpeech:"Sprache stoppen",
+        footerLine1:"Erstellt mit KI-Unterstützung",
+        footerLine2:`Erstellt von <a href="https://www.linkedin.com/in/mr-qaderi/" target="_blank" rel="noopener" class="text-[var(--primary-600)] hover:underline font-semibold">MohammadReza Qaderi</a>`,
+        textPlaceholder:"Wortliste hier eingeben oder Text/Datei einfügen…",
+        dropHint:"Wörter tippen oder .txt/.srt-Datei hier ablegen.",
+        modeWordlist:"Modus: Wortliste",
+        modeText:"Modus: Text/Datei",
+        levelWarning:"Bitte wähle dein <b>Niveau</b>, damit wir passende Ausdrücke extrahieren."
+      },
+      fr:{
+        appTitle:"Apprenant de langues IA",
+        mainTitle:"Générateur intelligent de vocabulaire",
+        headerSubtitle:"Nous extrayons des expressions utiles de votre texte (actu, histoire, sous-titres…) selon votre niveau, et affichons sens, prononciation et usages.",
+        subtitle:"Choisissez vos langues, collez un texte ou une liste de mots — l’IA s’occupe du reste ✨",
+        sourceLangLabel:"Ma langue maternelle",
+        targetLangLabel:"Langue que j’apprends",
+        userLevelLabel:"Mon niveau",
+        levels:{unspecified:"Non précisé", A1:"A1 (Débutant)", A2:"A2 (Élémentaire)", B1:"B1 (Intermédiaire)", B2:"B2 (Intermédiaire supérieur)", C1:"C1 (Avancé)"},
+        forceWordlistLabel:"Ceci est une liste de mots",
+        hintStatic:"<p class='font-semibold mb-1'>Guide d’entrée :</p><ul class='list-disc pl-4 space-y-1'><li>Si vous avez une <b>liste de mots</b> : <b>un élément par ligne</b> ou séparé par <code>-</code>. <b>Pas besoin de niveau</b> — cochez la case.</li><li>Pour extraire depuis un <b>texte</b> : choisissez votre <b>niveau</b> afin d’obtenir des expressions adaptées.</li></ul>",
+        uploadBtnText:"Importer un fichier (.txt, .srt)",
+        processBtn:"Analyser",
+        resultsTitle:"Résultats de l’analyse",
+        startOverBtn:"Recommencer",
+        expandAll:"Tout déployer",
+        collapseAll:"Tout replier",
+        errorText:"Veuillez saisir ou importer une entrée valide.",
+        errorLevel:"Pour les textes/fichiers, veuillez sélectionner votre niveau.",
+        errorAIResponse:"Aucune réponse IA valide.",
+        errorServer:"Problème de connexion au serveur.",
+        errorNoResults:"Aucun élément trouvé.",
+        wordNotFound:"Mot introuvable",
+        definition:"Définition",
+        grammar:"Grammaire",
+        collocations:"Collocations",
+        examples:"Exemples",
+        commonMistakes:"Erreurs courantes",
+        contextNote:"Remarque",
+        pronunciation:"Prononciation",
+        notApplicable:"—",
+        tags:"Tags",
+        speakWord:"Prononcer le mot",
+        speakSentence:"Prononcer la phrase",
+        stopSpeech:"Arrêter la lecture",
+        footerLine1:"Créé avec l’aide de l’IA",
+        footerLine2:`Créé par <a href="https://www.linkedin.com/in/mr-qaderi/" target="_blank" rel="noopener" class="text-[var(--primary-600)] hover:underline font-semibold">MohammadReza Qaderi</a>`,
+        textPlaceholder:"Entrez votre liste ou collez un texte/fichier…",
+        dropHint:"Saisissez vos mots ou déposez un fichier .txt/.srt.",
+        modeWordlist:"Mode : Liste de mots",
+        modeText:"Mode : Texte/Fichier",
+        levelWarning:"Veuillez sélectionner votre <b>niveau</b> pour extraire des expressions adaptées."
+      },
+      es:{
+        appTitle:"Aprendiz de idiomas con IA",
+        mainTitle:"Generador inteligente de vocabulario",
+        headerSubtitle:"Extraemos expresiones útiles de tu texto (noticias, historias, subtítulos…) según tu nivel y mostramos significado, pronunciación y uso.",
+        subtitle:"Elige idiomas, pega texto o una lista—la IA hace el resto ✨",
+        sourceLangLabel:"Mi lengua materna",
+        targetLangLabel:"Idioma que aprendo",
+        userLevelLabel:"Mi nivel",
+        levels:{unspecified:"Sin especificar", A1:"A1 (Principiante)", A2:"A2 (Básico)", B1:"B1 (Intermedio)", B2:"B2 (Intermedio alto)", C1:"C1 (Avanzado)"},
+        forceWordlistLabel:"Esta es una lista de palabras",
+        hintStatic:"<p class='font-semibold mb-1'>Guía de entrada:</p><ul class='list-disc pl-4 space-y-1'><li>Si ya tienes una <b>lista</b>, pon <b>un elemento por línea</b> o sepáralos con <code>-</code>. <b>No hace falta seleccionar nivel</b>—marca la casilla.</li><li>Para extraer de un <b>texto</b>, elige tu <b>nivel</b> para obtener expresiones adecuadas.</li></ul>",
+        uploadBtnText:"Subir archivo (.txt, .srt)",
+        processBtn:"Analizar",
+        resultsTitle:"Resultados del análisis",
+        startOverBtn:"Reiniciar",
+        expandAll:"Expandir todo",
+        collapseAll:"Contraer todo",
+        errorText:"Introduce o sube una entrada válida.",
+        errorLevel:"Para textos/archivos, selecciona tu nivel.",
+        errorAIResponse:"Respuesta de IA no válida.",
+        errorServer:"Problemas de conexión.",
+        errorNoResults:"No se encontraron elementos.",
+        wordNotFound:"Palabra no encontrada",
+        definition:"Definición",
+        grammar:"Gramática",
+        collocations:"Colocaciones",
+        examples:"Ejemplos",
+        commonMistakes:"Errores comunes",
+        contextNote:"Nota",
+        pronunciation:"Pronunciación",
+        notApplicable:"—",
+        tags:"Etiquetas",
+        speakWord:"Pronunciar palabra",
+        speakSentence:"Pronunciar frase",
+        stopSpeech:"Detener voz",
+        footerLine1:"Creado con ayuda de IA",
+        footerLine2:`Creado por <a href="https://www.linkedin.com/in/mr-qaderi/" target="_blank" rel="noopener" class="text-[var(--primary-600)] hover:underline font-semibold">MohammadReza Qaderi</a>`,
+        textPlaceholder:"Escribe tu lista o pega un texto/archivo…",
+        dropHint:"Escribe palabras o suelta un .txt/.srt.",
+        modeWordlist:"Modo: Lista",
+        modeText:"Modo: Texto/Archivo",
+        levelWarning:"Selecciona tu <b>nivel</b> para extraer expresiones adecuadas."
+      },
+      zh:{
+        appTitle:"AI 语言学习助手",
+        mainTitle:"智能词汇生成器",
+        headerSubtitle:"根据你的水平，从你的文本（新闻、故事、字幕等）提取实用短语，并显示释义、发音与用法。",
+        subtitle:"选择语言，粘贴文本或词表——其余交给 AI ✨",
+        sourceLangLabel:"母语",
+        targetLangLabel:"正在学习的语言",
+        userLevelLabel:"我的水平",
+        levels:{unspecified:"未指定", A1:"A1（初级）", A2:"A2（基础）", B1:"B1（中级）", B2:"B2（中高级）", C1:"C1（高级）"},
+        forceWordlistLabel:"这是一个词表",
+        hintStatic:"<p class='font-semibold mb-1'>输入指南：</p><ul class='list-disc pl-4 space-y-1'><li>已有<b>词表</b>：<b>每行一个</b>或用 <code>-</code> 分隔。<b>无需选择水平</b>，勾选上方选项。</li><li>想从<b>文本</b>提取：请选择<b>水平</b>，以便得到与你匹配的短语。</li></ul>",
+        uploadBtnText:"上传文件 (.txt, .srt)",
+        processBtn:"分析",
+        resultsTitle:"分析结果",
+        startOverBtn:"重新开始",
+        expandAll:"全部展开",
+        collapseAll:"全部收起",
+        errorText:"请输入或上传有效内容。",
+        errorLevel:"对于文本/文件，请选择你的水平。",
+        errorAIResponse:"AI 响应无效。",
+        errorServer:"服务器连接问题。",
+        errorNoResults:"未找到结果。",
+        wordNotFound:"未找到词语",
+        definition:"释义",
+        grammar:"语法",
+        collocations:"搭配",
+        examples:"例句",
+        commonMistakes:"常见错误",
+        contextNote:"说明",
+        pronunciation:"发音",
+        notApplicable:"—",
+        tags:"标签",
+        speakWord:"朗读单词",
+        speakSentence:"朗读句子",
+        stopSpeech:"停止朗读",
+        footerLine1:"借助 AI 构建",
+        footerLine2:`作者：<a href="https://www.linkedin.com/in/mr-qaderi/" target="_blank" rel="noopener" class="text-[var(--primary-600)] hover:underline font-semibold">MohammadReza Qaderi</a>`,
+        textPlaceholder:"在此输入词表或粘贴文本/文件…",
+        dropHint:"输入词语或拖放 .txt/.srt 文件。",
+        modeWordlist:"模式：词表",
+        modeText:"模式：文本/文件",
+        levelWarning:"请选择你的<b>水平</b>以提取匹配的短语。"
+      },
+      tr:{
+        appTitle:"YZ Dil Öğrenici",
+        mainTitle:"Akıllı Kelime Hazinesi",
+        headerSubtitle:"Seviyene göre metinden (haber, hikâye, altyazı…) kullanışlı ifadeleri çıkarır; anlam, telaffuz ve kullanımı gösterir.",
+        subtitle:"Dilleri seç, metin ya da kelime listesini yapıştır—gerisini YZ halleder ✨",
+        sourceLangLabel:"Anadilim",
+        targetLangLabel:"Öğrendiğim dil",
+        userLevelLabel:"Seviyem",
+        levels:{unspecified:"Belirtilmedi", A1:"A1 (Başlangıç)", A2:"A2 (Temel)", B1:"B1 (Orta)", B2:"B2 (Üst Orta)", C1:"C1 (İleri)"},
+        forceWordlistLabel:"Bu bir kelime listesi",
+        hintStatic:"<p class='font-semibold mb-1'>Girdi Rehberi:</p><ul class='list-disc pl-4 space-y-1'><li><b>Kelime listen</b> varsa: <b>satır başına bir</b> veya <code>-</code> ile ayır. <b>Seviye seçmeye gerek yok</b>—kutuyu işaretle.</li><li><b>Metinden</b> çıkarılacaksa: <b>seviyeni</b> seç ki sana uygun ifadeler gelsin.</li></ul>",
+        uploadBtnText:"Dosya yükle (.txt, .srt)",
+        processBtn:"Analiz et",
+        resultsTitle:"Analiz Sonuçları",
+        startOverBtn:"Baştan başla",
+        expandAll:"Hepsini aç",
+        collapseAll:"Hepsini kapa",
+        errorText:"Lütfen geçerli bir girdi gir ya da yükle.",
+        errorLevel:"Metin/dosyalar için lütfen seviyeni seç.",
+        errorAIResponse:"Geçerli YZ yanıtı yok.",
+        errorServer:"Sunucu bağlantı sorunu.",
+        errorNoResults:"Öğe bulunamadı.",
+        wordNotFound:"Kelime bulunamadı",
+        definition:"Tanım",
+        grammar:"Dilbilgisi",
+        collocations:"Sık birleşimler",
+        examples:"Örnekler",
+        commonMistakes:"Yaygın hatalar",
+        contextNote:"Not",
+        pronunciation:"Telaffuz",
+        notApplicable:"—",
+        tags:"Etiketler",
+        speakWord:"Kelimeyi oku",
+        speakSentence:"Cümleyi oku",
+        stopSpeech:"Okumayı durdur",
+        footerLine1:"YZ desteğiyle geliştirildi",
+        footerLine2:`Geliştirici: <a href="https://www.linkedin.com/in/mr-qaderi/" target="_blank" rel="noopener" class="text-[var(--primary-600)] hover:underline font-semibold">MohammadReza Qaderi</a>`,
+        textPlaceholder:"Kelime listesini yaz veya metin/dosya yapıştır…",
+        dropHint:"Kelimeleri yaz ya da .txt/.srt dosyası bırak.",
+        modeWordlist:"Mod: Kelime listesi",
+        modeText:"Mod: Metin/Dosya",
+        levelWarning:"Uygun ifadeleri çıkarmak için lütfen <b>seviyeni</b> seç."
+      },
+      it:{
+        appTitle:"Apprendimento lingue con IA",
+        mainTitle:"Generatore intelligente di vocabolario",
+        headerSubtitle:"Estraiamo frasi utili dal tuo testo (notizie, storie, sottotitoli…) in base al tuo livello, con significato, pronuncia e uso.",
+        subtitle:"Scegli le lingue, incolla testo o elenco—al resto pensa l’IA ✨",
+        sourceLangLabel:"Lingua madre",
+        targetLangLabel:"Lingua che sto imparando",
+        userLevelLabel:"Il mio livello",
+        levels:{unspecified:"Non specificato", A1:"A1 (Principiante)", A2:"A2 (Elementare)", B1:"B1 (Intermedio)", B2:"B2 (Intermedio superiore)", C1:"C1 (Avanzato)"},
+        forceWordlistLabel:"Questo è un elenco di parole",
+        hintStatic:"<p class='font-semibold mb-1'>Guida all’input:</p><ul class='list-disc pl-4 space-y-1'><li>Hai già un <b>elenco di parole</b>? <b>Una per riga</b> o separa con <code>-</code>. <b>Nessun livello necessario</b>—spunta la casella.</li><li>Per estrarre da un <b>testo</b>: seleziona il tuo <b>livello</b> per ottenere espressioni adatte.</li></ul>",
+        uploadBtnText:"Carica file (.txt, .srt)",
+        processBtn:"Analizza",
+        resultsTitle:"Risultati dell’analisi",
+        startOverBtn:"Ricomincia",
+        expandAll:"Espandi tutto",
+        collapseAll:"Comprimi tutto",
+        errorText:"Inserisci o carica un input valido.",
+        errorLevel:"Per testi/file, seleziona il tuo livello.",
+        errorAIResponse:"Risposta IA non valida.",
+        errorServer:"Problema di connessione al server.",
+        errorNoResults:"Nessun elemento trovato.",
+        wordNotFound:"Parola non trovata",
+        definition:"Definizione",
+        grammar:"Grammatica",
+        collocations:"Collocazioni",
+        examples:"Esempi",
+        commonMistakes:"Errori comuni",
+        contextNote:"Nota",
+        pronunciation:"Pronuncia",
+        notApplicable:"—",
+        tags:"Tag",
+        speakWord:"Pronuncia parola",
+        speakSentence:"Pronuncia frase",
+        stopSpeech:"Ferma voce",
+        footerLine1:"Creato con l’aiuto dell’IA",
+        footerLine2:`Creato da <a href="https://www.linkedin.com/in/mr-qaderi/" target="_blank" rel="noopener" class="text-[var(--primary-600)] hover:underline font-semibold">MohammadReza Qaderi</a>`,
+        textPlaceholder:"Inserisci elenco o incolla testo/file…",
+        dropHint:"Scrivi parole o rilascia un file .txt/.srt.",
+        modeWordlist:"Modalità: Elenco",
+        modeText:"Modalità: Testo/File",
+        levelWarning:"Seleziona il tuo <b>livello</b> per estrarre espressioni adatte."
+      },
+      ru:{
+        appTitle:"Изучение языков с ИИ",
+        mainTitle:"Умный словарный помощник",
+        headerSubtitle:"Мы извлекаем полезные выражения из вашего текста (новости, рассказы, субтитры и т. п.) с учётом уровня и показываем значение, произношение и употребление.",
+        subtitle:"Выберите языки, вставьте текст или список — остальное сделает ИИ ✨",
+        sourceLangLabel:"Родной язык",
+        targetLangLabel:"Изучаемый язык",
+        userLevelLabel:"Мой уровень",
+        levels:{unspecified:"Не указан", A1:"A1 (Начальный)", A2:"A2 (Элементарный)", B1:"B1 (Средний)", B2:"B2 (Выше среднего)", C1:"C1 (Продвинутый)"},
+        forceWordlistLabel:"Это список слов",
+        hintStatic:"<p class='font-semibold mb-1'>Как вводить:</p><ul class='list-disc pl-4 space-y-1'><li>Есть <b>список слов</b>? Пишите <b>по одному в строке</b> или разделяйте <code>-</code>. <b>Уровень не нужен</b> — отметьте галочку.</li><li>Нужно извлечь из <b>текста</b>? Выберите <b>уровень</b>, чтобы получить подходящие выражения.</li></ul>",
+        uploadBtnText:"Загрузить файл (.txt, .srt)",
+        processBtn:"Анализировать",
+        resultsTitle:"Результаты анализа",
+        startOverBtn:"Начать заново",
+        expandAll:"Развернуть все",
+        collapseAll:"Свернуть все",
+        errorText:"Введите или загрузите корректные данные.",
+        errorLevel:"Для текста/файла выберите ваш уровень.",
+        errorAIResponse:"Некорректный ответ ИИ.",
+        errorServer:"Проблема с подключением к серверу.",
+        errorNoResults:"Ничего не найдено.",
+        wordNotFound:"Слово не найдено",
+        definition:"Определение",
+        grammar:"Грамматика",
+        collocations:"Коллокации",
+        examples:"Примеры",
+        commonMistakes:"Типичные ошибки",
+        contextNote:"Примечание",
+        pronunciation:"Произношение",
+        notApplicable:"—",
+        tags:"Теги",
+        speakWord:"Произнести слово",
+        speakSentence:"Произнести предложение",
+        stopSpeech:"Остановить озвучку",
+        footerLine1:"Создано при помощи ИИ",
+        footerLine2:`Автор: <a href="https://www.linkedin.com/in/mr-qaderi/" target="_blank" rel="noopener" class="text-[var(--primary-600)] hover:underline font-semibold">MohammadReza Qaderi</a>`,
+        textPlaceholder:"Введите список или вставьте текст/файл…",
+        dropHint:"Введите слова или перетащите .txt/.srt.",
+        modeWordlist:"Режим: Список слов",
+        modeText:"Режим: Текст/Файл",
+        levelWarning:"Пожалуйста, выберите <b>уровень</b>, чтобы извлечь подходящие выражения."
+      }
     };
 
     function setLanguage(lang){
@@ -598,59 +935,44 @@ ${isWordList ? `Here is the word/phrase list:\n${text}` : `Here is the text to a
       document.documentElement.lang = lang;
       document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
 
-      // متون ثابت
+      // core texts
       const map = {
-        'app-title': s.appTitle,
-        'main-title': s.mainTitle,
-        'header-subtitle': s.headerSubtitle,
-        'subtitle': s.subtitle,
-        'source-lang-label': s.sourceLangLabel,
-        'target-lang-label': s.targetLangLabel,
-        'user-level-label': s.userLevelLabel,
-        'force-wordlist-label': s.forceWordlistLabel,
-        'upload-btn-text': s.uploadBtnText,
-        'results-title': s.resultsTitle,
-        'start-over-btn': s.startOverBtn,
-        'drop-hint-text': s.dropHint
+        'main-title':s.mainTitle, 'header-subtitle':s.headerSubtitle, 'subtitle':s.subtitle,
+        'source-lang-label':s.sourceLangLabel, 'target-lang-label':s.targetLangLabel,
+        'user-level-label':s.userLevelLabel, 'force-wordlist-label':s.forceWordlistLabel,
+        'hint':s.hintStatic, 'upload-btn-text':s.uploadBtnText, 'results-title':s.resultsTitle,
+        'start-over-btn':s.startOverBtn, 'drop-hint-text':s.dropHint
       };
-      for(const id in map){
-        const el = document.getElementById(id);
-        if(!el) continue;
-        // hint HTML است، بقیه متن ساده
-        if(id==='app-title' || id==='results-title' || id==='start-over-btn'){
-          el.textContent = map[id];
-        } else if(id==='upload-btn-text' || id==='drop-hint-text' || id==='force-wordlist-label' || id==='source-lang-label' || id==='target-lang-label' || id==='user-level-label' || id==='subtitle' || id==='main-title' || id==='header-subtitle'){
-          el.textContent = map[id];
-        }
-      }
-      // hint جدا چون HTML دارد
-      const hintEl = document.getElementById('hint');
-      hintEl.innerHTML = s.hintStatic;
+      for(const id in map){ const el=document.getElementById(id); if(el) el.innerHTML = map[id]; }
 
       document.title = s.appTitle;
       document.querySelector('#process-btn > span').textContent = s.processBtn;
-      document.getElementById('expand-all').textContent = `⬇️ ${s.expandAll}`;
-      document.getElementById('collapse-all').textContent = `⬆️ ${s.collapseAll}`;
+      document.getElementById('expand-all').innerHTML = `⬇️ ${s.expandAll}`;
+      document.getElementById('collapse-all').innerHTML = `⬆️ ${s.collapseAll}`;
       document.getElementById('stop-tts').title = s.stopSpeech;
-      document.getElementById('to-top').title = (lang==='fa') ? 'بازگشت به بالا' : (lang==='ru'?'Наверх':(lang==='tr'?'Başa dön':(lang==='de'?'Nach oben':(lang==='fr'?'Haut de page':(lang==='es'?'Volver arriba':(lang==='it'?'Torna su':(lang==='zh'?'回到顶部':'Back to top')))))));
-
-      // سطح‌ها (برای سادگی: en متن داخل value می‌ماند؛ label‌ها ترجمه نمی‌شوند چون CEFR)
-      document.getElementById('level-unspecified').textContent = (lang==='fa') ? 'انتخاب نشده' : (lang==='ru'?'Не указано':(lang==='tr'?'Belirtilmedi':(lang==='de'?'Nicht festgelegt':(lang==='fr'?'Non spécifié':(lang==='es'?'Sin especificar':(lang==='it'?'Non specificato':(lang==='zh'?'未指定':'Unspecified')))))));
-
+      document.getElementById('to-top').title = isRtl ? 'بازگشت به بالا' : (lang==='fr'?'Haut de page':lang==='es'?'Volver arriba':lang==='de'?'Zurück nach oben':'Back to top');
       document.getElementById('text-input').placeholder = s.textPlaceholder;
       document.getElementById('footer-text-line1').innerHTML = s.footerLine1;
       document.getElementById('footer-text-line2').innerHTML = s.footerLine2;
 
+      // level options (fix empty issue)
+      const lv = s.levels || uiStrings.en.levels;
+      document.getElementById('level-unspecified').textContent = lv.unspecified;
+      document.getElementById('level-a1').textContent = lv.A1;
+      document.getElementById('level-a2').textContent = lv.A2;
+      document.getElementById('level-b1').textContent = lv.B1;
+      document.getElementById('level-b2').textContent = lv.B2;
+      document.getElementById('level-c1').textContent = lv.C1;
+
       updateModeBadge();
+      syncLevelRequirement();
     }
 
-    // ===== INIT
+    // Populate language selects once
     document.addEventListener('DOMContentLoaded', ()=> {
-      // Populate selects once
       [uiLangSwitcher, sourceLangSelect, targetLangSelect].forEach(sel => {
         sel.innerHTML = LANGS.map(l => `<option value="${l.code}">${l.label}</option>`).join('');
       });
-      // Set defaults
       const lang = localStorage.getItem('ll-lang') || 'fa';
       setLanguage(lang);
       uiLangSwitcher.value = lang;
