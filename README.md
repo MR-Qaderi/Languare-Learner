@@ -4,8 +4,9 @@ Learn languages faster by reading what you love. Vocabulary-Learner helps you mi
 
 People learn best from content they actually care about. Instead of memorizing random word lists, read or watch something real and let the app intelligently extract the most relevant expressions for you, so you can focus on what truly moves the needle.
 
-<img width="800" height="730" alt="{01C01284-09B3-466B-B26B-E7791D4D4ED2}" src="https://github.com/user-attachments/assets/7dbc3710-7ff7-41d6-baed-255979b66feb" />
+<img width="800" height="730" alt="{6F7506BE-34A4-4109-A758-6BCF4D925E36}" src="https://github.com/user-attachments/assets/5df81f2a-98f6-4932-bde2-f100f4ba1e05" />
 <img width="800" height="730" alt="{A7B0F628-123D-4B3C-BDF1-0E16FC2A28BB}" src="https://github.com/user-attachments/assets/e5011ec2-9d88-4630-bc38-5f9ce92d8050" />
+
 
 
 ✨ Key Features
