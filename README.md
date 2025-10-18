@@ -5,9 +5,8 @@ Learn languages faster by reading what you love. Vocabulary-Learner helps you mi
 People learn best from content they actually care about. Instead of memorizing random word lists, read or watch something real and let the app intelligently extract the most relevant expressions for you, so you can focus on what truly moves the needle.
 
 <img width="1158" height="921" alt="{01C01284-09B3-466B-B26B-E7791D4D4ED2}" src="https://github.com/user-attachments/assets/7dbc3710-7ff7-41d6-baed-255979b66feb" />
-![photo_2025-10-18_08-38-25](https://github.com/user-attachments/assets/2cc99ba1-2da4-43a9-8d75-001bdbeed440)
-![photo_2025-10-18_08-38-35](https://github.com/user-attachments/assets/e96b413b-4b2a-42f0-a2b9-5e779cff6f0c)
-
+![photo_2025-10-18_08-38-25](https://github.com/user-attachments/assets/0fce3015-a5af-47e1-9bf1-131fb09dccd0)
+![photo_2025-10-18_08-38-35](https://github.com/user-attachments/assets/72ca4af1-d88f-4dd4-a4a9-72263293a775)
 
 ✨ Key Features
 🎯 Level-Aware Extraction (A1–C1)
