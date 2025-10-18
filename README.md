@@ -74,5 +74,5 @@ The app generates a detailed analysis for every single item. No level selection 
 
 🧩 Philosophy
 
-Vocabulary-Learner was built to make language learning natural and meaningful — turning the content you already read or watch into personalized, level-appropriate practice.
+Smart Vocab Builder was built to make language learning natural and meaningful — turning the content you already read or watch into personalized, level-appropriate practice.
 Less rote memorization, more real-world language.
